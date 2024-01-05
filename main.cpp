@@ -44,17 +44,11 @@ typedef struct BALL {
 } BALL;
 
 
-
-
 // variables related to balls
 const int radius_of_balls = 15;
 const int width_of_ball_box = 35;
 double vertical_speed = 0.4;
-vector <BALL> balls;
-
-
-
-
+vector<BALL> balls;
 
 
 using namespace std;
@@ -70,8 +64,15 @@ SDL_Renderer *renderer;
 
 // funcs
 void setRandomColor(RGB_COLOR &color);
+
 void initializeBalls();
-void initializeShooterBalls(BALL &shooter_ball ,BALL &reserved_ball);
+
+void initializeShooterBalls(BALL &shooter_ball, BALL &reserved_ball);
+
+void swapShootinBalls(BALL &shooter_ball , BALL &reserved_ball);
+
+void drawShootingBals(BALL shooter_ball , BALL reserved_ball);
+
 
 
 void game_loop() {
@@ -83,7 +84,7 @@ void game_loop() {
     initializeBalls();
     BALL shooter_ball;
     BALL reserved_ball;
-    initializeShooterBalls(shooter_ball , reserved_ball);
+    initializeShooterBalls(shooter_ball, reserved_ball);
 
 
     while (loop) {
@@ -96,6 +97,10 @@ void game_loop() {
                     case SDLK_ESCAPE:
                         loop = SDL_FALSE;
                         break;
+                    case SDLK_s:
+                        swapShootinBalls(shooter_ball , reserved_ball);
+                        drawShootingBals(shooter_ball , reserved_ball);
+                        break;
                     default:
                         loop = SDL_TRUE;
                 }
@@ -103,7 +108,7 @@ void game_loop() {
         }
 
         // Blank out the renderer with all black
-        SDL_SetRenderDrawColor(renderer, BLACK.r , BLACK.g , BLACK.b, 255);
+        SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
         SDL_RenderClear(renderer);
 
 
@@ -112,22 +117,18 @@ void game_loop() {
         for (int i = 0; i < balls.size(); i++) {
             BALL &ball = balls[i];
             ball.center.y += vertical_speed;
-            aacircleRGBA(renderer , Sint16(ball.center.x)
-                    , Sint16(ball.center.y) , 15 , ball.color.r , ball.color.g , ball.color.b , 255);
+            aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), 15, ball.color.r, ball.color.g,
+                         ball.color.b, 255);
         }
 
 
         // Shooter
 
-        SDL_Rect shooter_section = { 10 , 510 , 580 , 200};
-        SDL_RenderDrawRect(renderer , &shooter_section );
-        aacircleRGBA(renderer , Sint16(shooter_ball.center.x)
-                , Sint16(shooter_ball.center.y) , 15 , shooter_ball.color.r , shooter_ball.color.g , shooter_ball.color.b , 255);
-
-        aacircleRGBA(renderer , Sint16(reserved_ball.center.x)
-                , Sint16(reserved_ball.center.y) , 15 , reserved_ball.color.r , reserved_ball.color.g , reserved_ball.color.b , 255);
+        SDL_Rect shooter_section = {10, 510, 580, 200};
+        SDL_RenderDrawRect(renderer, &shooter_section);
 
 
+        drawShootingBals(shooter_ball , reserved_ball);
 
 
         // Present to renderer
@@ -137,7 +138,7 @@ void game_loop() {
 }
 
 
-int main(int argv, char** args) {
+int main(int argv, char **args) {
 
     srand(time(NULL));
 
@@ -163,18 +164,18 @@ int main(int argv, char** args) {
 }
 
 
-void initializeBalls(){
-    for(int i = 1 ; i <= 5 ; i ++){
-        for(int j = 0 ; j < SCREEN_WIDTH/width_of_ball_box ; j ++){
-            BALL ball ={
+void initializeBalls() {
+    for (int i = 1; i <= 5; i++) {
+        for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box; j++) {
+            BALL ball = {
                     .color = {
                             .r=0,
                             .g=0,
                             .b=0,
                     },
                     .center = {
-                            .x = double(j*width_of_ball_box + radius_of_balls + 3),
-                            .y = double(i*(width_of_ball_box)),
+                            .x = double(j * width_of_ball_box + radius_of_balls + 3),
+                            .y = double(i * (width_of_ball_box)),
                     },
             };
             setRandomColor(ball.color);
@@ -184,8 +185,7 @@ void initializeBalls(){
 }
 
 
-void setRandomColor(RGB_COLOR &color)
-{
+void setRandomColor(RGB_COLOR &color) {
     int i = rand() % 6;
     switch (i) {
         case (0):
@@ -209,7 +209,7 @@ void setRandomColor(RGB_COLOR &color)
 }
 
 
-void initializeShooterBalls(BALL &shooter_ball , BALL &reserved_ball){
+void initializeShooterBalls(BALL &shooter_ball, BALL &reserved_ball) {
 
     shooter_ball.center.x = 300;
     shooter_ball.center.y = 620;
@@ -221,4 +221,22 @@ void initializeShooterBalls(BALL &shooter_ball , BALL &reserved_ball){
     setRandomColor(reserved_ball.color);
     while (reserved_ball.color.r == shooter_ball.color.r) setRandomColor(reserved_ball.color);
 
+}
+
+
+void swapShootinBalls(BALL &shooter_ball , BALL &reserved_ball){
+    swap(shooter_ball.color , reserved_ball.color);
+//    cout << shooter_ball.color.r << " " ;
+}
+
+
+void drawShootingBals(BALL shooter_ball , BALL reserved_ball){
+    aacircleRGBA(renderer, Sint16(shooter_ball.center.x),
+                 Sint16(shooter_ball.center.y),
+                 15, shooter_ball.color.r,
+                 shooter_ball.color.g, shooter_ball.color.b, 255);
+
+    aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), 15,
+                 reserved_ball.color.r, reserved_ball.color.g, reserved_ball.color.b, 255);
+    SDL_RenderPresent(renderer);
 }
