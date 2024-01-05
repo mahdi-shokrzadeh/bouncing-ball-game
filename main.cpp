@@ -1,6 +1,16 @@
+
+/*
+ * In the name of GOD
+ * Bouncing Ball Game
+ * Mohammad Mahdi Shokrzadeh and Sina Hashemi
+ * Dr.Arasteh and Dr.Vosooqi
+ * DEC 2023 - JAN 2024
+ */
+
 #include <iostream>
 #include <cmath>
 #include <ctime>
+#include <string>
 #include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
