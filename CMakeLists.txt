@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.26)
+project(bouncing_ball_game)
+
+set(CMAKE_CXX_STANDARD 17)
+
+include_directories(common)
+add_executable(bouncing_ball_game main.cpp
+        common/colors.h)
+
+
+
+target_link_libraries(${PROJECT_NAME} -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer)
