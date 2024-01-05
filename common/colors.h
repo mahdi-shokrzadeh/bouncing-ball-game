@@ -5,7 +5,6 @@ struct RGB_COLOR {
     int r, g, b;
 };
 
-const RGB_COLOR WHITE = {255, 255, 255};
 const RGB_COLOR RED = {255, 0, 0};
 const RGB_COLOR BLACK = {0 , 0 , 0};
 const RGB_COLOR WHITE = {255, 255, 255};
