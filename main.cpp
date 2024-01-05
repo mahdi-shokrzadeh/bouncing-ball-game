@@ -51,6 +51,22 @@ double vertical_speed = 0.4;
 vector<BALL> balls;
 
 
+// variables related to targeter
+DOUBLE_POINT center_of_shooting_ball = {
+        .x = 300,
+        .y = 620,
+};
+DOUBLE_POINT center_of_reserved_ball = {
+        .x = 220,
+        .y = 670,
+};
+
+int targeter_balls_radius = 3;
+double targeter_balls_dist = 4.0;
+double targeter_vertical_speed = -1;
+double targeter_horizontal_speed = 0;
+
+
 using namespace std;
 
 // variables
@@ -69,11 +85,13 @@ void initializeBalls();
 
 void initializeShooterBalls(BALL &shooter_ball, BALL &reserved_ball);
 
-void swapShootinBalls(BALL &shooter_ball , BALL &reserved_ball);
+void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball);
 
-void drawShootingBals(BALL shooter_ball , BALL reserved_ball);
+void drawShootingBalls(BALL shooter_ball, BALL reserved_ball);
 
+void drawTargeter();
 
+void handleTargeterEvent(int type);
 
 void game_loop() {
 
@@ -94,12 +112,21 @@ void game_loop() {
                 loop = SDL_FALSE;
             } else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
-                    case SDLK_ESCAPE:
+
+                    case SDLK_ESCAPE :
                         loop = SDL_FALSE;
                         break;
+
                     case SDLK_s:
-                        swapShootinBalls(shooter_ball , reserved_ball);
-                        drawShootingBals(shooter_ball , reserved_ball);
+                        swapShootingBalls(shooter_ball, reserved_ball);
+                        drawShootingBalls(shooter_ball, reserved_ball);
+                        break;
+
+                    case SDLK_RIGHT :
+                        handleTargeterEvent(0);
+                        break;
+                    case SDLK_LEFT :
+                        handleTargeterEvent(1);
                         break;
                     default:
                         loop = SDL_TRUE;
@@ -111,8 +138,11 @@ void game_loop() {
         SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
         SDL_RenderClear(renderer);
 
+        // targeter
 
-        //
+        drawTargeter();
+
+        // drawing balls
 
         for (int i = 0; i < balls.size(); i++) {
             BALL &ball = balls[i];
@@ -126,9 +156,9 @@ void game_loop() {
 
         SDL_Rect shooter_section = {10, 510, 580, 200};
         SDL_RenderDrawRect(renderer, &shooter_section);
+        drawShootingBalls(shooter_ball, reserved_ball);
 
 
-        drawShootingBals(shooter_ball , reserved_ball);
 
 
         // Present to renderer
@@ -211,11 +241,11 @@ void setRandomColor(RGB_COLOR &color) {
 
 void initializeShooterBalls(BALL &shooter_ball, BALL &reserved_ball) {
 
-    shooter_ball.center.x = 300;
-    shooter_ball.center.y = 620;
+    shooter_ball.center.x = center_of_shooting_ball.x;
+    shooter_ball.center.y = center_of_shooting_ball.y;
 
-    reserved_ball.center.x = 220;
-    reserved_ball.center.y = 670;
+    reserved_ball.center.x = center_of_reserved_ball.x;
+    reserved_ball.center.y = center_of_reserved_ball.y;
 
     setRandomColor(shooter_ball.color);
     setRandomColor(reserved_ball.color);
@@ -224,13 +254,13 @@ void initializeShooterBalls(BALL &shooter_ball, BALL &reserved_ball) {
 }
 
 
-void swapShootinBalls(BALL &shooter_ball , BALL &reserved_ball){
-    swap(shooter_ball.color , reserved_ball.color);
+void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
+    swap(shooter_ball.color, reserved_ball.color);
 //    cout << shooter_ball.color.r << " " ;
 }
 
 
-void drawShootingBals(BALL shooter_ball , BALL reserved_ball){
+void drawShootingBalls(BALL shooter_ball, BALL reserved_ball) {
     aacircleRGBA(renderer, Sint16(shooter_ball.center.x),
                  Sint16(shooter_ball.center.y),
                  15, shooter_ball.color.r,
@@ -239,4 +269,45 @@ void drawShootingBals(BALL shooter_ball , BALL reserved_ball){
     aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), 15,
                  reserved_ball.color.r, reserved_ball.color.g, reserved_ball.color.b, 255);
     SDL_RenderPresent(renderer);
+}
+
+
+void drawTargeter() {
+
+    DOUBLE_POINT targeter_point = {
+            .x = center_of_shooting_ball.x,
+            .y = center_of_shooting_ball.y - 30,
+    };
+
+    while (true) {
+
+        if (targeter_point.y + targeter_vertical_speed <= 0) {
+            break;
+        }
+
+        if (targeter_point.x + targeter_horizontal_speed >= SCREEN_WIDTH) {
+            break;
+        } else if (targeter_point.x + targeter_horizontal_speed <= 0) {
+            break;
+        }
+
+
+        aacircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y), Sint16(targeter_balls_radius),
+                     SILVER.r, SILVER.g, SILVER.b, 255);
+        targeter_point.y += (targeter_vertical_speed - targeter_balls_dist - 10);
+        targeter_point.x += (targeter_horizontal_speed + targeter_balls_dist);
+    }
+
+}
+
+void handleTargeterEvent(int type){
+
+    switch (type) {
+        case 0:
+            targeter_vertical_speed -= 0.5;
+            break;
+        case 1:
+            targeter_vertical_speed += 0.5;
+        break;
+    }
 }
