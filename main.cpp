@@ -200,14 +200,12 @@ void setRandomColor(RGB_COLOR &color)
 
 
 void initializeShooterBalls(BALL &shooter_ball , BALL &reserved_ball){
-    shooter_ball.center = {
-            .x = 300,
-            .y = 620,
-    };
-    reserved_ball.center = {
-            .x = 220,
-            .y = 670,
-    };
+
+    shooter_ball.center.x = 300;
+    shooter_ball.center.y = 620;
+
+    reserved_ball.center.x = 220;
+    reserved_ball.center.y = 670;
 
     setRandomColor(shooter_ball.color);
     setRandomColor(reserved_ball.color);
