@@ -85,6 +85,8 @@ bool main_menu = false, start_menu = false, leaderboard = false, setting = false
 
 
 // funcs
+
+// Game
 void setRandomColor(SDL_Color &color);
 
 void initializeBalls();
@@ -98,6 +100,13 @@ void drawShootingBalls(BALL shooter_ball, BALL reserved_ball);
 void drawTargeter();
 
 void handleTargeterEvent(int type);
+
+bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point);
+
+double calculateDistance(DOUBLE_POINT a, DOUBLE_POINT b);
+
+
+// Menus
 
 void Main_Menu();
 
@@ -260,7 +269,7 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
     }
 
 
-    // Shooter
+    // shooter
 
     SDL_Rect shooter_section = {10, 510, 580, 200};
     SDL_RenderDrawRect(renderer, &shooter_section);
@@ -361,21 +370,19 @@ void drawTargeter() {
 
     while (true) {
 
-        if (targeter_point.y + dy <= 0) {
+        if (targeter_point.y + dy <= 0 || checkCollTargeterAndBalls(targeter_point)) {
             break;
         }
 
         if (targeter_point.x + dx >= SCREEN_WIDTH) {
             dx *= -1;
         }
-        if(targeter_point.x + dx <= 0){
+        if (targeter_point.x + dx <= 0) {
             dx *= -1;
         }
 
 
-        if (sqrt((targeter_point.y - center_of_shooting_ball.y) * (targeter_point.y - center_of_shooting_ball.y) +
-                 (targeter_point.x - center_of_shooting_ball.x) * (targeter_point.x - center_of_shooting_ball.x)) >=
-            25) {
+        if (calculateDistance(targeter_point, center_of_shooting_ball) >= 25) {
             aacircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y), Sint16(targeter_balls_radius),
                          SILVER.r, SILVER.g, SILVER.b, 255);
         }
@@ -399,10 +406,28 @@ void handleTargeterEvent(int type) {
                 degree -= 0.5;
             break;
         case 1:
-            if (degree <= 260 )
+            if (degree <= 260)
                 degree += 0.5;
             break;
         default:
             break;
     }
+}
+
+bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
+
+    for (unsigned int i = balls.size(); i > 0; i--) {
+        BALL &ball = balls[i];
+
+        if (ball.center.y <= -10) return false;
+
+        if (calculateDistance(ball.center, targeter_point) <= radius_of_balls + 15) return true;
+
+    }
+
+}
+
+double calculateDistance(DOUBLE_POINT a, DOUBLE_POINT b) {
+    return sqrt((a.y - b.y) * (a.y - b.y) +
+                (a.x - b.x) * (a.x - b.x));
 }
