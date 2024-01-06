@@ -47,7 +47,7 @@ typedef struct BALL {
 // variables related to balls
 const int radius_of_balls = 15;
 const int width_of_ball_box = 35;
-double vertical_speed = 0.4;
+double vertical_speed = 0.25;
 vector<BALL> balls;
 
 
@@ -61,8 +61,9 @@ DOUBLE_POINT center_of_reserved_ball = {
         .y = 670,
 };
 
+double degree = 179.6;
 int targeter_balls_radius = 3;
-double targeter_balls_dist = 4.0;
+double targeter_balls_dist = 10.0;
 double targeter_vertical_speed = -1;
 double targeter_horizontal_speed = 0;
 
@@ -279,35 +280,47 @@ void drawTargeter() {
             .y = center_of_shooting_ball.y - 30,
     };
 
+    double dx = sin(degree) * targeter_balls_dist;
+    double dy =  cos(degree) * targeter_balls_dist;
+
+
     while (true) {
 
-        if (targeter_point.y + targeter_vertical_speed <= 0) {
+        if (targeter_point.y + dy <= 0) {
             break;
         }
 
-        if (targeter_point.x + targeter_horizontal_speed >= SCREEN_WIDTH) {
+        if (targeter_point.x + dx >= SCREEN_WIDTH) {
             break;
-        } else if (targeter_point.x + targeter_horizontal_speed <= 0) {
+        } else if (targeter_point.x + dy <= 0) {
             break;
         }
 
 
         aacircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y), Sint16(targeter_balls_radius),
                      SILVER.r, SILVER.g, SILVER.b, 255);
-        targeter_point.y += (targeter_vertical_speed - targeter_balls_dist - 10);
-        targeter_point.x += (targeter_horizontal_speed + targeter_balls_dist);
+        targeter_point.y += dy;
+        targeter_point.x += dx;
     }
 
 }
 
-void handleTargeterEvent(int type){
-
+void handleTargeterEvent(int type) {
+    cout << degree << endl;
     switch (type) {
+//        case 0:
+//            targeter_vertical_speed -= 0.5;
+//            break;
+//        case 1:
+//            targeter_vertical_speed += 0.5;
+//        break;
         case 0:
-            targeter_vertical_speed -= 0.5;
+            if (degree >= 0)
+                degree -= 0.005;
             break;
         case 1:
-            targeter_vertical_speed += 0.5;
-        break;
+            if (degree <= 180)
+                degree += 0.005;
+            break;
     }
 }
