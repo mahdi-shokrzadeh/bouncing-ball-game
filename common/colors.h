@@ -7,6 +7,7 @@ struct RGB_COLOR {
 
 const RGB_COLOR RED = {255, 0, 0};
 const RGB_COLOR BLACK = {0 , 0 , 0};
+const RGB_COLOR WHITE = {255, 255, 255};
 const RGB_COLOR GREEN = {0, 255, 0};
 const RGB_COLOR BLUE = {0, 0, 255};
 const RGB_COLOR YELLOW = {255, 255, 0};
