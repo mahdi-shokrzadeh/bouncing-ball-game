@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(common)
 add_executable(bouncing_ball_game main.cpp
-        common/colors.h)
+        common/colors.h
+        common/themes.h)
 
 
 

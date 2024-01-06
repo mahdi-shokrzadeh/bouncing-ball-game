@@ -23,6 +23,7 @@ using namespace std;
 
 // Headers
 #include "common/colors.h"
+#include "common/themes.h"
 
 
 //Global variables
