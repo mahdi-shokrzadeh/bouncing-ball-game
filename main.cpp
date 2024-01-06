@@ -31,6 +31,8 @@ using namespace std;
 #define SCREEN_WIDTH 600
 #define SCREEN_HEIGHT 720
 
+// Global variables related to game
+#define SPEED_OF_THROWN_BALL 10
 
 // structures
 typedef struct DOUBLE_POINT {
@@ -62,11 +64,16 @@ DOUBLE_POINT center_of_reserved_ball = {
         .y = 670,
 };
 
+BALL thrown_ball;
+bool ball_is_being_thrown = false;
+double dxOfThrownBall;
+double dyOfThrownBall;
+
+
 double degree = 180.0;
 int targeter_balls_radius = 2;
 double targeter_balls_dist = 9.0;
 
-// variables
 
 // SDL Window
 SDL_Window *window;
@@ -91,7 +98,7 @@ void setRandomColor(SDL_Color &color);
 
 void initializeBalls();
 
-void initializeShooterBalls(BALL &shooter_ball, BALL &reserved_ball);
+void initializeShootingBalls(BALL &shooter_ball, BALL &reserved_ball);
 
 void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball);
 
@@ -104,6 +111,10 @@ void handleTargeterEvent(int type);
 bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point);
 
 double calculateDistance(DOUBLE_POINT a, DOUBLE_POINT b);
+
+void handleShootBall(BALL &shooting_ball, BALL &reserved_ball);
+
+void handleBallShooting();
 
 
 // Menus
@@ -121,7 +132,7 @@ void loop() {
     initializeBalls();
     BALL shooter_ball;
     BALL reserved_ball;
-    initializeShooterBalls(shooter_ball, reserved_ball);
+    initializeShootingBalls(shooter_ball, reserved_ball);
 
     bool MouseClicked = false;
     int x_MouseClicked = 0;
@@ -154,6 +165,10 @@ void loop() {
 
                     case SDLK_RIGHT :
                         handleTargeterEvent(0);
+                        break;
+
+                    case SDLK_s :
+                        handleShootBall(shooter_ball, reserved_ball);
                         break;
 
                     case SDLK_LEFT :
@@ -268,9 +283,14 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
                      ball.color.r, ball.color.g, ball.color.b, 255);
     }
 
+    // handle ball shooting
+
+    if (ball_is_being_thrown) {
+        handleBallShooting();
+    }
+
 
     // shooter
-
     SDL_Rect shooter_section = {10, 510, 580, 200};
     SDL_RenderDrawRect(renderer, &shooter_section);
     drawShootingBalls(shooter_ball, reserved_ball);
@@ -324,7 +344,7 @@ void setRandomColor(SDL_Color &color) {
 }
 
 
-void initializeShooterBalls(BALL &shooter_ball, BALL &reserved_ball) {
+void initializeShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
 
     shooter_ball.center.x = center_of_shooting_ball.x;
     shooter_ball.center.y = center_of_shooting_ball.y;
@@ -427,7 +447,48 @@ bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
 
 }
 
+
 double calculateDistance(DOUBLE_POINT a, DOUBLE_POINT b) {
     return sqrt((a.y - b.y) * (a.y - b.y) +
                 (a.x - b.x) * (a.x - b.x));
+}
+
+
+void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
+
+    if (!ball_is_being_thrown) {
+        ball_is_being_thrown = true;
+        thrown_ball = shooting_ball;
+        shooting_ball = reserved_ball;
+        shooting_ball.center = center_of_shooting_ball;
+        reserved_ball.center = center_of_reserved_ball;
+
+        setRandomColor(reserved_ball.color);
+        while (reserved_ball.color.r == shooting_ball.color.r) setRandomColor(reserved_ball.color);
+        dxOfThrownBall = sin(degree * M_PI / 180.0) * SPEED_OF_THROWN_BALL;
+        dyOfThrownBall = cos(degree * M_PI / 180.0) * SPEED_OF_THROWN_BALL;
+        drawShootingBalls(shooting_ball , reserved_ball);
+    }
+
+
+}
+
+void handleBallShooting() {
+
+    if (thrown_ball.center.y + dyOfThrownBall <= 0) {
+        ball_is_being_thrown = false;
+    } else {
+        if (thrown_ball.center.x + radius_of_balls + dxOfThrownBall >= SCREEN_WIDTH) {
+            dxOfThrownBall *= -1;
+        }
+        if (thrown_ball.center.x + dxOfThrownBall - radius_of_balls <= 0) {
+            dxOfThrownBall *= -1;
+        }
+    }
+    thrown_ball.center.x += dxOfThrownBall;
+    thrown_ball.center.y += dyOfThrownBall;
+
+    aacircleRGBA(renderer, Sint16(thrown_ball.center.x), Sint16(thrown_ball.center.y),
+                 Sint16(radius_of_balls), thrown_ball.color.r, thrown_ball.color.g, thrown_ball.color.b, 255);
+
 }
