@@ -191,7 +191,7 @@ int main(int argv, char **args) {
     SDL_DisplayMode DM;
     SDL_GetCurrentDisplayMode(0, &DM);
     TTF_Init();
-    font = TTF_OpenFont("assets/font.ttf", 24);
+    font = TTF_OpenFont("assets/font.ttc", 50);
 
 
     loop();
@@ -220,14 +220,14 @@ void Main_Menu() {
 
     // start button
     SDL_Rect startBtn = {100, 300, 400, 80};
-    //SDL_Color Text_color = {255, 255, 255, 255};
-    //SDL_Surface* startSurf = TTF_RenderText_Solid(font, "Start", Text_color);
-    //SDL_Texture* startText = SDL_CreateTextureFromSurface(renderer, startSurf);
-    //SDL_Rect textStart = {100, 300, startSurf->w, startSurf->h};
+    SDL_Color Text_color = {255, 255, 255, 255};
+    SDL_Surface* startSurf = TTF_RenderText_Solid(font, "Start", Text_color);
+    SDL_Texture* startText = SDL_CreateTextureFromSurface(renderer, startSurf);
+    SDL_Rect textStart = {250, 300, startSurf->w, startSurf->h};
 
     SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
     SDL_RenderFillRect(renderer, &startBtn);
-    //SDL_RenderCopy(renderer, startText, NULL, &textStart);
+    SDL_RenderCopy(renderer, startText, NULL, &textStart);
     //SDL_RenderPresent(renderer);
     //SDL_DestroyTexture(startText);
     //SDL_FreeSurface(startSurf);
