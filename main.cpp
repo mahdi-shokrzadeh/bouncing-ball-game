@@ -40,7 +40,7 @@ typedef struct DOUBLE_POINT {
 
 
 typedef struct BALL {
-    RGB_COLOR color;
+    SDL_Color color;
     DOUBLE_POINT center;
 } BALL;
 
@@ -85,7 +85,7 @@ bool main_menu = false, start_menu = false, leaderboard = false, setting = false
 
 
 // funcs
-void setRandomColor(RGB_COLOR &color);
+void setRandomColor(SDL_Color &color);
 
 void initializeBalls();
 
@@ -291,7 +291,7 @@ void initializeBalls() {
 }
 
 
-void setRandomColor(RGB_COLOR &color) {
+void setRandomColor(SDL_Color &color) {
     int i = rand() % 6;
     switch (i) {
         case (0):

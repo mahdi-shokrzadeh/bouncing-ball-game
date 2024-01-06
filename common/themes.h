@@ -7,9 +7,9 @@
 struct theme {
     string bg; //background address
     string music; //music address
-    RGB_COLOR MainColor; //theme main color
-    RGB_COLOR SecColor; //theme second color
-    RGB_COLOR TextColor; //theme text color
+    SDL_Color MainColor; //theme main color
+    SDL_Color SecColor; //theme second color
+    SDL_Color TextColor; //theme text color
     // to be continued...
 };
 
