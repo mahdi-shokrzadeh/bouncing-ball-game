@@ -76,7 +76,7 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 
 // SDL font
-TTF_Font* font = NULL;
+TTF_Font *font = NULL;
 
 // theme
 theme th = th1;
@@ -189,6 +189,7 @@ int main(int argv, char **args) {
     SDL_RaiseWindow(window);
     SDL_DisplayMode DM;
     SDL_GetCurrentDisplayMode(0, &DM);
+    TTF_Init();
     font = TTF_OpenFont("assets/font.ttf", 24);
 
 
@@ -215,18 +216,32 @@ void Main_Menu() {
     SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
     SDL_RenderClear(renderer);
 
+
+    // start button
     SDL_Rect startBtn = {100, 300, 400, 80};
+    SDL_Color Text_color = {255, 255, 255, 255};
+    SDL_Surface* startSurf = TTF_RenderText_Solid(font, "Start", Text_color);
+    SDL_Texture* startText = SDL_CreateTextureFromSurface(renderer, startSurf);
+    SDL_Rect textStart = {100, 300, startSurf->w, startSurf->h};
+
     SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
     SDL_RenderFillRect(renderer, &startBtn);
+    SDL_RenderCopy(renderer, startText, NULL, &textStart);
+    SDL_RenderPresent(renderer);
+    SDL_DestroyTexture(startText);
+    SDL_FreeSurface(startSurf);
 
+    // Leaderboard button
     SDL_Rect leaderBtn = {100, 400, 400, 80};
     SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
     SDL_RenderFillRect(renderer, &leaderBtn);
 
+    // setting button
     SDL_Rect settingBtn = {100, 500, 400, 80};
     SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
     SDL_RenderFillRect(renderer, &settingBtn);
 
+    // quit button
     SDL_Rect quitBtn = {100, 600, 400, 80};
     SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
     SDL_RenderFillRect(renderer, &quitBtn);
