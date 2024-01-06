@@ -9,9 +9,10 @@ struct theme {
     string music; //music address
     RGB_COLOR MainColor; //theme main color
     RGB_COLOR SecColor; //theme second color
+    RGB_COLOR TextColor; //theme text color
     // to be continued...
 };
 
-const theme th1 = {"", "", BLUE, CYAN};
+const theme th1 = {"", "", BLUE, CYAN, WHITE};
 
 #endif //BOUNCING_BALL_GAME_THEMES_H
