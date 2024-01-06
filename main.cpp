@@ -75,6 +75,15 @@ SDL_Window *window;
 // SDL Renderer to draw to
 SDL_Renderer *renderer;
 
+// SDL font
+TTF_Font* font = NULL;
+
+// theme
+theme th = th1;
+
+// where are we?
+bool main_menu = true, start_menu = false, leaderboard = false, setting = false, quit_menu = false, game = false;
+
 
 // funcs
 void setRandomColor(RGB_COLOR &color);
@@ -91,7 +100,11 @@ void drawTargeter();
 
 void handleTargeterEvent(int type);
 
-void game_loop() {
+void Main_Menu();
+
+void Game(BALL shooter_ball, BALL reserved_ball);
+
+void loop() {
 
     SDL_bool loop = SDL_TRUE;
     SDL_Event event;
@@ -102,17 +115,29 @@ void game_loop() {
     BALL reserved_ball;
     initializeShooterBalls(shooter_ball, reserved_ball);
 
+    bool MouseClicked = false;
+    int x_MouseClicked = 0;
+    int y_MouseClicked = 0;
+
 
     while (loop) {
+
         // Allow quiting with escape key by polling for pending events
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 loop = SDL_FALSE;
-            } else if (event.type == SDL_KEYDOWN) {
+            }
+            else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
 
                     case SDLK_ESCAPE :
                         loop = SDL_FALSE;
+                        break;
+
+                    case SDL_MOUSEBUTTONDOWN :
+                        MouseClicked = true;
+                        x_MouseClicked = event.button.x;
+                        y_MouseClicked = event.button.y;
                         break;
 
                     case SDLK_s:
@@ -123,9 +148,11 @@ void game_loop() {
                     case SDLK_RIGHT :
                         handleTargeterEvent(0);
                         break;
+
                     case SDLK_LEFT :
                         handleTargeterEvent(1);
                         break;
+
                     default:
                         loop = SDL_TRUE;
                 }
@@ -136,28 +163,10 @@ void game_loop() {
         SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
         SDL_RenderClear(renderer);
 
-        // targeter
-
-        drawTargeter();
-
-        // drawing balls
-
-        for (int i = 0; i < balls.size(); i++) {
-            BALL &ball = balls[i];
-            ball.center.y += vertical_speed;
-            aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), 15, ball.color.r, ball.color.g,
-                         ball.color.b, 255);
-        }
-
-
-        // Shooter
-
-        SDL_Rect shooter_section = {10, 510, 580, 200};
-        SDL_RenderDrawRect(renderer, &shooter_section);
-        drawShootingBalls(shooter_ball, reserved_ball);
-
-
-
+        if(main_menu)
+            Main_Menu();
+        else if(game)
+            Game(shooter_ball, reserved_ball);
 
         // Present to renderer
         SDL_RenderPresent(renderer);
@@ -172,23 +181,81 @@ int main(int argv, char **args) {
 
 
     // SDL Inits
-    Uint32 SDL_flags = SDL_INIT_VIDEO | SDL_INIT_TIMER;
-//    Uint32 WND_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN_DESKTOP;//SDL_WINDOW_BORDERLESS ;
-    Uint32 WND_flags = SDL_WINDOW_SHOWN;//SDL_WINDOW_BORDERLESS ;
+    Uint32 SDL_flags = SDL_INIT_EVERYTHING;// SDL_INIT_VIDEO | SDL_INIT_TIMER
+    // Uint32 WND_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN_DESKTOP;//SDL_WINDOW_BORDERLESS ;
+    Uint32 WND_flags = SDL_WINDOW_SHOWN;
     SDL_Init(SDL_flags);
     SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, WND_flags, &window, &renderer);
     SDL_RaiseWindow(window);
     SDL_DisplayMode DM;
     SDL_GetCurrentDisplayMode(0, &DM);
+    font = TTF_OpenFont("assets/font.ttf", 24);
 
-    game_loop();
+
+    loop();
 
     //clean up
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    TTF_CloseFont(font);
+    window = NULL;
+    renderer = NULL;
+    font = NULL;
+
+    TTF_Quit();
     SDL_Quit();
 
     return 0;
+}
+
+void Main_Menu() {
+
+    // Draw buttons
+
+    SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_Rect startBtn = {100, 300, 400, 80};
+    SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
+    SDL_RenderFillRect(renderer, &startBtn);
+
+    SDL_Rect leaderBtn = {100, 400, 400, 80};
+    SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
+    SDL_RenderFillRect(renderer, &leaderBtn);
+
+    SDL_Rect settingBtn = {100, 500, 400, 80};
+    SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
+    SDL_RenderFillRect(renderer, &settingBtn);
+
+    SDL_Rect quitBtn = {100, 600, 400, 80};
+    SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
+    SDL_RenderFillRect(renderer, &quitBtn);
+}
+
+void Game(BALL shooter_ball, BALL reserved_ball) {
+
+    // targeter
+
+    drawTargeter();
+
+    // drawing balls
+
+    for (int i = 0; i < balls.size(); i++) {
+        BALL &ball = balls[i];
+        ball.center.y += vertical_speed;
+        aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), 15,
+                     ball.color.r, ball.color.g, ball.color.b, 255);
+    }
+
+
+    // Shooter
+
+    SDL_Rect shooter_section = {10, 510, 580, 200};
+    SDL_RenderDrawRect(renderer, &shooter_section);
+    drawShootingBalls(shooter_ball, reserved_ball);
+
+
+
 }
 
 
