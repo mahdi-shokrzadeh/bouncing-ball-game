@@ -16,8 +16,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL2_gfxPrimitives.h>
-//#include <SDL2/SDL2_gfx.h>
+//#include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL2_gfx.h>
 
 using namespace std;
 
@@ -83,7 +83,7 @@ TTF_Font *font = NULL;
 theme th = th1;
 
 // where are we?
-bool main_menu = true, start_menu = false, leaderboard = false, setting = false, quit_menu = false, game = false;
+bool main_menu = false, start_menu = false, leaderboard = false, setting = false, quit_menu = false, game = true;
 
 
 // funcs
@@ -349,7 +349,7 @@ void drawShootingBalls(BALL shooter_ball, BALL reserved_ball) {
 
     aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), 15,
                  reserved_ball.color.r, reserved_ball.color.g, reserved_ball.color.b, 255);
-    SDL_RenderPresent(renderer);
+//    SDL_RenderPresent(renderer);
 }
 
 
@@ -357,7 +357,7 @@ void drawTargeter() {
 
     DOUBLE_POINT targeter_point = {
             .x = center_of_shooting_ball.x,
-            .y = center_of_shooting_ball.y - 30,
+            .y = center_of_shooting_ball.y,
     };
 
     double dx = sin(degree) * targeter_balls_dist;
