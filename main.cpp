@@ -105,7 +105,6 @@ void game_loop() {
     BALL reserved_ball;
     initializeShooterBalls(shooter_ball, reserved_ball);
 
-
     while (loop) {
         // Allow quiting with escape key by polling for pending events
         while (SDL_PollEvent(&event)) {
@@ -321,6 +320,8 @@ void handleTargeterEvent(int type) {
         case 1:
             if (degree <= 180)
                 degree += 0.005;
+            break;
+        default:
             break;
     }
 }
