@@ -62,11 +62,9 @@ DOUBLE_POINT center_of_reserved_ball = {
         .y = 670,
 };
 
-double degree = 179.6;
-int targeter_balls_radius = 3;
-double targeter_balls_dist = 10.0;
-double targeter_vertical_speed = -1;
-double targeter_horizontal_speed = 0;
+double degree = 180.0;
+int targeter_balls_radius = 2;
+double targeter_balls_dist = 9.0;
 
 // variables
 
@@ -127,8 +125,7 @@ void loop() {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 loop = SDL_FALSE;
-            }
-            else if (event.type == SDL_KEYDOWN) {
+            } else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
 
                     case SDLK_ESCAPE :
@@ -141,7 +138,7 @@ void loop() {
                         y_MouseClicked = event.button.y;
                         break;
 
-                    case SDLK_s:
+                    case SDLK_SPACE:
                         swapShootingBalls(shooter_ball, reserved_ball);
                         drawShootingBalls(shooter_ball, reserved_ball);
                         break;
@@ -164,9 +161,9 @@ void loop() {
         SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
         SDL_RenderClear(renderer);
 
-        if(main_menu)
+        if (main_menu)
             Main_Menu();
-        else if(game)
+        else if (game)
             Game(shooter_ball, reserved_ball);
 
         // Present to renderer
@@ -206,7 +203,6 @@ int main(int argv, char **args) {
 
     TTF_Quit();
     SDL_Quit();
-
     return 0;
 }
 
@@ -221,8 +217,8 @@ void Main_Menu() {
     // start button
     SDL_Rect startBtn = {100, 300, 400, 80};
     SDL_Color Text_color = {255, 255, 255, 255};
-    SDL_Surface* startSurf = TTF_RenderText_Solid(font, "Start", Text_color);
-    SDL_Texture* startText = SDL_CreateTextureFromSurface(renderer, startSurf);
+    SDL_Surface *startSurf = TTF_RenderText_Solid(font, "Start", Text_color);
+    SDL_Texture *startText = SDL_CreateTextureFromSurface(renderer, startSurf);
     SDL_Rect textStart = {250, 300, startSurf->w, startSurf->h};
 
     SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
@@ -269,7 +265,6 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
     SDL_Rect shooter_section = {10, 510, 580, 200};
     SDL_RenderDrawRect(renderer, &shooter_section);
     drawShootingBalls(shooter_ball, reserved_ball);
-
 
 
 }
@@ -360,8 +355,8 @@ void drawTargeter() {
             .y = center_of_shooting_ball.y,
     };
 
-    double dx = sin(degree) * targeter_balls_dist;
-    double dy =  cos(degree) * targeter_balls_dist;
+    double dx = sin(degree * M_PI / 180.0) * targeter_balls_dist;
+    double dy = cos(degree * M_PI / 180.0) * targeter_balls_dist;
 
 
     while (true) {
@@ -371,14 +366,20 @@ void drawTargeter() {
         }
 
         if (targeter_point.x + dx >= SCREEN_WIDTH) {
-            break;
-        } else if (targeter_point.x + dy <= 0) {
-            break;
+            dx *= -1;
+        }
+        if(targeter_point.x + dx <= 0){
+            dx *= -1;
         }
 
 
-        aacircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y), Sint16(targeter_balls_radius),
-                     SILVER.r, SILVER.g, SILVER.b, 255);
+        if (sqrt((targeter_point.y - center_of_shooting_ball.y) * (targeter_point.y - center_of_shooting_ball.y) +
+                 (targeter_point.x - center_of_shooting_ball.x) * (targeter_point.x - center_of_shooting_ball.x)) >=
+            25) {
+            aacircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y), Sint16(targeter_balls_radius),
+                         SILVER.r, SILVER.g, SILVER.b, 255);
+        }
+
         targeter_point.y += dy;
         targeter_point.x += dx;
     }
@@ -386,7 +387,6 @@ void drawTargeter() {
 }
 
 void handleTargeterEvent(int type) {
-    cout << degree << endl;
     switch (type) {
 //        case 0:
 //            targeter_vertical_speed -= 0.5;
@@ -395,12 +395,12 @@ void handleTargeterEvent(int type) {
 //            targeter_vertical_speed += 0.5;
 //        break;
         case 0:
-            if (degree >= 0)
-                degree -= 0.005;
+            if (degree >= 100)
+                degree -= 0.5;
             break;
         case 1:
-            if (degree <= 180)
-                degree += 0.005;
+            if (degree <= 260 )
+                degree += 0.5;
             break;
         default:
             break;
