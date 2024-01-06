@@ -67,9 +67,6 @@ double targeter_balls_dist = 4.0;
 double targeter_vertical_speed = -1;
 double targeter_horizontal_speed = 0;
 
-
-using namespace std;
-
 // variables
 
 // SDL Window
