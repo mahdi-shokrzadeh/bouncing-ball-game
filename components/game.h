@@ -1,17 +1,16 @@
 #ifndef BOUNCING_BALL_GAME_GAME_H
 #define BOUNCING_BALL_GAME_GAME_H
 
-
-
 // variables related to targeter
 DOUBLE_POINT center_of_shooting_ball = {
-        .x = 300,
-        .y = 620,
+    .x = 300,
+    .y = 620,
 };
 DOUBLE_POINT center_of_reserved_ball = {
-        .x = 220,
-        .y = 670,
+    .x = 220,
+    .y = 670,
 };
+
 
 BALL thrown_ball;
 bool ball_is_being_thrown = false;
@@ -25,18 +24,17 @@ double targeter_balls_dist = 9.0;
 
 
 
-
 // variables related to balls
 
-const int radius_of_balls = 15;
-const int width_of_ball_box = 35;
+const int radius_of_balls = 20;
+const int width_of_ball_box = 45;
 double vertical_speed = 0.25;
+double dist_from_left = 12.5;
 
 
 // Initializing balls
 
-vector <BALL> balls;
-
+vector<BALL> balls;
 
 
 // Game
@@ -66,6 +64,11 @@ void Game(BALL shooter_ball, BALL reserved_ball);
 
 
 
+
+
+// ---------------------------------------------------
+
+
 void Game(BALL shooter_ball, BALL reserved_ball) {
 
     // targeter
@@ -77,14 +80,8 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
     for (int i = 0; i < balls.size(); i++) {
         BALL &ball = balls[i];
         ball.center.y += vertical_speed;
-        aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), 15,
+        aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
                      ball.color.r, ball.color.g, ball.color.b, 255);
-    }
-
-    // handle ball shooting
-
-    if (ball_is_being_thrown) {
-        handleBallShooting();
     }
 
 
@@ -93,26 +90,55 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
     SDL_RenderDrawRect(renderer, &shooter_section);
     drawShootingBalls(shooter_ball, reserved_ball);
 
+
+    // handle ball shooting
+
+    if (ball_is_being_thrown) {
+        handleBallShooting();
+    }
+
+
     SDL_RenderPresent(renderer);
 }
 
 
 void initializeBalls() {
     for (int i = 1; i <= 5; i++) {
-        for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box; j++) {
-            BALL ball = {
+        for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box -1; j++){
+            if(i%2 == 0) {
+
+                BALL ball = {
+                        .color = {
+                                .r=0,
+                                .g=0,
+                                .b=0,
+                        },
+                        .center = {
+                                .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
+                                .y = double(i * (width_of_ball_box)),
+                        },
+                };
+                setRandomColor(ball.color);
+                balls.push_back(ball);
+            }else {
+
+                BALL ball = {
                     .color = {
                             .r=0,
                             .g=0,
                             .b=0,
                     },
                     .center = {
-                            .x = double(j * width_of_ball_box + radius_of_balls + 3),
+                            .x = double((j+0.5) * width_of_ball_box + radius_of_balls + dist_from_left),
                             .y = double(i * (width_of_ball_box)),
                     },
-            };
-            setRandomColor(ball.color);
-            balls.push_back(ball);
+                };
+                setRandomColor(ball.color);
+                balls.push_back(ball);
+
+            }
+
+
         }
     }
 }
@@ -164,12 +190,13 @@ void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
 
 
 void drawShootingBalls(BALL shooter_ball, BALL reserved_ball) {
+
     aacircleRGBA(renderer, Sint16(shooter_ball.center.x),
                  Sint16(shooter_ball.center.y),
-                 15, shooter_ball.color.r,
+                 radius_of_balls, shooter_ball.color.r,
                  shooter_ball.color.g, shooter_ball.color.b, 255);
 
-    aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), 15,
+    aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), radius_of_balls,
                  reserved_ball.color.r, reserved_ball.color.g, reserved_ball.color.b, 255);
 //    SDL_RenderPresent(renderer);
 }
@@ -201,7 +228,9 @@ void drawTargeter() {
 
 
         if (calculateDistance(targeter_point, center_of_shooting_ball) >= 25) {
-            aacircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y), Sint16(targeter_balls_radius),
+
+            aacircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y),
+                         Sint16(targeter_balls_radius),
                          SILVER.r, SILVER.g, SILVER.b, 255);
         }
 
@@ -265,7 +294,7 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
         while (reserved_ball.color.r == shooting_ball.color.r) setRandomColor(reserved_ball.color);
         dxOfThrownBall = sin(degree * M_PI / 180.0) * SPEED_OF_THROWN_BALL;
         dyOfThrownBall = cos(degree * M_PI / 180.0) * SPEED_OF_THROWN_BALL;
-        drawShootingBalls(shooting_ball , reserved_ball);
+        drawShootingBalls(shooting_ball, reserved_ball);
     }
 
 
@@ -276,10 +305,8 @@ void handleBallShooting() {
     if (thrown_ball.center.y + dyOfThrownBall <= 0) {
         ball_is_being_thrown = false;
     } else {
-        if (thrown_ball.center.x + radius_of_balls + dxOfThrownBall >= SCREEN_WIDTH) {
-            dxOfThrownBall *= -1;
-        }
-        if (thrown_ball.center.x + dxOfThrownBall - radius_of_balls <= 0) {
+        if (thrown_ball.center.x + radius_of_balls + dxOfThrownBall >= SCREEN_WIDTH ||
+            thrown_ball.center.x + dxOfThrownBall - radius_of_balls <= 0) {
             dxOfThrownBall *= -1;
         }
     }
@@ -290,10 +317,6 @@ void handleBallShooting() {
                  Sint16(radius_of_balls), thrown_ball.color.r, thrown_ball.color.g, thrown_ball.color.b, 255);
 
 }
-
-
-
-
 
 
 #endif //BOUNCING_BALL_GAME_GAME_H

@@ -16,8 +16,4 @@ typedef struct BALL {
 
 
 
-
-
-
-
 #endif //BOUNCING_BALL_GAME_STRUCTS_H
