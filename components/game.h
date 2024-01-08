@@ -17,6 +17,16 @@ bool ball_is_being_thrown = false;
 double dxOfThrownBall;
 double dyOfThrownBall;
 
+BALL sample_ball = {
+
+        .type ='s',
+        .color = RED,
+
+        .center = {
+                .x = 0,
+                .y = 0,
+        },
+};
 
 double degree = 180.0;
 int targeter_balls_radius = 2;
@@ -34,7 +44,7 @@ double dist_from_left = 12.5;
 
 // Initializing balls
 
-BALL balls[NUMBER_OF_COLUMNS][12];
+BALL balls[MAX_NUMBER_OF_COLUMNS][12] = {0};
 
 // Game
 void setRandomColor(SDL_Color &color);
@@ -63,6 +73,7 @@ void Game(BALL shooter_ball, BALL reserved_ball);
 
 void checkCollShooterAndBalls();
 
+void handleCollShooterAndBalls(BALL &ball, int i, int j);
 
 
 
@@ -78,12 +89,15 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
 
     // drawing balls
 
-    for ( int i = 0 ; i < NUMBER_OF_COLUMNS; i++) {
-        for(int j = 0; j < 12; j++) {
-            BALL &ball = balls[i][j];
-            ball.center.y += vertical_speed;
-            aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
-                         ball.color.r, ball.color.g, ball.color.b, 255);
+    for (int i = 0; i < FINAL_COLUMNS; i++) {
+        for (int j = 0; j < 12; j++) {
+            if (balls[i][j].type != 's') {
+                BALL &ball = balls[i][j];
+                ball.center.y += vertical_speed;
+                aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
+                             ball.color.r, ball.color.g, ball.color.b, 255);
+
+            }
         }
     }
 
@@ -97,6 +111,7 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
 
     if (ball_is_being_thrown) {
         handleBallShooting();
+        checkCollShooterAndBalls();
     }
 
 
@@ -105,27 +120,33 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
 
 
 void initializeBalls() {
-    for (int i = 1; i <= NUMBER_OF_COLUMNS; i++) {
+    for (int i = 1; i <= FINAL_COLUMNS; i++) {
         for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box - 1; j++) {
-            BALL ball = {
-                    .color = {
-                            .r=0,
-                            .g=0,
-                            .b=0,
-                    },
-                    .center = {
-                            .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
-                            .y = double((i+1) * (width_of_ball_box)),
-                    },
-            };
-            setRandomColor(ball.color);
-
-            if (i % 2 != 0) {
-                balls[i-1][j] = ball;
+            if (i <= ESCAPE_FOR_BALLS_ARRAY) {
+                balls[i - 1][j] = sample_ball;
             } else {
-                ball.center.x += 0.5 * width_of_ball_box;
-                balls[i-1][j] = ball;
+                BALL ball = {
+                        .type='c',
+                        .color = {
+                                .r=0,
+                                .g=0,
+                                .b=0,
+                        },
+                        .center = {
+                                .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
+                                .y = double(-(i - 5) * (width_of_ball_box)),
+                        },
+                };
+                setRandomColor(ball.color);
+
+                if (i % 2 == 0) {
+                    balls[i - 1][j] = ball;
+                } else {
+                    ball.center.x += 0.5 * width_of_ball_box;
+                    balls[i - 1][j] = ball;
+                }
             }
+
         }
     }
 
@@ -157,7 +178,8 @@ void setRandomColor(SDL_Color &color) {
 
 
 void initializeShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
-
+    shooter_ball.type = 'c';
+    reserved_ball.type = 'c';
     shooter_ball.center.x = center_of_shooting_ball.x;
     shooter_ball.center.y = center_of_shooting_ball.y;
 
@@ -251,10 +273,9 @@ void handleTargeterEvent(int type) {
 
 bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
 
-    for (unsigned int i = NUMBER_OF_COLUMNS-1; i > 0; i--) {
-        for(int j = 11 ; j >= 0 ; j--){
+    for (int i = 0; i < FINAL_COLUMNS; i++) {
+        for (int j = NUMBER_OF_BALLS_IN_EACH_COL - 1; j >= 0; j--) {
             BALL &ball = balls[i][j];
-
             if (ball.center.y <= -10) return false;
             if (calculateDistance(ball.center, targeter_point) <= radius_of_balls + 15) return true;
 
@@ -279,7 +300,8 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
         shooting_ball = reserved_ball;
         shooting_ball.center = center_of_shooting_ball;
         reserved_ball.center = center_of_reserved_ball;
-
+        shooting_ball.type = 'c';
+        reserved_ball.type = 'c';
         setRandomColor(reserved_ball.color);
         while (reserved_ball.color.r == shooting_ball.color.r) setRandomColor(reserved_ball.color);
         dxOfThrownBall = sin(degree * M_PI / 180.0) * SPEED_OF_THROWN_BALL;
@@ -310,14 +332,38 @@ void handleBallShooting() {
 
 
 void checkCollShooterAndBalls() {
+    for (int i = 0; i < FINAL_COLUMNS; i++) {
+        for (int j = NUMBER_OF_BALLS_IN_EACH_COL - 1; j >= 0; j--) {
+            BALL &ball = balls[i][j];
+            if (calculateDistance(ball.center, thrown_ball.center) <= radius_of_balls * 2) {
+                // ball is being thrown
+                ball_is_being_thrown = false;
+                handleCollShooterAndBalls(ball, i, j);
+            }
 
+        }
+
+    }
 }
 
 
-void handleCollShooterAndBallse(BALL ball) {
+void handleCollShooterAndBalls(BALL &ball, int i, int j) {
+
+    BALL new_ball;
 
     // only positioning
+    if (i % 2 == 0) {
+        if(atan((ball.center.x-thrown_ball.center.x)/(ball.center.y-thrown_ball.center.y))* 180 / M_PI < 90){
+            new_ball.type='c';
+            new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+            new_ball.center.y =  double(ball.center.y + width_of_ball_box);
+            new_ball.color = thrown_ball.color;
+            balls[i-1][j-1] = new_ball;
+        }
 
+    } else {
+
+    }
 
 }
 

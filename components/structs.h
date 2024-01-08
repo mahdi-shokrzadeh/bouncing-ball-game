@@ -9,6 +9,7 @@ typedef struct DOUBLE_POINT {
 
 
 typedef struct BALL {
+    char type;
     SDL_Color color;
     DOUBLE_POINT center;
 } BALL;
