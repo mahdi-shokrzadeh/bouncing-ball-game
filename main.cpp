@@ -88,7 +88,7 @@ TTF_Font *font = NULL;
 theme th = th1;
 
 // where are we?
-bool main_menu = false, start_menu = false, leaderboard = false, setting = false, quit_menu = false, game = true;
+bool main_menu = true, start_menu = false, leaderboard = false, setting = false, quit_menu = false, game = false;
 
 
 // funcs
@@ -119,7 +119,7 @@ void handleBallShooting();
 
 // Menus
 
-void Main_Menu();
+void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere);
 
 void Game(BALL shooter_ball, BALL reserved_ball);
 
@@ -137,6 +137,8 @@ void loop() {
     bool MouseClicked = false;
     int x_MouseClicked = 0;
     int y_MouseClicked = 0;
+    int x_MouseWhere = 0;
+    int y_MouseWhere = 0;
 
 
     while (loop) {
@@ -145,7 +147,8 @@ void loop() {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 loop = SDL_FALSE;
-            } else if (event.type == SDL_KEYDOWN) {
+            }
+            else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
 
                     case SDLK_ESCAPE :
@@ -181,17 +184,20 @@ void loop() {
             }
         }
 
+        // get mouse free location
+        SDL_GetMouseState(&x_MouseWhere, &y_MouseWhere);
+
         // Blank out the renderer with all black
         SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
         SDL_RenderClear(renderer);
 
         if (main_menu)
-            Main_Menu();
+            Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere);
         else if (game)
             Game(shooter_ball, reserved_ball);
 
         // Present to renderer
-        SDL_RenderPresent(renderer);
+        //SDL_RenderPresent(renderer);
         SDL_Delay(DELAY);
     }
 }
@@ -230,7 +236,7 @@ int main(int argv, char **args) {
     return 0;
 }
 
-void Main_Menu() {
+void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere) {
 
     // Draw buttons
 
@@ -248,9 +254,6 @@ void Main_Menu() {
     SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
     SDL_RenderFillRect(renderer, &startBtn);
     SDL_RenderCopy(renderer, startText, NULL, &textStart);
-    //SDL_RenderPresent(renderer);
-    //SDL_DestroyTexture(startText);
-    //SDL_FreeSurface(startSurf);
 
     // Leaderboard button
     SDL_Rect leaderBtn = {100, 400, 400, 80};
@@ -266,6 +269,12 @@ void Main_Menu() {
     SDL_Rect quitBtn = {100, 600, 400, 80};
     SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
     SDL_RenderFillRect(renderer, &quitBtn);
+
+
+    // destroyer
+    SDL_RenderPresent(renderer);
+    SDL_DestroyTexture(startText);
+    SDL_FreeSurface(startSurf);
 }
 
 void Game(BALL shooter_ball, BALL reserved_ball) {
@@ -295,7 +304,7 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
     SDL_RenderDrawRect(renderer, &shooter_section);
     drawShootingBalls(shooter_ball, reserved_ball);
 
-
+    SDL_RenderPresent(renderer);
 }
 
 
