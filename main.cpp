@@ -16,8 +16,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-//#include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL2/SDL2_gfx.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
+//#include <SDL2/SDL2_gfx.h>
 
 using namespace std;
 
@@ -119,7 +119,7 @@ void handleBallShooting();
 
 // Menus
 
-void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere);
+void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, bool &game, bool &main_menu);
 
 void Game(BALL shooter_ball, BALL reserved_ball);
 
@@ -147,8 +147,7 @@ void loop() {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 loop = SDL_FALSE;
-            }
-            else if (event.type == SDL_KEYDOWN) {
+            } else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
 
                     case SDLK_ESCAPE :
@@ -181,6 +180,16 @@ void loop() {
                     default:
                         loop = SDL_TRUE;
                 }
+            } else if (event.type == SDL_KEYUP) {
+                switch (event.key.keysym.sym) {
+
+                    case SDL_MOUSEBUTTONUP :
+                        MouseClicked = false;
+                        break;
+
+                    default:
+                        loop = SDL_TRUE;
+                }
             }
         }
 
@@ -192,7 +201,7 @@ void loop() {
         SDL_RenderClear(renderer);
 
         if (main_menu)
-            Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere);
+            Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, game, main_menu);
         else if (game)
             Game(shooter_ball, reserved_ball);
 
@@ -236,7 +245,7 @@ int main(int argv, char **args) {
     return 0;
 }
 
-void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere) {
+void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, bool &game, bool &main_menu) {
 
     // Draw buttons
 
@@ -274,6 +283,14 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
     SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
     SDL_RenderFillRect(renderer, &quitBtn);
 
+    // mouse actions
+    /*if(x_MouseWhere >= startBtn.x && x_MouseWhere <= startBtn.x + startBtn.w && y_MouseWhere >= startBtn.y && y_MouseWhere <= startBtn.y + startBtn.h){
+        void;
+    }*/
+    if(MouseClicked && (x_MouseClicked >= startBtn.x && x_MouseClicked <= startBtn.x + startBtn.w) && (y_MouseClicked >= startBtn.y && y_MouseClicked <= startBtn.y + startBtn.h)){
+        game = !game;
+        main_menu = !main_menu;
+    }
 
     // destroyer
     SDL_RenderPresent(renderer);
