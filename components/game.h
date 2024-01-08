@@ -3,12 +3,12 @@
 
 // variables related to targeter
 DOUBLE_POINT center_of_shooting_ball = {
-    .x = 300,
-    .y = 620,
+        .x = 300,
+        .y = 620,
 };
 DOUBLE_POINT center_of_reserved_ball = {
-    .x = 220,
-    .y = 670,
+        .x = 220,
+        .y = 670,
 };
 
 
@@ -28,14 +28,13 @@ double targeter_balls_dist = 9.0;
 
 const int radius_of_balls = 20;
 const int width_of_ball_box = 45;
-double vertical_speed = 0.25;
+double vertical_speed = 0.2;
 double dist_from_left = 12.5;
 
 
 // Initializing balls
 
-vector<BALL> balls;
-
+BALL balls[NUMBER_OF_COLUMNS][12];
 
 // Game
 void setRandomColor(SDL_Color &color);
@@ -62,11 +61,13 @@ void handleBallShooting();
 
 void Game(BALL shooter_ball, BALL reserved_ball);
 
+void checkCollShooterAndBalls();
 
 
 
 
 // ---------------------------------------------------
+
 
 
 void Game(BALL shooter_ball, BALL reserved_ball) {
@@ -77,13 +78,14 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
 
     // drawing balls
 
-    for (int i = 0; i < balls.size(); i++) {
-        BALL &ball = balls[i];
-        ball.center.y += vertical_speed;
-        aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
-                     ball.color.r, ball.color.g, ball.color.b, 255);
+    for ( int i = 0 ; i < NUMBER_OF_COLUMNS; i++) {
+        for(int j = 0; j < 12; j++) {
+            BALL &ball = balls[i][j];
+            ball.center.y += vertical_speed;
+            aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
+                         ball.color.r, ball.color.g, ball.color.b, 255);
+        }
     }
-
 
     // shooter
     SDL_Rect shooter_section = {10, 510, 580, 200};
@@ -103,44 +105,30 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
 
 
 void initializeBalls() {
-    for (int i = 1; i <= 5; i++) {
-        for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box -1; j++){
-            if(i%2 == 0) {
-
-                BALL ball = {
-                        .color = {
-                                .r=0,
-                                .g=0,
-                                .b=0,
-                        },
-                        .center = {
-                                .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
-                                .y = double(i * (width_of_ball_box)),
-                        },
-                };
-                setRandomColor(ball.color);
-                balls.push_back(ball);
-            }else {
-
-                BALL ball = {
+    for (int i = 1; i <= NUMBER_OF_COLUMNS; i++) {
+        for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box - 1; j++) {
+            BALL ball = {
                     .color = {
                             .r=0,
                             .g=0,
                             .b=0,
                     },
                     .center = {
-                            .x = double((j+0.5) * width_of_ball_box + radius_of_balls + dist_from_left),
-                            .y = double(i * (width_of_ball_box)),
+                            .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
+                            .y = double((i+1) * (width_of_ball_box)),
                     },
-                };
-                setRandomColor(ball.color);
-                balls.push_back(ball);
+            };
+            setRandomColor(ball.color);
 
+            if (i % 2 != 0) {
+                balls[i-1][j] = ball;
+            } else {
+                ball.center.x += 0.5 * width_of_ball_box;
+                balls[i-1][j] = ball;
             }
-
-
         }
     }
+
 }
 
 
@@ -263,12 +251,14 @@ void handleTargeterEvent(int type) {
 
 bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
 
-    for (unsigned int i = balls.size(); i > 0; i--) {
-        BALL &ball = balls[i];
+    for (unsigned int i = NUMBER_OF_COLUMNS-1; i > 0; i--) {
+        for(int j = 11 ; j >= 0 ; j--){
+            BALL &ball = balls[i][j];
 
-        if (ball.center.y <= -10) return false;
+            if (ball.center.y <= -10) return false;
+            if (calculateDistance(ball.center, targeter_point) <= radius_of_balls + 15) return true;
 
-        if (calculateDistance(ball.center, targeter_point) <= radius_of_balls + 15) return true;
+        }
 
     }
 
@@ -318,5 +308,17 @@ void handleBallShooting() {
 
 }
 
+
+void checkCollShooterAndBalls() {
+
+}
+
+
+void handleCollShooterAndBallse(BALL ball) {
+
+    // only positioning
+
+
+}
 
 #endif //BOUNCING_BALL_GAME_GAME_H

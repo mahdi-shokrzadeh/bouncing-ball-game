@@ -9,6 +9,7 @@
 
 // Global variables related to game
 #define SPEED_OF_THROWN_BALL 10
+#define NUMBER_OF_COLUMNS 4
 
 
 
