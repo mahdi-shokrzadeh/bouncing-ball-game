@@ -246,8 +246,7 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
 
     // start button
     SDL_Rect startBtn = {100, 300, 400, 80};
-    SDL_Color Text_color = {255, 255, 255, 255};
-    SDL_Surface *startSurf = TTF_RenderText_Solid(font, "Start", Text_color);
+    SDL_Surface *startSurf = TTF_RenderText_Solid(font, "Start", WHITE);
     SDL_Texture *startText = SDL_CreateTextureFromSurface(renderer, startSurf);
     SDL_Rect textStart = {250, 300, startSurf->w, startSurf->h};
 
@@ -257,8 +256,13 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
 
     // Leaderboard button
     SDL_Rect leaderBtn = {100, 400, 400, 80};
+    SDL_Surface *leaderSurf = TTF_RenderText_Solid(font, "Leaderboard", WHITE);
+    SDL_Texture *leaderText = SDL_CreateTextureFromSurface(renderer, leaderSurf);
+    SDL_Rect textLeader = {170, 400, leaderSurf->w, leaderSurf->h};
+
     SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
     SDL_RenderFillRect(renderer, &leaderBtn);
+    SDL_RenderCopy(renderer, leaderText, NULL, &textLeader);
 
     // setting button
     SDL_Rect settingBtn = {100, 500, 400, 80};
@@ -275,6 +279,8 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
     SDL_RenderPresent(renderer);
     SDL_DestroyTexture(startText);
     SDL_FreeSurface(startSurf);
+    SDL_DestroyTexture(leaderText);
+    SDL_FreeSurface(leaderSurf);
 }
 
 void Game(BALL shooter_ball, BALL reserved_ball) {
