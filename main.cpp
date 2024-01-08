@@ -16,8 +16,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL2_gfxPrimitives.h>
-//#include <SDL2/SDL2_gfx.h>
+//include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL2_gfx.h>
 
 using namespace std;
 
@@ -154,12 +154,6 @@ void loop() {
                         loop = SDL_FALSE;
                         break;
 
-                    case SDL_MOUSEBUTTONDOWN :
-                        MouseClicked = true;
-                        x_MouseClicked = event.button.x;
-                        y_MouseClicked = event.button.y;
-                        break;
-
                     case SDLK_SPACE:
                         swapShootingBalls(shooter_ball, reserved_ball);
                         drawShootingBalls(shooter_ball, reserved_ball);
@@ -182,14 +176,15 @@ void loop() {
                 }
             } else if (event.type == SDL_KEYUP) {
                 switch (event.key.keysym.sym) {
-
-                    case SDL_MOUSEBUTTONUP :
-                        MouseClicked = false;
-                        break;
-
                     default:
                         loop = SDL_TRUE;
                 }
+            } else if(event.type == SDL_MOUSEBUTTONDOWN) {
+                MouseClicked = true;
+                x_MouseClicked = event.button.x;
+                y_MouseClicked = event.button.y;
+            } else if(event.type == SDL_MOUSEBUTTONUP) {
+                MouseClicked = false;
             }
         }
 
