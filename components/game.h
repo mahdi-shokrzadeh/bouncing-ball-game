@@ -37,9 +37,9 @@ double targeter_balls_dist = 9.0;
 // variables related to balls
 
 const int radius_of_balls = 20;
-const int width_of_ball_box = 45;
+const int width_of_ball_box = 46;
 double vertical_speed = 0.2;
-double dist_from_left = 12.5;
+double dist_from_left = 14.5;
 
 
 // Initializing balls
@@ -260,11 +260,11 @@ void handleTargeterEvent(int type) {
 //        break;
         case 0:
             if (degree >= 100)
-                degree -= 0.5;
+                degree -= TARGETER_SPEED;
             break;
         case 1:
             if (degree <= 260)
-                degree += 0.5;
+                degree += TARGETER_SPEED;
             break;
         default:
             break;
@@ -337,8 +337,9 @@ void checkCollShooterAndBalls() {
             BALL &ball = balls[i][j];
             if (calculateDistance(ball.center, thrown_ball.center) <= radius_of_balls * 2) {
                 // ball is being thrown
-                ball_is_being_thrown = false;
+
                 handleCollShooterAndBalls(ball, i, j);
+                ball_is_being_thrown = false;
             }
 
         }
@@ -348,22 +349,106 @@ void checkCollShooterAndBalls() {
 
 
 void handleCollShooterAndBalls(BALL &ball, int i, int j) {
+    if (ball_is_being_thrown) {
+        BALL new_ball;
+        new_ball.color = thrown_ball.color;
+        new_ball.type = 'c';
 
-    BALL new_ball;
+        double collision_degree;
+        string dir;
+        collision_degree =
+                atan2(abs(ball.center.y - thrown_ball.center.y), abs(thrown_ball.center.x - ball.center.x)) * 180 /
+                M_PI;
 
-    // only positioning
-    if (i % 2 == 0) {
-        if(atan((ball.center.x-thrown_ball.center.x)/(ball.center.y-thrown_ball.center.y))* 180 / M_PI < 90){
-            new_ball.type='c';
-            new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-            new_ball.center.y =  double(ball.center.y + width_of_ball_box);
-            new_ball.color = thrown_ball.color;
-            balls[i-1][j-1] = new_ball;
+        if (thrown_ball.center.x >= ball.center.x) {
+            dir = "right";
+        } else {
+            dir = "left";
         }
+        cout << collision_degree << endl;
 
-    } else {
+        // only positioning
+        if (i % 2 == 0) {
+            if (dir == "right") {
+                if (collision_degree < 45) {
+                    new_ball.center.x = double((j + 1.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = ball.center.y;
+                    balls[i][j + 1] = new_ball;
+                    cout << "Right 2 <45"<<endl;
+                } else {
+                    // checking if ball is the last or first item of row
+                    if (j + 1 != 12) {
+                        new_ball.center.x = double((j + 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                        new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                        balls[i - 1][j + 1] = new_ball;
 
+                    } else {
+                        new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                        new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                        balls[i - 1][j] = new_ball;
+                        cout << "Right 2"<<endl;
+                    }
+
+                }
+
+            } else {
+                if (collision_degree < 45) {
+                    new_ball.center.x = double((j - 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = ball.center.y;
+                    balls[i][j - 1] = new_ball;
+                } else {
+                    new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                    balls[i - 1][j] = new_ball;
+                }
+
+
+            }
+        } else {
+            if (dir == "right") {
+                if (collision_degree < 45) {
+                    new_ball.center.x = double((j + 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = ball.center.y;
+                    balls[i][j + 1] = new_ball;
+                    cout << "Right 1 <45" << endl;
+
+                } else {
+                    // checking if ball is the last or first item of row
+                    new_ball.center.x = double((j + 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                    balls[i - 1][j] = new_ball;
+                    cout << "Right 1 " << endl;
+
+                }
+
+            } else {
+                if (collision_degree < 45) {
+                    new_ball.center.x = double((j - 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = ball.center.y;
+                    balls[i][j - 1] = new_ball;
+                    cout << "LEFT 1 <45" << endl;
+
+                } else {
+                    if (j + 1 != 1) {
+                        new_ball.center.x = double((j - 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                        new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                        balls[i - 1][j - 1] = new_ball;
+                        cout << "LEFT 1" << endl;
+
+                    } else {
+                        new_ball.center.x = double((j - 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                        new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                        balls[i - 1][0] = new_ball;
+                        cout << "LEFT 1 ex" << endl;
+                    }
+
+                }
+
+            }
+
+        }
     }
+
 
 }
 
