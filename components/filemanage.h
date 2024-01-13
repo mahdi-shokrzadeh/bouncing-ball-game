@@ -1,6 +1,14 @@
 #ifndef BOUNCING_BALL_GAME_FILEMANAGE_H
 #define BOUNCING_BALL_GAME_FILEMANAGE_H
 
+void SetTheme(int whatTheme) {
+    switch(whatTheme) {
+        case 1:
+            th = th1;
+            break;
+    }
+}
+
 int scoresReader(string a[]) {
 
     ifstream scores;
@@ -58,7 +66,7 @@ void settingReader() {
         return;
     }
 
-    string whatTheme;
+    int whatTheme;
     settingfile >> soundVolume;
     settingfile >> musicVolume;
     settingfile >> whatTheme;
@@ -67,7 +75,7 @@ void settingReader() {
     settingfile.close();
 }
 
-void settingWriter(int soundVolumeSet, int musicVolumeSet, string whatTheme) {
+void settingWriter(int soundVolumeSet, int musicVolumeSet, int whatTheme) {
 
     ofstream settingfile;
     settingfile.open(".\\assets\\setting.txt");
