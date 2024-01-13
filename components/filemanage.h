@@ -12,7 +12,7 @@ void SetTheme(int whatTheme) {
 int scoresReader(string a[]) {
 
     ifstream scores;
-    scores.open("../database/scores.txt");
+    scores.open("./database/scores.txt");
 
     int i = 0;
     if (!scores.good()) {
@@ -39,7 +39,7 @@ void scoresWriter(string name, int score) {
     n = scoresReader(a);
 
     ofstream scores;
-    scores.open("../database/scores.txt");
+    scores.open("./database/scores.txt");
 
     if (!scores.good()) {
         cout << "error opening scores file...";
@@ -56,10 +56,10 @@ void scoresWriter(string name, int score) {
 void settingReader() {
 
     ifstream settingfile;
-    settingfile.open("../database/setting.txt");
+    settingfile.open("./database/setting.txt");
 
     if (!settingfile.good()) {
-        cout << "error opening scores file...";
+        cout << "error opening setting file...";
         return;
     }
 
@@ -75,10 +75,10 @@ void settingReader() {
 void settingWriter(int soundVolumeSet, int musicVolumeSet, int whatTheme) {
 
     ofstream settingfile;
-    settingfile.open("../database/setting.txt");
+    settingfile.open("./database/setting.txt");
 
     if (!settingfile.good()) {
-        cout << "error opening scores file...";
+        cout << "error opening setting file...";
         return;
     }
 
