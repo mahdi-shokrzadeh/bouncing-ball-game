@@ -47,4 +47,41 @@ void scoresWriter(string name, int score) {
     scores.close();
 }
 
+void settingReader(int &soundVolume, int &musicVolume, string &whatTheme) {
+
+    ifstream setting;
+    //scores.open(".\\assets\\setting.txt");
+    setting.open("./assets/setting.txt");
+
+    int i = 0;
+    if (!setting.good()) {
+        cout << "error opening scores file...";
+        return;
+    }
+
+    setting >> soundVolume;
+    setting >> musicVolume;
+    setting >> whatTheme;
+
+    setting.close();
+}
+
+void settingWriter(int soundVolume, int musicVolume, string whatTheme) {
+
+    ofstream setting;
+    //scores.open(".\\assets\\setting.txt");
+    setting.open("./assets/setting.txt");
+
+    if (!setting.good()) {
+        cout << "error opening scores file...";
+        return;
+    }
+
+    setting << soundVolume << endl;
+    setting << musicVolume << endl;
+    setting << whatTheme;
+    setting.close();
+}
+
+
 #endif //BOUNCING_BALL_GAME_FILEMANAGE_H
