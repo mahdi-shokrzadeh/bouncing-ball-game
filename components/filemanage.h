@@ -4,8 +4,8 @@
 void scoresReader() {
 
     ifstream scores;
-    scores.open("..\\assets\\scores.txt");
-    //scores.open("/Users/sina/CLionProjects/bouncing-ball-game/assets/scores.txt");
+    scores.open(".\\assets\\scores.txt");
+    //scores.open("./assets/scores.txt");
 
     int n = 0;
     string a[100];
