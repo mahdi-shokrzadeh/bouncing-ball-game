@@ -4,8 +4,8 @@
 int scoresReader(string a[]) {
 
     ifstream scores;
-    //scores.open(".\\assets\\scores.txt");
-    scores.open("./assets/scores.txt");
+    scores.open(".\\assets\\scores.txt");
+    //scores.open("./assets/scores.txt");
 
     int i = 0;
     if (!scores.good()) {
@@ -32,8 +32,8 @@ void scoresWriter(string name, int score) {
     n = scoresReader(a);
 
     ofstream scores;
-    //scores.open(".\\assets\\scores.txt");
-    scores.open("./assets/scores.txt");
+    scores.open(".\\assets\\scores.txt");
+    //scores.open("./assets/scores.txt");
 
     if (!scores.good()) {
         cout << "error opening scores file...";
@@ -47,40 +47,41 @@ void scoresWriter(string name, int score) {
     scores.close();
 }
 
-void settingReader(int &soundVolume, int &musicVolume, string &whatTheme) {
+void settingReader() {
 
-    ifstream setting;
-    //scores.open(".\\assets\\setting.txt");
-    setting.open("./assets/setting.txt");
+    ifstream settingfile;
+    settingfile.open(".\\assets\\setting.txt");
+    //setting.open("./assets/setting.txt");
 
-    int i = 0;
-    if (!setting.good()) {
+    if (!settingfile.good()) {
         cout << "error opening scores file...";
         return;
     }
 
-    setting >> soundVolume;
-    setting >> musicVolume;
-    setting >> whatTheme;
+    string whatTheme;
+    settingfile >> soundVolume;
+    settingfile >> musicVolume;
+    settingfile >> whatTheme;
+    SetTheme(whatTheme);
 
-    setting.close();
+    settingfile.close();
 }
 
-void settingWriter(int soundVolume, int musicVolume, string whatTheme) {
+void settingWriter(int soundVolumeSet, int musicVolumeSet, string whatTheme) {
 
-    ofstream setting;
-    //scores.open(".\\assets\\setting.txt");
-    setting.open("./assets/setting.txt");
+    ofstream settingfile;
+    settingfile.open(".\\assets\\setting.txt");
+    //setting.open("./assets/setting.txt");
 
-    if (!setting.good()) {
+    if (!settingfile.good()) {
         cout << "error opening scores file...";
         return;
     }
 
-    setting << soundVolume << endl;
-    setting << musicVolume << endl;
-    setting << whatTheme;
-    setting.close();
+    settingfile << soundVolumeSet << endl;
+    settingfile << musicVolumeSet << endl;
+    settingfile << whatTheme;
+    settingfile.close();
 }
 
 
