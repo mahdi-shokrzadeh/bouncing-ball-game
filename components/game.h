@@ -381,6 +381,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                         new_ball.center.x = double((j + 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
                         new_ball.center.y = double(ball.center.y + width_of_ball_box);
                         balls[i - 1][j + 1] = new_ball;
+                        cout << "DSDSF" << endl;
 
                     } else {
                         new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
@@ -393,13 +394,24 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
 
             } else {
                 if (collision_degree < 45) {
-                    new_ball.center.x = double((j - 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                    new_ball.center.y = ball.center.y;
-                    balls[i][j - 1] = new_ball;
+                    if(j+1 == 1){
+                        new_ball.center.x = double((j ) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                        new_ball.center.y = ball.center.y+width_of_ball_box;
+                        balls[i-1][j] = new_ball;
+
+                    }else{
+                        new_ball.center.x = double((j - 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                        new_ball.center.y = ball.center.y;
+                        balls[i][j - 1] = new_ball;
+                    }
+
+
+                    cout << "Left 2 <45" << endl;
                 } else {
                     new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
                     new_ball.center.y = double(ball.center.y + width_of_ball_box);
                     balls[i - 1][j] = new_ball;
+                    cout << "Left 2" << endl;
                 }
 
 
@@ -407,10 +419,18 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
         } else {
             if (dir == "right") {
                 if (collision_degree < 45) {
-                    new_ball.center.x = double((j + 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                    new_ball.center.y = ball.center.y;
-                    balls[i][j + 1] = new_ball;
-                    cout << "Right 1 <45" << endl;
+                    if(j+1 == 12){
+                        new_ball.center.x = double((j + 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                        new_ball.center.y = ball.center.y+width_of_ball_box;
+                        balls[i-1][j] = new_ball;
+                    }else{
+                        new_ball.center.x = double((j + 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                        new_ball.center.y = ball.center.y;
+                        balls[i][j + 1] = new_ball;
+                        cout << "Right 1 <45" << endl;
+
+                    }
+
 
                 } else {
                     // checking if ball is the last or first item of row
@@ -436,7 +456,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                         cout << "LEFT 1" << endl;
 
                     } else {
-                        new_ball.center.x = double((j - 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                        new_ball.center.x = double((j + 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
                         new_ball.center.y = double(ball.center.y + width_of_ball_box);
                         balls[i - 1][0] = new_ball;
                         cout << "LEFT 1 ex" << endl;
