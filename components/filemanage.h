@@ -1,52 +1,26 @@
 #ifndef BOUNCING_BALL_GAME_FILEMANAGE_H
 #define BOUNCING_BALL_GAME_FILEMANAGE_H
 
-void scoresReader() {
+int scoresReader(string a[]) {
 
     ifstream scores;
     scores.open(".\\assets\\scores.txt");
     //scores.open("./assets/scores.txt");
 
-    int n = 0;
-    string a[100];
-    if (scores.good()) {
-        scores >> n;
-        for (int i = 0; i < n; i++)
-            getline(scores, a[i]);
-        scores.close();
-
-        //bubbleSort(a, n);
-    }
-    else {
+    int i = 0;
+    if (!scores.good()) {
         cout << "error opening scores file...";
+        return 0;
     }
 
-    for(int i = 0;i < n;i++)
-        cout << a[i] << " ";
-    cout << endl;
-
-    /*
-    ifstream in("..\\files\\input.txt");
-    if(in.good())
+    while(!scores.eof())
     {
-        int a[MAX_DIM], i=0;
-        while(!in.eof())
-        {
-            in>>a[i];
-            if(in.good())
-            {
-                cout<<a[i]<<"\t";
-                i++;
-            }
-        }
-        in.close();
-
+        getline(scores, a[i]);
+        if(scores.good())
+            i++;
     }
-    else
-    {
-        cout<<"error...";
-    }*/
 
+    return i;
 }
 /*
 void scoresWriter() {

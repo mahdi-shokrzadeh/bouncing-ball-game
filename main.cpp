@@ -125,7 +125,10 @@ int main(int argv, char **args) {
 
     srand(time(NULL));
 
-    scoresReader();
+    string a[100];
+    int n = scoresReader(a);
+    for(int i = 0;i < n;i++)
+        cout << a[i];
 
     // SDL Inits
     Uint32 SDL_flags = SDL_INIT_EVERYTHING;// SDL_INIT_VIDEO | SDL_INIT_TIMER
