@@ -18,7 +18,19 @@
 #define ESCAPE_FOR_BALLS_ARRAY 6
 #define FINAL_COLUMNS (ESCAPE_FOR_BALLS_ARRAY + NUMBER_OF_COLUMNS)
 
+// SDL Window
+SDL_Window *window;
 
+// SDL Renderer to draw to
+SDL_Renderer *renderer;
+
+// SDL font
+TTF_Font *font = NULL;
+
+// Setting default
+int soundVolume = 10;
+int musicVolume = 10;
+theme th = th1;
 
 
 
