@@ -124,6 +124,7 @@ void loop() {
 int main(int argv, char **args) {
 
     srand(time(NULL));
+    settingReader();
 
     string a[100];
     int n = scoresReader(a);
