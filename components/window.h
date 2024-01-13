@@ -3,21 +3,6 @@
 
 
 
-
-// SDL Window
-SDL_Window *window;
-
-// SDL Renderer to draw to
-SDL_Renderer *renderer;
-
-// SDL font
-TTF_Font *font = NULL;
-
-// theme
-theme th = th1;
-
-
-
 // where are we?
 bool main_menu = true, start_menu = false, leaderboard = false, setting = false, quit_menu = false, game = false;
 
