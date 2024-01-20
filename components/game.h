@@ -75,7 +75,11 @@ void checkCollShooterAndBalls();
 
 void handleCollShooterAndBalls(BALL &ball, int i, int j);
 
+vector<ELEMENT> findNeighbors(int i, int j);
 
+void filterByColor(vector<ELEMENT> &elements, SDL_Color color);
+
+void handleGraphCheck(int i, int j, SDL_Color color);
 
 // ---------------------------------------------------
 
@@ -349,127 +353,259 @@ void checkCollShooterAndBalls() {
 
 
 void handleCollShooterAndBalls(BALL &ball, int i, int j) {
-    if (ball_is_being_thrown) {
-        BALL new_ball;
-        new_ball.color = thrown_ball.color;
-        new_ball.type = 'c';
+    if (!ball_is_being_thrown)return;
+//    cout << balls[15][0].type<<endl;
 
-        double collision_degree;
-        string dir;
-        collision_degree =
-                atan2(abs(ball.center.y - thrown_ball.center.y), abs(thrown_ball.center.x - ball.center.x)) * 180 /
-                M_PI;
+    ELEMENT el;
 
-        if (thrown_ball.center.x >= ball.center.x) {
-            dir = "right";
-        } else {
-            dir = "left";
-        }
-        cout << collision_degree << endl;
 
-        // only positioning
-        if (i % 2 == 0) {
-            if (dir == "right") {
-                if (collision_degree < 45) {
-                    new_ball.center.x = double((j + 1.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                    new_ball.center.y = ball.center.y;
-                    balls[i][j + 1] = new_ball;
-                    cout << "Right 2 <45"<<endl;
-                } else {
-                    // checking if ball is the last or first item of row
-                    if (j + 1 != 12) {
-                        new_ball.center.x = double((j + 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                        new_ball.center.y = double(ball.center.y + width_of_ball_box);
-                        balls[i - 1][j + 1] = new_ball;
-                        cout << "DSDSF" << endl;
+    BALL new_ball;
+    new_ball.color = thrown_ball.color;
+    new_ball.type = 'c';
 
-                    } else {
-                        new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                        new_ball.center.y = double(ball.center.y + width_of_ball_box);
-                        balls[i - 1][j] = new_ball;
-                        cout << "Right 2"<<endl;
-                    }
+    double collision_degree;
+    string dir;
+    collision_degree =
+            atan2(abs(ball.center.y - thrown_ball.center.y), abs(thrown_ball.center.x - ball.center.x)) * 180 /
+            M_PI;
 
-                }
+    if (thrown_ball.center.x >= ball.center.x) {
+        dir = "right";
+    } else {
+        dir = "left";
+    }
 
+    // positioning
+    if (i % 2 == 0) {
+        if (dir == "right") {
+            if (collision_degree < 45) {
+                new_ball.center.x = double((j + 1.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                new_ball.center.y = ball.center.y;
+                balls[i][j + 1] = new_ball;
+                el.i = i;
+                el.j = j + 1;
+
+                cout << "Right 2 <45" << endl;
             } else {
-                if (collision_degree < 45) {
-                    if(j+1 == 1){
-                        new_ball.center.x = double((j ) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                        new_ball.center.y = ball.center.y+width_of_ball_box;
-                        balls[i-1][j] = new_ball;
+                // checking if ball is the last or first item of row
+                if (j + 1 != 12) {
+                    new_ball.center.x = double((j + 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                    balls[i - 1][j + 1] = new_ball;
+                    el.i = i - 1;
+                    el.j = j + 1;
+                    cout << "DSDSF" << endl;
 
-                    }else{
-                        new_ball.center.x = double((j - 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                        new_ball.center.y = ball.center.y;
-                        balls[i][j - 1] = new_ball;
-                    }
-
-
-                    cout << "Left 2 <45" << endl;
                 } else {
                     new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
                     new_ball.center.y = double(ball.center.y + width_of_ball_box);
                     balls[i - 1][j] = new_ball;
-                    cout << "Left 2" << endl;
+                    el.i = i - 1;
+                    el.j = j;
+                    cout << "Right 2" << endl;
                 }
-
 
             }
+
         } else {
-            if (dir == "right") {
-                if (collision_degree < 45) {
-                    if(j+1 == 12){
-                        new_ball.center.x = double((j + 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                        new_ball.center.y = ball.center.y+width_of_ball_box;
-                        balls[i-1][j] = new_ball;
-                    }else{
-                        new_ball.center.x = double((j + 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                        new_ball.center.y = ball.center.y;
-                        balls[i][j + 1] = new_ball;
-                        cout << "Right 1 <45" << endl;
-
-                    }
-
+            if (collision_degree < 45) {
+                if (j + 1 == 1) {
+                    new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = ball.center.y + width_of_ball_box;
+                    balls[i - 1][j] = new_ball;
+                    el.i = i - 1;
+                    el.j = j;
 
                 } else {
-                    // checking if ball is the last or first item of row
-                    new_ball.center.x = double((j + 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                    new_ball.center.y = double(ball.center.y + width_of_ball_box);
-                    balls[i - 1][j] = new_ball;
-                    cout << "Right 1 " << endl;
-
-                }
-
-            } else {
-                if (collision_degree < 45) {
-                    new_ball.center.x = double((j - 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.x = double((j - 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
                     new_ball.center.y = ball.center.y;
                     balls[i][j - 1] = new_ball;
-                    cout << "LEFT 1 <45" << endl;
+                    el.i = i;
+                    el.j = j - 1;
+                }
+
+
+                cout << "Left 2 <45" << endl;
+            } else {
+                new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                balls[i - 1][j] = new_ball;
+                el.i = i - 1;
+                el.j = j;
+                cout << "Left 2" << endl;
+            }
+
+
+        }
+    } else {
+        if (dir == "right") {
+            if (collision_degree < 45) {
+                if (j + 1 == 12) {
+                    new_ball.center.x = double((j + 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = ball.center.y + width_of_ball_box;
+                    balls[i - 1][j] = new_ball;
+                    el.i = i - 1;
+                    el.j = j;
+                } else {
+                    new_ball.center.x = double((j + 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = ball.center.y;
+                    balls[i][j + 1] = new_ball;
+                    el.i = i;
+                    el.j = j + 1;
+                    cout << "Right 1 <45" << endl;
+
+                }
+
+
+            } else {
+                // checking if ball is the last or first item of row
+                new_ball.center.x = double((j + 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                balls[i - 1][j] = new_ball;
+                el.i = i - 1;
+                el.j = j;
+                cout << "Right 1 " << endl;
+
+            }
+
+        } else {
+            if (collision_degree < 45) {
+                new_ball.center.x = double((j - 1) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                new_ball.center.y = ball.center.y;
+                balls[i][j - 1] = new_ball;
+                el.i = i;
+                el.j = j - 1;
+                cout << "LEFT 1 <45" << endl;
+
+            } else {
+                if (j + 1 != 1) {
+                    new_ball.center.x = double((j - 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                    balls[i - 1][j - 1] = new_ball;
+                    el.i = i - 1;
+                    el.j = j - 1;
+                    cout << "LEFT 1" << endl;
 
                 } else {
-                    if (j + 1 != 1) {
-                        new_ball.center.x = double((j - 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                        new_ball.center.y = double(ball.center.y + width_of_ball_box);
-                        balls[i - 1][j - 1] = new_ball;
-                        cout << "LEFT 1" << endl;
-
-                    } else {
-                        new_ball.center.x = double((j + 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
-                        new_ball.center.y = double(ball.center.y + width_of_ball_box);
-                        balls[i - 1][0] = new_ball;
-                        cout << "LEFT 1 ex" << endl;
-                    }
-
+                    new_ball.center.x = double((j + 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
+                    new_ball.center.y = double(ball.center.y + width_of_ball_box);
+                    balls[i - 1][0] = new_ball;
+                    el.i = i - 1;
+                    el.j = 0;
+                    cout << "LEFT 1 ex" << endl;
                 }
 
             }
 
+        }
+
+    }
+
+//    handle graph
+    handleGraphCheck(el.i, el.j, thrown_ball.color);
+}
+
+vector<ELEMENT> findNeighbors(int i, int j) {
+
+    vector<ELEMENT> neighbors;
+
+    if (i % 2 == 0) {
+        if (j + 1 <= 11) {
+            // checking the upper line
+            if (balls[i + 1][j + 1].type != 's') neighbors.push_back({i + 1, j + 1});
+            // checking the line
+            if (balls[i][j + 1].type != 's') neighbors.push_back({i, j + 1});
+            // checking the downer line
+            if (balls[i - 1][j + 1].type != 's') neighbors.push_back({i - 1, j + 1});
+        }
+
+        if (balls[i + 1][j].type != 's') neighbors.push_back({i + 1, j});
+        if (balls[i - 1][j].type != 's') neighbors.push_back({i - 1, j});
+
+        if (j - 1 >= 0) {
+            if (balls[i][j - 1].type != 's') neighbors.push_back({i, j - 1});
+        }
+
+    } else {
+        if (j - 1 >= 0) {
+            // checking the upper line
+            if (balls[i + 1][j - 1].type != 's') neighbors.push_back({i + 1, j - 1});
+            // checking the line
+            if (balls[i][j - 1].type != 's') neighbors.push_back({i, j - 1});
+            // checking the downer line
+            if (balls[i - 1][j - 1].type != 's') neighbors.push_back({i - 1, j - 1});
+        }
+
+        if (balls[i + 1][j].type != 's') neighbors.push_back({i + 1, j});
+        if (balls[i - 1][j].type != 's') neighbors.push_back({i - 1, j});
+
+        if (j + 1 <= 11) {
+            if (balls[i][j + 1].type != 's') neighbors.push_back({i, j + 1});
+        }
+    }
+
+    return neighbors;
+}
+
+
+void filterByColor(vector<ELEMENT> &elements, SDL_Color color) {
+    for (auto it = elements.begin(); it != elements.end();) {
+        if (!(balls[it->i][it->j].color.r == color.r && balls[it->i][it->j].color.g == color.g &&
+              balls[it->i][it->j].color.b == color.b)) {
+            elements.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+bool vectorContainsElement(const vector<ELEMENT> &elements, ELEMENT el) {
+
+    for (ELEMENT e: elements) {
+        if (e.i == el.i && e.j == el.j) return true;
+    }
+    return false;
+
+}
+
+
+void handleGraphCheck(int i, int j, SDL_Color color) {
+
+    cout << i << endl << endl;
+    vector<ELEMENT> visited;
+    vector<ELEMENT> queue;
+
+    ELEMENT zero;
+    zero.i = i;
+    zero.j = j;
+
+    queue.push_back(zero);
+
+    while (!queue.empty()) {
+
+        ELEMENT el = queue[0];
+        vector<ELEMENT> vec = findNeighbors(el.i, el.j);
+        filterByColor(vec, color);
+
+        visited.push_back(el);
+        for (ELEMENT el2: vec) {
+            if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
+            cout << el2.i << " " << el2.j << endl;
+        }
+
+        queue.erase(queue.begin());
+
+    }
+
+
+    if (visited.size() > 2) {
+        for (ELEMENT el: visited) {
+            balls[el.i][el.j].type = 's';
         }
     }
 
 
 }
+
 
 #endif //BOUNCING_BALL_GAME_GAME_H

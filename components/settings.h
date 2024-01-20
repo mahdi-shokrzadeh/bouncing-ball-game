@@ -21,7 +21,7 @@
 
 
 // targeter
-#define TARGETER_SPEED 0.7
+#define TARGETER_SPEED 0.9
 
 
 // SDL Window

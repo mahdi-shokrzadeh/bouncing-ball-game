@@ -13,6 +13,8 @@
 #include <string>
 #include <string>
 #include <vector>
+#include <stack>
+#include <algorithm>
 #include <fstream>
 #include <map>
 #include <SDL2/SDL.h>
