@@ -19,14 +19,26 @@ double dyOfThrownBall;
 
 BALL sample_ball = {
 
-        .type ='s',
-        .color = RED,
+    .type ='s',
+    .color = RED,
 
-        .center = {
-                .x = 0,
-                .y = 0,
-        },
+    .center = {
+            .x = 0,
+            .y = 0,
+    },
 };
+
+
+BALL gone_ball = {
+    .type ='s',
+    .color = RED,
+
+    .center = {
+            .x = 10000,
+            .y = 20000,
+    },
+};
+
 
 double degree = 180.0;
 int targeter_balls_radius = 2;
@@ -560,16 +572,15 @@ void filterByColor(vector<ELEMENT> &elements, SDL_Color color) {
 }
 
 bool vectorContainsElement(const vector<ELEMENT> &elements, ELEMENT el) {
-
     for (ELEMENT e: elements) {
         if (e.i == el.i && e.j == el.j) return true;
     }
     return false;
-
 }
 
 
 void handleGraphCheck(int i, int j, SDL_Color color) {
+
 
     cout << i << endl << endl;
     vector<ELEMENT> visited;
@@ -600,7 +611,7 @@ void handleGraphCheck(int i, int j, SDL_Color color) {
 
     if (visited.size() > 2) {
         for (ELEMENT el: visited) {
-            balls[el.i][el.j].type = 's';
+            balls[el.i][el.j] = gone_ball;
         }
     }
 
