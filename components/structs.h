@@ -19,6 +19,25 @@ typedef struct ELEMENT {
    int j;
 }ELEMENT;
 
+// file structures
+struct user {
+    int id;
+    string name;
+    string password;
+};
+
+struct score {
+    int user_id;
+    int level_id;
+    int time_created;
+    int score;
+};
+
+struct level {
+    string mode;
+    int difficulty_level;
+};
+
 
 
 #endif //BOUNCING_BALL_GAME_STRUCTS_H
