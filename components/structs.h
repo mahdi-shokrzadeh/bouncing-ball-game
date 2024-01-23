@@ -36,6 +36,7 @@ struct score {
 
 struct level {
     string mode;
+    int number_of_possible_throwing_balls;
     int difficulty_level;
 };
 
