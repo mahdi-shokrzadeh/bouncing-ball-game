@@ -58,6 +58,14 @@ void loop() {
     int y_MouseWhere = 0;
 
 
+
+    map<string, bool> Locator;
+    Locator["main_menu"] = true;
+    Locator["start_menu"] = false;
+    Locator["game"] = false;
+
+
+
     while (loop) {
 
         // Allow quiting with escape key by polling for pending events
@@ -112,9 +120,9 @@ void loop() {
         SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
         SDL_RenderClear(renderer);
 
-        if (main_menu)
-            Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, game, main_menu);
-        else if (game)
+        if (Locator["main_menu"])
+            Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
+        else if (Locator["game"])
             Game(shooter_ball, reserved_ball);
         // //Present to renderer
         //SDL_RenderPresent(renderer);
@@ -142,6 +150,11 @@ int main(int argv, char **args) {
     TTF_Init();
     font = TTF_OpenFont("assets/font.ttc", 50);
 
+    //set icon and title
+    SDL_Surface *icon = IMG_Load("assets/icon.png");
+    SDL_SetWindowIcon(window, icon);
+    SDL_SetWindowTitle(window, "Bouncing Ball Gameeeeee!!!!");
+
 
     //loop
     loop();
@@ -155,6 +168,8 @@ int main(int argv, char **args) {
 
     TTF_CloseFont(font);
     font = NULL;
+
+    SDL_FreeSurface(icon);
 
     TTF_Quit();
     SDL_Quit();

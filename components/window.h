@@ -3,13 +3,9 @@
 
 
 
-// where are we?
-bool main_menu = true, start_menu = false, leaderboard = false, setting = false, quit_menu = false, game = false;
-
-
 // Menus
 
-void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, bool &game, bool &main_menu) {
+void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
 
     // Draw buttons
 
@@ -52,8 +48,8 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
         void;
     }*/
     if(MouseClicked && (x_MouseClicked >= startBtn.x && x_MouseClicked <= startBtn.x + startBtn.w) && (y_MouseClicked >= startBtn.y && y_MouseClicked <= startBtn.y + startBtn.h)){
-        game = !game;
-        main_menu = !main_menu;
+        Locator["game"] = !Locator["game"];
+        Locator["main_menu"] = !Locator["main_menu"];
     }
 
     // destroyer
