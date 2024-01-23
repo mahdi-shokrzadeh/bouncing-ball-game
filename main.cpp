@@ -21,8 +21,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-//#include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL2/SDL2_gfx.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
+//#include <SDL2/SDL2_gfx.h>
 
 using namespace std;
 
@@ -148,7 +148,19 @@ int main(int argv, char **args) {
     SDL_GetCurrentDisplayMode(0, &DM);
 
     TTF_Init();
-    font = TTF_OpenFont("assets/font.ttc", 50);
+    font = TTF_OpenFont(th.font, 50);
+
+    Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);
+    music = Mix_LoadMUS(th.music);
+    Mix_PlayMusic(music, -1);
+
+    bgSurface = IMG_Load(th.bg);
+    bg = SDL_CreateTextureFromSurface(renderer, bgSurface);
+
+    bgRect.x = 0;
+    bgRect.y = 0;
+    bgRect.w = bgSurface->w;
+    bgRect.h = bgSurface->h;
 
     //set icon and title
     SDL_Surface *icon = IMG_Load("assets/icon.png");
@@ -168,6 +180,12 @@ int main(int argv, char **args) {
 
     TTF_CloseFont(font);
     font = NULL;
+
+    Mix_FreeMusic(music);
+    music = NULL;
+
+    SDL_FreeSurface(bgSurface);
+    SDL_DestroyTexture(bg);
 
     SDL_FreeSurface(icon);
 

@@ -35,8 +35,17 @@ SDL_Window *window;
 // SDL Renderer to draw to
 SDL_Renderer *renderer;
 
-// SDL font
+// SDL setup
 TTF_Font *font = NULL;
+
+Mix_Music *music = NULL;
+
+SDL_Surface *bgSurface = NULL;
+
+SDL_Texture *bg = NULL;
+
+SDL_Rect bgRect;
+
 
 // Setting default
 int soundVolume = 10;
