@@ -46,8 +46,8 @@ BALL end_pointer_ball = {
 //                .y = -20000,
 //        },
 //};
-BALL gone_ball;
 
+BALL gone_ball;
 
 double degree = 180.0;
 int targeter_balls_radius = 2;
@@ -75,7 +75,16 @@ SDL_Event event;
 
 BALL balls[MAX_NUMBER_OF_ROWS][12] = {0};
 
+
+// Page state
+string state = "game_is_running";
+
+
+
 // Game
+
+void handleGameProcess();
+
 void setRandomColor(SDL_Color &color);
 
 void initializeBalls();
@@ -116,8 +125,7 @@ void handleFallingBalls();
 // ---------------------------------------------------
 
 
-
-void Game() {
+void handleGameProcess() {
 
     initializeBalls();
     BALL shooter_ball;
@@ -125,6 +133,7 @@ void Game() {
     initializeShootingBalls(shooter_ball, reserved_ball);
 
     bool game_loop = SDL_TRUE;
+
     while (game_loop) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
@@ -132,10 +141,6 @@ void Game() {
                 main_loop = SDL_FALSE;
             } else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
-
-//                    case SDLK_ESCAPE :
-//                        loop = SDL_FALSE;
-//                        break;
 
                     case SDLK_SPACE:
                         swapShootingBalls(shooter_ball, reserved_ball);
@@ -160,72 +165,81 @@ void Game() {
             }
         }
 
+        Game(shooter_ball , reserved_ball);
 
-        // Blank out the renderer with all black
-        SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
-        SDL_RenderClear(renderer);
-
-
-        // targeter
-        drawTargeter();
-
-        // drawing balls
-
-        for (int i = 0; i < FINAL_ROWS; i++) {
-            for (int j = 0; j < 12; j++) {
-                if (balls[i][j].type != 's') {
-                    BALL &ball = balls[i][j];
-                    ball.center.y += vertical_speed;
-                    aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
-                                 ball.color.r, ball.color.g, ball.color.b, 255);
-
-                    // updating the flag
-                    if (ball.center.y >= -60 && ball.center.y <= -40 && flag.i != i) {
-                        flag.i = i;
-                        flag.j = j;
-                    }
-
-                }
-            }
-        }
-        // updating end_pointer_ball center
-        for (int j = 0; j < 12; j++) {
-            if (balls[FINAL_ROWS][j].type != 's') {
-                BALL &ball = balls[FINAL_ROWS][j];
-                ball.center.y += vertical_speed;
-            }
-        }
-        end_pointer_ball.center.y += vertical_speed;
-
-
-        // shooter
-        SDL_Rect shooter_section = {10, 510, 580, 200};
-        SDL_RenderDrawRect(renderer, &shooter_section);
-        drawShootingBalls(shooter_ball, reserved_ball);
-
-
-        // draw the end section
-        if (end_pointer_ball.center.y >= -50) {
-            SDL_Rect r;
-            r.x = 5;
-            r.y = end_pointer_ball.center.y - 85;
-            r.w = SCREEN_WIDTH - 10;
-            r.h = 50;
-            SDL_SetRenderDrawColor(renderer, PLUM.r, PLUM.g, PLUM.b, 255);
-            SDL_RenderFillRect(renderer, &r);
-            flag.i = FINAL_ROWS;
-        }
-
-
-        // handle ball shooting
-        if (ball_is_being_thrown) {
-            handleBallShooting();
-            checkCollShooterAndBalls();
-        }
-
+        //  Delay and update window
         SDL_RenderPresent(renderer);
         SDL_Delay(DELAY);
+
     }
+
+}
+
+void Game(BALL shooter_ball ,BALL reserved_ball) {
+
+
+    // Blank out the renderer with all black
+    SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
+    SDL_RenderClear(renderer);
+
+
+    // targeter
+    drawTargeter();
+
+    // drawing balls
+
+    for (int i = 0; i < FINAL_ROWS; i++) {
+        for (int j = 0; j < 12; j++) {
+            if (balls[i][j].type != 's') {
+                BALL &ball = balls[i][j];
+                ball.center.y += vertical_speed;
+                aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
+                             ball.color.r, ball.color.g, ball.color.b, 255);
+
+                // updating the flag
+                if (ball.center.y >= -60 && ball.center.y <= -40 && flag.i != i) {
+                    flag.i = i;
+                    flag.j = j;
+                }
+
+            }
+        }
+    }
+    // updating end_pointer_ball center
+    for (int j = 0; j < 12; j++) {
+        if (balls[FINAL_ROWS][j].type != 's') {
+            BALL &ball = balls[FINAL_ROWS][j];
+            ball.center.y += vertical_speed;
+        }
+    }
+    end_pointer_ball.center.y += vertical_speed;
+
+
+    // shooter
+    SDL_Rect shooter_section = {10, 510, 580, 200};
+    SDL_RenderDrawRect(renderer, &shooter_section);
+    drawShootingBalls(shooter_ball, reserved_ball);
+
+
+    // draw the end section
+    if (end_pointer_ball.center.y >= -50) {
+        SDL_Rect r;
+        r.x = 5;
+        r.y = end_pointer_ball.center.y - 85;
+        r.w = SCREEN_WIDTH - 10;
+        r.h = 50;
+        SDL_SetRenderDrawColor(renderer, PLUM.r, PLUM.g, PLUM.b, 255);
+        SDL_RenderFillRect(renderer, &r);
+        flag.i = FINAL_ROWS;
+    }
+
+
+    // handle ball shooting
+    if (ball_is_being_thrown) {
+        handleBallShooting();
+        checkCollShooterAndBalls();
+    }
+
 
 }
 

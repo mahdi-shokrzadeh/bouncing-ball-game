@@ -100,7 +100,7 @@ void loop() {
             Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
 
         else if (Locator["game"]){
-            Game();
+            handleGameProcess();
         }
 
 
