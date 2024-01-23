@@ -18,7 +18,6 @@ double dxOfThrownBall;
 double dyOfThrownBall;
 
 BALL sample_ball = {
-
         .type ='s',
         .color = RED,
 
@@ -38,20 +37,25 @@ BALL end_pointer_ball = {
 };
 
 
-BALL gone_ball = {
-        .type ='s',
-        .color = RED,
-
-        .center = {
-                .x = 10000,
-                .y = 20000,
-        },
-};
+//BALL gone_ball = {
+//        .type ='s',
+//        .color = RED,
+//
+//        .center = {
+//                .x = -10000,
+//                .y = -20000,
+//        },
+//};
+BALL gone_ball;
 
 
 double degree = 180.0;
 int targeter_balls_radius = 2;
 double targeter_balls_dist = 9.0;
+
+
+// Flag
+ELEMENT flag;
 
 
 
@@ -96,11 +100,14 @@ void checkCollShooterAndBalls();
 
 void handleCollShooterAndBalls(BALL &ball, int i, int j);
 
-vector<ELEMENT> findNeighbors(int i, int j);
+vector<ELEMENT> findNeighbors(int i, int j, string type);
 
 void filterByColor(vector<ELEMENT> &elements, SDL_Color color);
 
 void handleGraphCheck(int i, int j, SDL_Color color);
+
+void handleFallingBalls();
+
 
 // ---------------------------------------------------
 
@@ -122,10 +129,22 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
                 aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
                              ball.color.r, ball.color.g, ball.color.b, 255);
 
+                // updating the flag
+                if (ball.center.y >= -60 && ball.center.y <= -40 && flag.i != i) {
+                    flag.i = i;
+                    flag.j = j;
+                }
+
             }
         }
     }
     // updating end_pointer_ball center
+    for (int j = 0; j < 12; j++) {
+        if (balls[FINAL_COLUMNS][j].type != 's') {
+            BALL &ball = balls[FINAL_COLUMNS][j];
+            ball.center.y += vertical_speed;
+        }
+    }
     end_pointer_ball.center.y += vertical_speed;
 
 
@@ -136,15 +155,15 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
 
 
     // draw the end section
-    if (end_pointer_ball.center.y >= -50){
+    if (end_pointer_ball.center.y >= -50) {
         SDL_Rect r;
         r.x = 5;
         r.y = end_pointer_ball.center.y - 85;
-        r.w = SCREEN_WIDTH-10;
+        r.w = SCREEN_WIDTH - 10;
         r.h = 50;
-        SDL_SetRenderDrawColor( renderer, PLUM.r , PLUM.g , PLUM.b, 255 );
-        SDL_RenderFillRect(renderer , &r);
-
+        SDL_SetRenderDrawColor(renderer, PLUM.r, PLUM.g, PLUM.b, 255);
+        SDL_RenderFillRect(renderer, &r);
+        flag.i = FINAL_COLUMNS;
     }
 
 
@@ -165,16 +184,16 @@ void initializeBalls() {
                 balls[i - 1][j] = sample_ball;
             } else {
                 BALL ball = {
-                    .type='c',
-                    .color = {
-                            .r=0,
-                            .g=0,
-                            .b=0,
-                    },
-                    .center = {
-                            .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
-                            .y = double(-(i - 5) * (width_of_ball_box)),
-                    },
+                        .type='c',
+                        .color = {
+                                .r=0,
+                                .g=0,
+                                .b=0,
+                        },
+                        .center = {
+                                .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
+                                .y = double(-(i - 5) * (width_of_ball_box)),
+                        },
                 };
                 setRandomColor(ball.color);
 
@@ -191,9 +210,20 @@ void initializeBalls() {
 
     //
 
-    for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box - 1; j++){
-        end_pointer_ball.center.y = double(-(FINAL_COLUMNS - 5) * (width_of_ball_box));
+    for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box - 1; j++) {
+        BALL ball;
+        ball.type = 'e';
+        ball.color = RED;
+        ball.center.y = double(-(FINAL_COLUMNS - 4) * (width_of_ball_box));
+        ball.center.x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left);
+        if ((FINAL_COLUMNS + 1) % 2 == 0) {
+            balls[FINAL_COLUMNS][j] = ball;
+        } else {
+            ball.center.x += 0.5 * width_of_ball_box;
+            balls[FINAL_COLUMNS][j] = ball;
+        }
     }
+    end_pointer_ball.center.y = double(-(FINAL_COLUMNS - 5) * (width_of_ball_box));
 
 }
 
@@ -321,12 +351,15 @@ bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
     for (int i = 0; i < FINAL_COLUMNS; i++) {
         for (int j = NUMBER_OF_BALLS_IN_EACH_COL - 1; j >= 0; j--) {
             BALL &ball = balls[i][j];
-            if (ball.center.y <= -10) return false;
+//            if (ball.center.y <= -10) return false;
             if (calculateDistance(ball.center, targeter_point) <= radius_of_balls + 15) return true;
-
         }
+        // collision to end section
+        if (targeter_point.y - 10 <= end_pointer_ball.center.y) return true;
 
     }
+    return false;
+
 
 }
 
@@ -386,9 +419,7 @@ void checkCollShooterAndBalls() {
                 handleCollShooterAndBalls(ball, i, j);
                 ball_is_being_thrown = false;
             }
-
         }
-
     }
 }
 
@@ -542,25 +573,29 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
 
     }
 
-//    handle graph
+    //    handle graph
     handleGraphCheck(el.i, el.j, thrown_ball.color);
+    // handle balls falling
+    handleFallingBalls();
+
 }
 
-vector<ELEMENT> findNeighbors(int i, int j) {
+
+vector<ELEMENT> findNeighbors(int i, int j, string type) {
 
     vector<ELEMENT> neighbors;
 
     if (i % 2 == 0) {
         if (j + 1 <= 11) {
             // checking the upper line
-            if (balls[i + 1][j + 1].type != 's') neighbors.push_back({i + 1, j + 1});
+            if (balls[i + 1][j + 1].type != 's' && type != "down") neighbors.push_back({i + 1, j + 1});
             // checking the line
             if (balls[i][j + 1].type != 's') neighbors.push_back({i, j + 1});
             // checking the downer line
             if (balls[i - 1][j + 1].type != 's') neighbors.push_back({i - 1, j + 1});
         }
 
-        if (balls[i + 1][j].type != 's') neighbors.push_back({i + 1, j});
+        if (balls[i + 1][j].type != 's' && type != "down") neighbors.push_back({i + 1, j});
         if (balls[i - 1][j].type != 's') neighbors.push_back({i - 1, j});
 
         if (j - 1 >= 0) {
@@ -570,14 +605,14 @@ vector<ELEMENT> findNeighbors(int i, int j) {
     } else {
         if (j - 1 >= 0) {
             // checking the upper line
-            if (balls[i + 1][j - 1].type != 's') neighbors.push_back({i + 1, j - 1});
+            if (balls[i + 1][j - 1].type != 's' && type != "down") neighbors.push_back({i + 1, j - 1});
             // checking the line
             if (balls[i][j - 1].type != 's') neighbors.push_back({i, j - 1});
             // checking the downer line
             if (balls[i - 1][j - 1].type != 's') neighbors.push_back({i - 1, j - 1});
         }
 
-        if (balls[i + 1][j].type != 's') neighbors.push_back({i + 1, j});
+        if (balls[i + 1][j].type != 's' && type != "down") neighbors.push_back({i + 1, j});
         if (balls[i - 1][j].type != 's') neighbors.push_back({i - 1, j});
 
         if (j + 1 <= 11) {
@@ -623,7 +658,7 @@ void handleGraphCheck(int i, int j, SDL_Color color) {
     while (!queue.empty()) {
 
         ELEMENT el = queue[0];
-        vector<ELEMENT> vec = findNeighbors(el.i, el.j);
+        vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
         filterByColor(vec, color);
 
         visited.push_back(el);
@@ -638,13 +673,57 @@ void handleGraphCheck(int i, int j, SDL_Color color) {
 
 
     if (visited.size() > LEAST_BALLS_NUMBER) {
+        // clearing balls
         for (ELEMENT el: visited) {
             balls[el.i][el.j] = gone_ball;
         }
     }
 
-
 }
 
+
+void handleFallingBalls() {
+
+    //    Vector type , enhanced version -> array
+    vector<ELEMENT> visited;
+    vector<ELEMENT> queue;
+    ELEMENT element;
+
+    if (end_pointer_ball.center.y >= -50) {
+        element = {FINAL_COLUMNS, 0};
+    } else {
+        element = flag;
+    }
+
+
+    // Initializing the queue
+
+    for (int j = 0; j <= 11; j++) {
+        queue.push_back({element.i, j});
+    }
+    cout << element.i << endl;
+
+    while (!queue.empty()) {
+
+        ELEMENT el = queue[0];
+        vector<ELEMENT> vec = findNeighbors(el.i, el.j, "down");
+        visited.push_back(el);
+        for (ELEMENT el2: vec) {
+            if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
+        }
+        queue.erase(queue.begin());
+
+    }
+
+    // removing the other balls
+    for (int i = 0; i < element.i; i++) {
+        for (int j = 0; j < 12; j++) {
+            if (balls[i][j].type != 's') {
+                if (!vectorContainsElement(visited, {i, j})) balls[i][j] = gone_ball;
+            }
+        }
+    }
+
+}
 
 #endif //BOUNCING_BALL_GAME_GAME_H
