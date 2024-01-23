@@ -41,7 +41,17 @@ SDL_bool main_loop = SDL_TRUE;
 
 
 // SDL font
+// SDL setup
 TTF_Font *font = NULL;
+
+Mix_Music *music = NULL;
+
+SDL_Surface *bgSurface = NULL;
+
+SDL_Texture *bg = NULL;
+
+SDL_Rect bgRect;
+
 
 // Setting default
 int soundVolume = 10;

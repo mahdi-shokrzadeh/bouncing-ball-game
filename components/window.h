@@ -12,6 +12,7 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
     SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
     SDL_RenderClear(renderer);
 
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
 
     // start button
     SDL_Rect startBtn = {100, 300, 400, 80};
