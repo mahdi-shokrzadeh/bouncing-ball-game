@@ -6,6 +6,12 @@ void SetTheme(int whatTheme) {
         case 1:
             th = Jungle;
             break;
+        case 2:
+            th = Ocean;
+            break;
+        case 3:
+            th = Space;
+            break;
         default:
             th = th1;
             break;
