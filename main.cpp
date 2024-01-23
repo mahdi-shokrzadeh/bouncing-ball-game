@@ -42,16 +42,6 @@ using namespace std;
 
 void loop() {
 
-
-
-    bool game_is_running = false;
-
-
-//    initializeBalls();
-//    BALL shooter_ball;
-//    BALL reserved_ball;
-//    initializeShootingBalls(shooter_ball, reserved_ball);
-
     bool MouseClicked = false;
     int x_MouseClicked = 0;
     int y_MouseClicked = 0;
@@ -73,28 +63,9 @@ void loop() {
                 main_loop = SDL_FALSE;
             } else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
-
                     case SDLK_ESCAPE :
                         main_loop = SDL_FALSE;
                         break;
-
-//                    case SDLK_SPACE:
-//                        swapShootingBalls(shooter_ball, reserved_ball);
-//                        drawShootingBalls(shooter_ball, reserved_ball);
-//                        break;
-//
-//                    case SDLK_RIGHT :
-//                        handleTargeterEvent(0);
-//                        break;
-//
-//                    case SDLK_s :
-//                        handleShootBall(shooter_ball, reserved_ball);
-//                        break;
-//
-//                    case SDLK_LEFT :
-//                        handleTargeterEvent(1);
-//                        break;
-
                     default:
                         main_loop = SDL_TRUE;
                 }
@@ -115,20 +86,27 @@ void loop() {
         // get mouse free location
         SDL_GetMouseState(&x_MouseWhere, &y_MouseWhere);
 
+
+        // Blank out the renderer with all black
+        SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
+        SDL_RenderClear(renderer);
+
+
         // Blank out the renderer with all black
         SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
         SDL_RenderClear(renderer);
 
         if (Locator["main_menu"])
             Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
-        else if (Locator["game"] && !game_is_running){
-//            Game(shooter_ball, reserved_ball);
+
+        else if (Locator["game"]){
             Game();
-            game_is_running = true;
         }
+
+
         // //Present to renderer
-        //SDL_RenderPresent(renderer);
-//        SDL_Delay(DELAY);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(DELAY);
     }
 }
 
