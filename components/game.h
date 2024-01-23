@@ -175,6 +175,7 @@ void handleGameProcess() {
 
 }
 
+
 void Game(BALL shooter_ball ,BALL reserved_ball) {
 
 
@@ -393,6 +394,7 @@ void drawTargeter() {
 
 }
 
+
 void handleTargeterEvent(int type) {
     switch (type) {
 //        case 0:
@@ -413,6 +415,7 @@ void handleTargeterEvent(int type) {
             break;
     }
 }
+
 
 bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
 
@@ -457,6 +460,7 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
 
 
 }
+
 
 void handleBallShooting() {
 
@@ -790,6 +794,11 @@ void handleFallingBalls() {
             }
         }
     }
+}
+
+
+void handleScor(){
+
 }
 
 
