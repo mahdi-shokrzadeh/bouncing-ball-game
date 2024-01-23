@@ -19,24 +19,33 @@ double dyOfThrownBall;
 
 BALL sample_ball = {
 
-    .type ='s',
-    .color = RED,
+        .type ='s',
+        .color = RED,
 
-    .center = {
-            .x = 0,
-            .y = 0,
-    },
+        .center = {
+                .x = 0,
+                .y = 0,
+        },
+};
+
+BALL end_pointer_ball = {
+        .type = 'e',
+        .color = RED,
+        .center = {
+                .x = 0,
+                .y = 0,
+        },
 };
 
 
 BALL gone_ball = {
-    .type ='s',
-    .color = RED,
+        .type ='s',
+        .color = RED,
 
-    .center = {
-            .x = 10000,
-            .y = 20000,
-    },
+        .center = {
+                .x = 10000,
+                .y = 20000,
+        },
 };
 
 
@@ -116,6 +125,9 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
             }
         }
     }
+    // updating end_pointer_ball center
+    end_pointer_ball.center.y += vertical_speed;
+
 
     // shooter
     SDL_Rect shooter_section = {10, 510, 580, 200};
@@ -123,13 +135,24 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
     drawShootingBalls(shooter_ball, reserved_ball);
 
 
-    // handle ball shooting
+    // draw the end section
+    if (end_pointer_ball.center.y >= -50){
+        SDL_Rect r;
+        r.x = 5;
+        r.y = end_pointer_ball.center.y - 85;
+        r.w = SCREEN_WIDTH-10;
+        r.h = 50;
+        SDL_SetRenderDrawColor( renderer, PLUM.r , PLUM.g , PLUM.b, 255 );
+        SDL_RenderFillRect(renderer , &r);
 
+    }
+
+
+    // handle ball shooting
     if (ball_is_being_thrown) {
         handleBallShooting();
         checkCollShooterAndBalls();
     }
-
 
     SDL_RenderPresent(renderer);
 }
@@ -142,16 +165,16 @@ void initializeBalls() {
                 balls[i - 1][j] = sample_ball;
             } else {
                 BALL ball = {
-                        .type='c',
-                        .color = {
-                                .r=0,
-                                .g=0,
-                                .b=0,
-                        },
-                        .center = {
-                                .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
-                                .y = double(-(i - 5) * (width_of_ball_box)),
-                        },
+                    .type='c',
+                    .color = {
+                            .r=0,
+                            .g=0,
+                            .b=0,
+                    },
+                    .center = {
+                            .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
+                            .y = double(-(i - 5) * (width_of_ball_box)),
+                    },
                 };
                 setRandomColor(ball.color);
 
@@ -164,6 +187,12 @@ void initializeBalls() {
             }
 
         }
+    }
+
+    //
+
+    for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box - 1; j++){
+        end_pointer_ball.center.y = double(-(FINAL_COLUMNS - 5) * (width_of_ball_box));
     }
 
 }
@@ -581,8 +610,7 @@ bool vectorContainsElement(const vector<ELEMENT> &elements, ELEMENT el) {
 
 void handleGraphCheck(int i, int j, SDL_Color color) {
 
-
-    cout << i << endl << endl;
+//    cout << i << endl << endl;
     vector<ELEMENT> visited;
     vector<ELEMENT> queue;
 
@@ -601,7 +629,7 @@ void handleGraphCheck(int i, int j, SDL_Color color) {
         visited.push_back(el);
         for (ELEMENT el2: vec) {
             if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
-            cout << el2.i << " " << el2.j << endl;
+//            cout << el2.i << " " << el2.j << endl;
         }
 
         queue.erase(queue.begin());
@@ -609,7 +637,7 @@ void handleGraphCheck(int i, int j, SDL_Color color) {
     }
 
 
-    if (visited.size() > 2) {
+    if (visited.size() > LEAST_BALLS_NUMBER) {
         for (ELEMENT el: visited) {
             balls[el.i][el.j] = gone_ball;
         }

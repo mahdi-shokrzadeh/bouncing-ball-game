@@ -23,6 +23,9 @@
 // targeter
 #define TARGETER_SPEED 0.9
 
+// least number of balls to be destroyed after collision
+#define LEAST_BALLS_NUMBER 2
+
 
 // SDL Window
 SDL_Window *window;

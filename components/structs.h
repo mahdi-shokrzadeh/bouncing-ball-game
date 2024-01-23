@@ -7,6 +7,7 @@ typedef struct DOUBLE_POINT {
     double y;
 } DOUBLE_POINT;
 
+// s -> sample ball which will not be rendered.
 
 typedef struct BALL {
     char type='s';
