@@ -280,7 +280,8 @@ void initializeBalls() {
     for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box - 1; j++) {
         BALL ball;
         ball.type = 'e';
-        ball.color = RED;
+        // color of end balls must be unique
+        ball.color = DARK_ORANGE;
         ball.center.y = double(-(FINAL_ROWS - 4) * (width_of_ball_box));
         ball.center.x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left);
         if ((FINAL_ROWS + 1) % 2 == 0) {
@@ -477,12 +478,11 @@ void handleBallShooting() {
 
 
 void checkCollShooterAndBalls() {
-    for (int i = 0; i < FINAL_ROWS; i++) {
+    for (int i = 0; i < FINAL_ROWS+1; i++) {
         for (int j = NUMBER_OF_BALLS_IN_EACH_COL - 1; j >= 0; j--) {
             BALL &ball = balls[i][j];
             if (calculateDistance(ball.center, thrown_ball.center) <= radius_of_balls * 2) {
                 // ball is being thrown
-
                 handleCollShooterAndBalls(ball, i, j);
                 ball_is_being_thrown = false;
             }
