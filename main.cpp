@@ -21,8 +21,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-//#include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL2/SDL2_gfx.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
+//#include <SDL2/SDL2_gfx.h>
 
 using namespace std;
 
@@ -128,11 +128,6 @@ int main(int argv, char **args) {
 
     srand(time(NULL));
     settingReader();
-
-    string a[100];
-    int n = scoresReader(a);
-    for(int i = 0;i < n;i++)
-        cout << a[i];
 
     // SDL Inits
     Uint32 SDL_flags = SDL_INIT_EVERYTHING;// SDL_INIT_VIDEO | SDL_INIT_TIMER
