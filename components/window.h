@@ -53,12 +53,14 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
         Locator["main_menu"] = !Locator["main_menu"];
     }
 
+    /*
     // destroyer
     SDL_RenderPresent(renderer);
     SDL_DestroyTexture(startText);
     SDL_FreeSurface(startSurf);
     SDL_DestroyTexture(leaderText);
     SDL_FreeSurface(leaderSurf);
+    */
 }
 
 
