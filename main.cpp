@@ -42,14 +42,15 @@ using namespace std;
 
 void loop() {
 
-    SDL_bool loop = SDL_TRUE;
-    SDL_Event event;
 
 
-    initializeBalls();
-    BALL shooter_ball;
-    BALL reserved_ball;
-    initializeShootingBalls(shooter_ball, reserved_ball);
+    bool game_is_running = false;
+
+
+//    initializeBalls();
+//    BALL shooter_ball;
+//    BALL reserved_ball;
+//    initializeShootingBalls(shooter_ball, reserved_ball);
 
     bool MouseClicked = false;
     int x_MouseClicked = 0;
@@ -58,57 +59,55 @@ void loop() {
     int y_MouseWhere = 0;
 
 
-
     map<string, bool> Locator;
     Locator["main_menu"] = true;
     Locator["start_menu"] = false;
     Locator["game"] = false;
 
 
-
-    while (loop) {
+    while (main_loop) {
 
         // Allow quiting with escape key by polling for pending events
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
-                loop = SDL_FALSE;
+                main_loop = SDL_FALSE;
             } else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
 
                     case SDLK_ESCAPE :
-                        loop = SDL_FALSE;
+                        main_loop = SDL_FALSE;
                         break;
 
-                    case SDLK_SPACE:
-                        swapShootingBalls(shooter_ball, reserved_ball);
-                        drawShootingBalls(shooter_ball, reserved_ball);
-                        break;
-
-                    case SDLK_RIGHT :
-                        handleTargeterEvent(0);
-                        break;
-
-                    case SDLK_s :
-                        handleShootBall(shooter_ball, reserved_ball);
-                        break;
-
-                    case SDLK_LEFT :
-                        handleTargeterEvent(1);
-                        break;
+//                    case SDLK_SPACE:
+//                        swapShootingBalls(shooter_ball, reserved_ball);
+//                        drawShootingBalls(shooter_ball, reserved_ball);
+//                        break;
+//
+//                    case SDLK_RIGHT :
+//                        handleTargeterEvent(0);
+//                        break;
+//
+//                    case SDLK_s :
+//                        handleShootBall(shooter_ball, reserved_ball);
+//                        break;
+//
+//                    case SDLK_LEFT :
+//                        handleTargeterEvent(1);
+//                        break;
 
                     default:
-                        loop = SDL_TRUE;
+                        main_loop = SDL_TRUE;
                 }
             } else if (event.type == SDL_KEYUP) {
                 switch (event.key.keysym.sym) {
                     default:
-                        loop = SDL_TRUE;
+                        main_loop = SDL_TRUE;
                 }
-            } else if(event.type == SDL_MOUSEBUTTONDOWN) {
+            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
                 MouseClicked = true;
                 x_MouseClicked = event.button.x;
                 y_MouseClicked = event.button.y;
-            } else if(event.type == SDL_MOUSEBUTTONUP) {
+            } else if (event.type == SDL_MOUSEBUTTONUP) {
                 MouseClicked = false;
             }
         }
@@ -122,11 +121,14 @@ void loop() {
 
         if (Locator["main_menu"])
             Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
-        else if (Locator["game"])
-            Game(shooter_ball, reserved_ball);
+        else if (Locator["game"] && !game_is_running){
+//            Game(shooter_ball, reserved_ball);
+            Game();
+            game_is_running = true;
+        }
         // //Present to renderer
         //SDL_RenderPresent(renderer);
-        SDL_Delay(DELAY);
+//        SDL_Delay(DELAY);
     }
 }
 

@@ -35,6 +35,11 @@ SDL_Window *window;
 // SDL Renderer to draw to
 SDL_Renderer *renderer;
 
+
+// main.cpp loop
+SDL_bool main_loop = SDL_TRUE;
+
+
 // SDL font
 TTF_Font *font = NULL;
 
