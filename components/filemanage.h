@@ -4,6 +4,9 @@
 void SetTheme(int whatTheme) {
     switch(whatTheme) {
         case 1:
+            th = Jungle;
+            break;
+        default:
             th = th1;
             break;
     }
