@@ -116,8 +116,7 @@ void loop() {
             Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, game, main_menu);
         else if (game)
             Game(shooter_ball, reserved_ball);
-
-        // Present to renderer
+        // //Present to renderer
         //SDL_RenderPresent(renderer);
         SDL_Delay(DELAY);
     }
@@ -130,26 +129,31 @@ int main(int argv, char **args) {
     settingReader();
 
     // SDL Inits
-    Uint32 SDL_flags = SDL_INIT_EVERYTHING;// SDL_INIT_VIDEO | SDL_INIT_TIMER
+    Uint32 SDL_flags = SDL_INIT_EVERYTHING;
     // Uint32 WND_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN_DESKTOP;//SDL_WINDOW_BORDERLESS ;
     Uint32 WND_flags = SDL_WINDOW_SHOWN;
     SDL_Init(SDL_flags);
     SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, WND_flags, &window, &renderer);
     SDL_RaiseWindow(window);
+
     SDL_DisplayMode DM;
     SDL_GetCurrentDisplayMode(0, &DM);
+
     TTF_Init();
     font = TTF_OpenFont("assets/font.ttc", 50);
 
 
+    //loop
     loop();
+
 
     //clean up
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    TTF_CloseFont(font);
     window = NULL;
     renderer = NULL;
+
+    TTF_CloseFont(font);
     font = NULL;
 
     TTF_Quit();

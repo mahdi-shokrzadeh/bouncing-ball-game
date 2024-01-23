@@ -9,8 +9,6 @@ bool main_menu = true, start_menu = false, leaderboard = false, setting = false,
 
 // Menus
 
-void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, bool &game, bool &main_menu);
-
 void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, bool &game, bool &main_menu) {
 
     // Draw buttons
