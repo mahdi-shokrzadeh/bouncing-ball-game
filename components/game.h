@@ -69,7 +69,7 @@ double dist_from_left = 14.5;
 
 // Initializing balls
 
-BALL balls[MAX_NUMBER_OF_COLUMNS][12] = {0};
+BALL balls[MAX_NUMBER_OF_ROWS][12] = {0};
 
 // Game
 void setRandomColor(SDL_Color &color);
@@ -121,7 +121,7 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
 
     // drawing balls
 
-    for (int i = 0; i < FINAL_COLUMNS; i++) {
+    for (int i = 0; i < FINAL_ROWS; i++) {
         for (int j = 0; j < 12; j++) {
             if (balls[i][j].type != 's') {
                 BALL &ball = balls[i][j];
@@ -140,8 +140,8 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
     }
     // updating end_pointer_ball center
     for (int j = 0; j < 12; j++) {
-        if (balls[FINAL_COLUMNS][j].type != 's') {
-            BALL &ball = balls[FINAL_COLUMNS][j];
+        if (balls[FINAL_ROWS][j].type != 's') {
+            BALL &ball = balls[FINAL_ROWS][j];
             ball.center.y += vertical_speed;
         }
     }
@@ -163,7 +163,7 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
         r.h = 50;
         SDL_SetRenderDrawColor(renderer, PLUM.r, PLUM.g, PLUM.b, 255);
         SDL_RenderFillRect(renderer, &r);
-        flag.i = FINAL_COLUMNS;
+        flag.i = FINAL_ROWS;
     }
 
 
@@ -178,7 +178,7 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
 
 
 void initializeBalls() {
-    for (int i = 1; i <= FINAL_COLUMNS; i++) {
+    for (int i = 1; i <= FINAL_ROWS; i++) {
         for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box - 1; j++) {
             if (i <= ESCAPE_FOR_BALLS_ARRAY) {
                 balls[i - 1][j] = sample_ball;
@@ -214,16 +214,16 @@ void initializeBalls() {
         BALL ball;
         ball.type = 'e';
         ball.color = RED;
-        ball.center.y = double(-(FINAL_COLUMNS - 4) * (width_of_ball_box));
+        ball.center.y = double(-(FINAL_ROWS - 4) * (width_of_ball_box));
         ball.center.x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left);
-        if ((FINAL_COLUMNS + 1) % 2 == 0) {
-            balls[FINAL_COLUMNS][j] = ball;
+        if ((FINAL_ROWS + 1) % 2 == 0) {
+            balls[FINAL_ROWS][j] = ball;
         } else {
             ball.center.x += 0.5 * width_of_ball_box;
-            balls[FINAL_COLUMNS][j] = ball;
+            balls[FINAL_ROWS][j] = ball;
         }
     }
-    end_pointer_ball.center.y = double(-(FINAL_COLUMNS - 5) * (width_of_ball_box));
+    end_pointer_ball.center.y = double(-(FINAL_ROWS - 5) * (width_of_ball_box));
 
 }
 
@@ -348,7 +348,7 @@ void handleTargeterEvent(int type) {
 
 bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
 
-    for (int i = 0; i < FINAL_COLUMNS; i++) {
+    for (int i = 0; i < FINAL_ROWS; i++) {
         for (int j = NUMBER_OF_BALLS_IN_EACH_COL - 1; j >= 0; j--) {
             BALL &ball = balls[i][j];
 //            if (ball.center.y <= -10) return false;
@@ -410,7 +410,7 @@ void handleBallShooting() {
 
 
 void checkCollShooterAndBalls() {
-    for (int i = 0; i < FINAL_COLUMNS; i++) {
+    for (int i = 0; i < FINAL_ROWS; i++) {
         for (int j = NUMBER_OF_BALLS_IN_EACH_COL - 1; j >= 0; j--) {
             BALL &ball = balls[i][j];
             if (calculateDistance(ball.center, thrown_ball.center) <= radius_of_balls * 2) {
@@ -690,7 +690,7 @@ void handleFallingBalls() {
     ELEMENT element;
 
     if (end_pointer_ball.center.y >= -50) {
-        element = {FINAL_COLUMNS, 0};
+        element = {FINAL_ROWS, 0};
     } else {
         element = flag;
     }
@@ -725,5 +725,17 @@ void handleFallingBalls() {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 #endif //BOUNCING_BALL_GAME_GAME_H
