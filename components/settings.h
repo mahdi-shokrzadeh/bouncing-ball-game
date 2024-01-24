@@ -78,6 +78,10 @@ SDL_Surface *leaderButtonSurface = NULL;
 SDL_Texture *leaderButton = NULL;
 SDL_Rect leaderButtonRect;
 SDL_Rect leaderButtonRectSrc;
+SDL_Surface *leaderHoverButtonSurface = NULL;
+SDL_Texture *leaderHoverButton = NULL;
+SDL_Rect leaderHoverButtonRect;
+SDL_Rect leaderHoverButtonRectSrc;
 SDL_Surface *leaderTextSurface;
 SDL_Texture *leaderText;
 SDL_Rect leaderTextRectSrc;
@@ -87,11 +91,23 @@ SDL_Surface *backButtonSurface = NULL;
 SDL_Texture *backButton = NULL;
 SDL_Rect backButtonRect;
 SDL_Rect backButtonRectSrc;
+SDL_Surface *backHoverButtonSurface = NULL;
+SDL_Texture *backHoverButton = NULL;
+SDL_Rect backHoverButtonRect;
+SDL_Rect backHoverButtonRectSrc;
 SDL_Surface *backTextSurface;
 SDL_Texture *backText;
 SDL_Rect backTextRectSrc;
 SDL_Rect backTextRect;
 
+SDL_Surface *iWantQuitButtonSurface = NULL;
+SDL_Texture *iWantQuitButton = NULL;
+SDL_Rect iWantQuitButtonRect;
+SDL_Rect iWantQuitButtonRectSrc;
+SDL_Surface *iWantQuitTextSurface;
+SDL_Texture *iWantQuitText;
+SDL_Rect iWantQuitTextRectSrc;
+SDL_Rect iWantQuitTextRect;
 
 
 // Setting default
