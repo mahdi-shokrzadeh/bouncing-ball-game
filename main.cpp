@@ -53,6 +53,8 @@ void loop() {
     Locator["main_menu"] = true;
     Locator["start_menu"] = false;
     Locator["leaderboard"] = false;
+    Locator["setting_menu"] = false;
+    Locator["quit_menu"] = false;
     Locator["game"] = false;
 
 
@@ -101,6 +103,10 @@ void loop() {
             Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["leaderboard"])
             leaderboard(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
+        else if (Locator["setting_menu"])
+            settingMenu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
+        else if(Locator["quit_menu"])
+            quitMenu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["game"])
             handleGameProcess();
 
