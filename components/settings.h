@@ -65,6 +65,19 @@ SDL_Surface *startButtonSurface = NULL;
 SDL_Texture *startButton = NULL;
 SDL_Rect startButtonRect;
 SDL_Rect startButtonRectSrc;
+SDL_Surface *startTextSurface;
+SDL_Texture *startText;
+SDL_Rect startTextRectSrc;
+SDL_Rect startTextRect;
+
+SDL_Surface *leaderButtonSurface = NULL;
+SDL_Texture *leaderButton = NULL;
+SDL_Rect leaderButtonRect;
+SDL_Rect leaderButtonRectSrc;
+SDL_Surface *leaderTextSurface;
+SDL_Texture *leaderText;
+SDL_Rect leaderTextRectSrc;
+SDL_Rect leaderTextRect;
 
 
 

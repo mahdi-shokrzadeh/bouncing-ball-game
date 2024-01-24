@@ -3,9 +3,9 @@
 
 // building and destroying
 
-void buttonMaker(SDL_Surface* &surface, SDL_Texture* &texture,
+void imageRender(SDL_Surface* &surface, SDL_Texture* &texture,
                  SDL_Rect &src, SDL_Rect &dest,
-                 int x, int y, int multiplier, char address[64]) {
+                 int x, int y, float multiplier, char address[64]) {
 
     surface = IMG_Load(address);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -21,25 +21,46 @@ void buttonMaker(SDL_Surface* &surface, SDL_Texture* &texture,
     dest.h = surface->h * multiplier;
 }
 
+void textRender(SDL_Surface* &surface, SDL_Texture* &texture,
+                 SDL_Rect &src, SDL_Rect &dest,
+                 int x, int y, float multiplier, string text) {
+
+    surface = TTF_RenderText_Solid(font, text.c_str(), th.TextColor);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    src.x = 0;
+    src.y = 0;
+    src.w = surface->w;
+    src.h = surface->h;
+
+    dest.x = x;
+    dest.y = y;
+    dest.w = surface->w * multiplier;
+    dest.h = surface->h * multiplier;
+}
+
+
 void initializeButtons() {
 
     //setting button
-
-    buttonMaker(settingButtonSurface, settingButton, settingButtonRectSrc, settingButtonRect, 10, 660, 2, "assets/UiUx/setting.svg");
+    imageRender(settingButtonSurface, settingButton,settingButtonRectSrc,
+                settingButtonRect, 10, 660, 2, "assets/UiUx/setting.svg");
 
     //exit button
-    exitButtonSurface = IMG_Load("assets/UiUx/exit.svg");
-    exitButton = SDL_CreateTextureFromSurface(renderer, exitButtonSurface);
-    exitButtonRectSrc.x = 0;
-    exitButtonRectSrc.y = 0;
-    exitButtonRectSrc.w = exitButtonSurface->w;
-    exitButtonRectSrc.h = exitButtonSurface->h;
-    exitButtonRect.x = 550;
-    exitButtonRect.y = 660;
-    exitButtonRect.w = exitButtonSurface->w * 2;
-    exitButtonRect.h = exitButtonSurface->h * 2;
+    imageRender(exitButtonSurface, exitButton,exitButtonRectSrc,
+                exitButtonRect, 550, 660, 2, "assets/UiUx/exit.svg");
 
+    //start button
+    imageRender(startButtonSurface, startButton,startButtonRectSrc,
+                startButtonRect, 100, 300, 0.3, th.button);
+    textRender(startTextSurface, startText, startTextRectSrc,
+               startTextRect, 163, 364, 0.5, "Start");
 
+    //leader button
+    imageRender(leaderButtonSurface, leaderButton,leaderButtonRectSrc,
+                leaderButtonRect, 300, 300, 0.3, th.button);
+    textRender(leaderTextSurface, leaderText, leaderTextRectSrc,
+               leaderTextRect, 345, 370, 0.3, "LeaderBoard");
 
 }
 
@@ -50,10 +71,16 @@ void destroyButtons() {
     SDL_FreeSurface(exitButtonSurface);
     SDL_DestroyTexture(exitButton);
 
-//    SDL_DestroyTexture(startText);
-//    SDL_FreeSurface(startSurf);
-//    SDL_DestroyTexture(leaderText);
-//    SDL_FreeSurface(leaderSurf);
+    SDL_FreeSurface(startButtonSurface);
+    SDL_DestroyTexture(startButton);
+    SDL_FreeSurface(startTextSurface);
+    SDL_DestroyTexture(startText);
+
+    SDL_FreeSurface(leaderButtonSurface);
+    SDL_DestroyTexture(leaderButton);
+    SDL_FreeSurface(leaderTextSurface);
+    SDL_DestroyTexture(leaderText);
+
 }
 
 // Menus
@@ -68,24 +95,14 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
     SDL_RenderCopy(renderer, bg, NULL, &bgRect);
 
     // start button
-    SDL_Rect startBtn = {100, 300, 400, 80};
-    SDL_Surface *startSurf = TTF_RenderText_Solid(font, "Start", WHITE);
-    SDL_Texture *startText = SDL_CreateTextureFromSurface(renderer, startSurf);
-    SDL_Rect textStart = {250, 300, startSurf->w, startSurf->h};
 
-    SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
-    SDL_RenderFillRect(renderer, &startBtn);
-    SDL_RenderCopy(renderer, startText, NULL, &textStart);
+    SDL_RenderCopy(renderer, startButton, &startButtonRectSrc, &startButtonRect);
+    SDL_RenderCopy(renderer, startText, &startTextRectSrc, &startTextRect);
 
     // Leaderboard button
-    SDL_Rect leaderBtn = {100, 400, 400, 80};
-    SDL_Surface *leaderSurf = TTF_RenderText_Solid(font, "Leaderboard", WHITE);
-    SDL_Texture *leaderText = SDL_CreateTextureFromSurface(renderer, leaderSurf);
-    SDL_Rect textLeader = {170, 400, leaderSurf->w, leaderSurf->h};
 
-    SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
-    SDL_RenderFillRect(renderer, &leaderBtn);
-    SDL_RenderCopy(renderer, leaderText, NULL, &textLeader);
+    SDL_RenderCopy(renderer, leaderButton, &leaderButtonRectSrc, &leaderButtonRect);
+    SDL_RenderCopy(renderer, leaderText, &leaderTextRectSrc, &leaderTextRect);
 
 
     // setting button
@@ -101,7 +118,7 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
     /*if(x_MouseWhere >= startBtn.x && x_MouseWhere <= startBtn.x + startBtn.w && y_MouseWhere >= startBtn.y && y_MouseWhere <= startBtn.y + startBtn.h){
         void;
     }*/
-    if(MouseClicked && (x_MouseClicked >= startBtn.x && x_MouseClicked <= startBtn.x + startBtn.w) && (y_MouseClicked >= startBtn.y && y_MouseClicked <= startBtn.y + startBtn.h)){
+    if(MouseClicked && (x_MouseClicked >= startButtonRect.x && x_MouseClicked <= startButtonRect.x + startButtonRect.w) && (y_MouseClicked >= startButtonRect.y && y_MouseClicked <= startButtonRect.y + startButtonRect.h)){
         Locator["game"] = !Locator["game"];
         Locator["main_menu"] = !Locator["main_menu"];
     }
