@@ -741,35 +741,35 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
     if (i % 2 == 0) {
         if (j + 1 <= 11) {
             // checking the upper line
-            if (balls[i + 1][j + 1].type != 's' && type != "down") neighbors.push_back({i + 1, j + 1});
+            if (balls[i + 1][j + 1].type != 's' && balls[i + 1][j + 1].type != 'f' && type != "down") neighbors.push_back({i + 1, j + 1});
             // checking the line
-            if (balls[i][j + 1].type != 's') neighbors.push_back({i, j + 1});
+            if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
             // checking the downer line
-            if (balls[i - 1][j + 1].type != 's') neighbors.push_back({i - 1, j + 1});
+            if (balls[i - 1][j + 1].type != 's' && balls[i - 1][j + 1].type != 'f') neighbors.push_back({i - 1, j + 1});
         }
 
-        if (balls[i + 1][j].type != 's' && type != "down") neighbors.push_back({i + 1, j});
-        if (balls[i - 1][j].type != 's') neighbors.push_back({i - 1, j});
+        if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && type != "down") neighbors.push_back({i + 1, j});
+        if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f' ) neighbors.push_back({i - 1, j});
 
         if (j - 1 >= 0) {
-            if (balls[i][j - 1].type != 's') neighbors.push_back({i, j - 1});
+            if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
         }
 
     } else {
         if (j - 1 >= 0) {
             // checking the upper line
-            if (balls[i + 1][j - 1].type != 's' && type != "down") neighbors.push_back({i + 1, j - 1});
+            if (balls[i + 1][j - 1].type != 's' && balls[i + 1][j - 1].type != 'f' && type != "down") neighbors.push_back({i + 1, j - 1});
             // checking the line
-            if (balls[i][j - 1].type != 's') neighbors.push_back({i, j - 1});
+            if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
             // checking the downer line
-            if (balls[i - 1][j - 1].type != 's') neighbors.push_back({i - 1, j - 1});
+            if (balls[i - 1][j - 1].type != 's' && balls[i - 1][j - 1].type != 'f') neighbors.push_back({i - 1, j - 1});
         }
 
-        if (balls[i + 1][j].type != 's' && type != "down") neighbors.push_back({i + 1, j});
-        if (balls[i - 1][j].type != 's') neighbors.push_back({i - 1, j});
+        if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && type != "down") neighbors.push_back({i + 1, j});
+        if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f') neighbors.push_back({i - 1, j});
 
         if (j + 1 <= 11) {
-            if (balls[i][j + 1].type != 's') neighbors.push_back({i, j + 1});
+            if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
         }
     }
 
