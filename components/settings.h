@@ -79,6 +79,15 @@ SDL_Texture *leaderText;
 SDL_Rect leaderTextRectSrc;
 SDL_Rect leaderTextRect;
 
+SDL_Surface *backButtonSurface = NULL;
+SDL_Texture *backButton = NULL;
+SDL_Rect backButtonRect;
+SDL_Rect backButtonRectSrc;
+SDL_Surface *backTextSurface;
+SDL_Texture *backText;
+SDL_Rect backTextRectSrc;
+SDL_Rect backTextRect;
+
 
 
 // Setting default
