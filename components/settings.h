@@ -46,10 +46,26 @@ TTF_Font *font = NULL;
 Mix_Music *music = NULL;
 
 SDL_Surface *bgSurface = NULL;
-
 SDL_Texture *bg = NULL;
-
 SDL_Rect bgRect;
+
+// Buttons setup for making them global
+
+SDL_Surface *settingButtonSurface = NULL;
+SDL_Texture *settingButton = NULL;
+SDL_Rect settingButtonRect;
+SDL_Rect settingButtonRectSrc;
+
+SDL_Surface *exitButtonSurface = NULL;
+SDL_Texture *exitButton = NULL;
+SDL_Rect exitButtonRect;
+SDL_Rect exitButtonRectSrc;
+
+SDL_Surface *startButtonSurface = NULL;
+SDL_Texture *startButton = NULL;
+SDL_Rect startButtonRect;
+SDL_Rect startButtonRectSrc;
+
 
 
 // Setting default
