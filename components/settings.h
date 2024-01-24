@@ -100,6 +100,11 @@ SDL_Texture *backText;
 SDL_Rect backTextRectSrc;
 SDL_Rect backTextRect;
 
+SDL_Surface *DoYouWantToQuitTextSurface;
+SDL_Texture *DoYouWantToQuitText;
+SDL_Rect DoYouWantToQuitTextRectSrc;
+SDL_Rect DoYouWantToQuitTextRect;
+
 SDL_Surface *iWantQuitButtonSurface = NULL;
 SDL_Texture *iWantQuitButton = NULL;
 SDL_Rect iWantQuitButtonRect;

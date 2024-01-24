@@ -77,6 +77,14 @@ void initializeButtons() {
     textRender(backTextSurface, backText, backTextRectSrc,
                backTextRect, 280, 645, 0.5, "Back");
 
+    //quit menu
+    textRender(DoYouWantToQuitTextSurface, DoYouWantToQuitText, DoYouWantToQuitTextRectSrc,
+               DoYouWantToQuitTextRect, 70, 240, 0.5, "Do you Really want to quit the Game? :(");
+    imageRender(iWantQuitButtonSurface, iWantQuitButton,iWantQuitButtonRectSrc,
+                iWantQuitButtonRect, 220, 260, 0.3, th.buttonQuit);
+    textRender(iWantQuitTextSurface, iWantQuitText, iWantQuitTextRectSrc,
+               iWantQuitTextRect, 260, 305, 1, "Yes!");
+
 }
 
 void destroyButtons() {
@@ -106,6 +114,13 @@ void destroyButtons() {
     SDL_DestroyTexture(backHoverButton);
     SDL_FreeSurface(backTextSurface);
     SDL_DestroyTexture(backText);
+
+    SDL_FreeSurface(DoYouWantToQuitTextSurface);
+    SDL_DestroyTexture(DoYouWantToQuitText);
+    SDL_FreeSurface(iWantQuitButtonSurface);
+    SDL_DestroyTexture(iWantQuitButton);
+    SDL_FreeSurface(iWantQuitTextSurface);
+    SDL_DestroyTexture(iWantQuitText);
 }
 
 // Menus
@@ -203,19 +218,32 @@ void quitMenu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_M
     SDL_RenderCopy(renderer, bg, NULL, &bgRect);
 
     // question box
-    SDL_Rect fillRect = {50, 200, 500, 200};
-    SDL_RenderFillRect(renderer, &fillRect);
+    SDL_Rect questionBox = {50, 200, 500, 200};
+    SDL_RenderFillRect(renderer, &questionBox);
+    SDL_RenderCopy(renderer, DoYouWantToQuitText, &DoYouWantToQuitTextRectSrc, &DoYouWantToQuitTextRect);
+
+    // yes box
+    SDL_RenderCopy(renderer, iWantQuitButton, &iWantQuitButtonRectSrc, &iWantQuitButtonRect);
+    SDL_RenderCopy(renderer, iWantQuitText, &iWantQuitTextRectSrc, &iWantQuitTextRect);
+
 
     // back button
-    SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, backButtonRect))
+        SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
+    else
+        SDL_RenderCopy(renderer, backHoverButton, &backHoverButtonRectSrc, &backHoverButtonRect);
     SDL_RenderCopy(renderer, backText, &backTextRectSrc, &backTextRect);
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)){
-//        Locator["leaderboard"] = !Locator["leaderboard"];
+        Locator["quit_menu"] = !Locator["quit_menu"];
         Locator["main_menu"] = !Locator["main_menu"];
     }
 
-    //main_loop = SDL_FALSE;
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, iWantQuitButtonRect)){
+        Locator["quit_menu"] = !Locator["quit_menu"];
+        main_loop = SDL_FALSE;
+    }
+
 }
 
 
