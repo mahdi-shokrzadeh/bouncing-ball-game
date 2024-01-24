@@ -564,7 +564,7 @@ void checkCollShooterAndBalls() {
     for (int i = 0; i < FINAL_ROWS + 1; i++) {
         for (int j = NUMBER_OF_BALLS_IN_EACH_COL - 1; j >= 0; j--) {
             BALL &ball = balls[i][j];
-            if (calculateDistance(ball.center, thrown_ball.center) <= radius_of_balls * 2) {
+            if (calculateDistance(ball.center, thrown_ball.center) <= radius_of_balls * 2 && ball.type != 'f') {
                 // ball is being thrown
                 handleCollShooterAndBalls(ball, i, j);
                 ball_is_being_thrown = false;
