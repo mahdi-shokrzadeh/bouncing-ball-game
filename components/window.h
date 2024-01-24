@@ -127,6 +127,7 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
 
     // mouse actions
 
+    // start actions
     /*if(x_MouseWhere >= startBtn.x && x_MouseWhere <= startBtn.x + startBtn.w && y_MouseWhere >= startBtn.y && y_MouseWhere <= startBtn.y + startBtn.h){
         void;
     }*/
@@ -160,11 +161,11 @@ void leaderboard(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int 
     SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
     SDL_RenderCopy(renderer, backText, &backTextRectSrc, &backTextRect);
 
-//    // setting button
-//    SDL_RenderCopy(renderer, settingButton, &settingButtonRectSrc, &settingButtonRect);
-//
-//    // exit button
-//    SDL_RenderCopy(renderer, exitButton, &exitButtonRectSrc, &exitButtonRect);
+    // setting button
+    SDL_RenderCopy(renderer, settingButton, &settingButtonRectSrc, &settingButtonRect);
+
+    // exit button
+    SDL_RenderCopy(renderer, exitButton, &exitButtonRectSrc, &exitButtonRect);
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)){
         Locator["leaderboard"] = !Locator["leaderboard"];
