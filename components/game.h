@@ -107,9 +107,11 @@ int mouse_x = 0, mouse_y = 0;
 // falling balls speed
 double falling_balls_speed = 2.0;
 
-// Score
+// score
 int score = 0;
 
+// color handling
+vector <int> balls_recent_color={1};
 
 
 // Game
@@ -384,8 +386,8 @@ void initializeBalls() {
 
 }
 
-
 void setRandomColor(SDL_Color &color) {
+
     int i = rand() % 6;
     switch (i) {
         case (0):
@@ -403,8 +405,18 @@ void setRandomColor(SDL_Color &color) {
         case (4) :
             color = AQUA;
             break;
+        case (5):
+            if(!contains(balls_recent_color , 5)){
+                color = WHEAT;
+                break;
+            }
         default :
             color = YELLOW;
+    }
+    balls_recent_color.push_back(i);
+
+    if(balls_recent_color.size() > 6){
+        balls_recent_color.erase(balls_recent_color.begin());
     }
 }
 
@@ -903,7 +915,6 @@ void gameInitialImage(SDL_Surface *&g_button, SDL_Texture *&g_button_tex, char *
 
 void initializeMenuButtons() {
     gameInitialImage(menu_btn_sur, menu_btn_tex, "assets/Game/menu2.png");
-
 }
 
 
@@ -926,9 +937,9 @@ void handleCheckMenuClicks() {
 
     if (!mouse_click) return;
     bool menuIsClicked = checkInOut(mouse_x, mouse_y, menu_btn_rect);
-    if (game_page_state == "game") {
+    if (game_page_state == "game" && menuIsClicked) {
         game_page_state = "pause_menu";
-    } else if (game_page_state == "pause_menu") {
+    } else if (game_page_state == "pause_menu" && menuIsClicked) {
         game_page_state = "game";
     }
     mouse_click = false;

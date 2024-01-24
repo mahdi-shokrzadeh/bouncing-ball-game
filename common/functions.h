@@ -6,6 +6,7 @@ double calculateDistance(DOUBLE_POINT a, DOUBLE_POINT b);
 
 bool checkInOut(int x, int y, SDL_Rect rect);
 
+bool contains(std::vector<int>& vec, int num);
 
 
 
@@ -21,6 +22,10 @@ bool checkInOut(int x, int y, SDL_Rect rect) {
 double calculateDistance(DOUBLE_POINT a, DOUBLE_POINT b) {
     return sqrt((a.y - b.y) * (a.y - b.y) +
                 (a.x - b.x) * (a.x - b.x));
+}
+
+bool contains(vector<int> &vec, int num) {
+    return find(vec.begin(), vec.end(), num) != vec.end();
 }
 
 
