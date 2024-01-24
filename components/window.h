@@ -39,6 +39,9 @@ void textRender(SDL_Surface* &surface, SDL_Texture* &texture,
     dest.h = surface->h * multiplier;
 }
 
+bool checkInOut(int x, int y, SDL_Rect rect) {
+    return (x >= rect.x && x <= rect.x + rect.w) && (y >= rect.y && y <= rect.y + rect.h);
+}
 
 void initializeButtons() {
 
@@ -62,6 +65,12 @@ void initializeButtons() {
     textRender(leaderTextSurface, leaderText, leaderTextRectSrc,
                leaderTextRect, 345, 370, 0.3, "LeaderBoard");
 
+    //back button
+    imageRender(backButtonSurface, backButton,backButtonRectSrc,
+                backButtonRect, 220, 580, 0.3, th.button);
+    textRender(backTextSurface, backText, backTextRectSrc,
+               backTextRect, 280, 645, 0.5, "Back");
+
 }
 
 void destroyButtons() {
@@ -81,6 +90,10 @@ void destroyButtons() {
     SDL_FreeSurface(leaderTextSurface);
     SDL_DestroyTexture(leaderText);
 
+    SDL_FreeSurface(backButtonSurface);
+    SDL_DestroyTexture(backButton);
+    SDL_FreeSurface(backTextSurface);
+    SDL_DestroyTexture(backText);
 }
 
 // Menus
@@ -114,18 +127,50 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
 
     // mouse actions
 
-    // start actions
     /*if(x_MouseWhere >= startBtn.x && x_MouseWhere <= startBtn.x + startBtn.w && y_MouseWhere >= startBtn.y && y_MouseWhere <= startBtn.y + startBtn.h){
         void;
     }*/
-    if(MouseClicked && (x_MouseClicked >= startButtonRect.x && x_MouseClicked <= startButtonRect.x + startButtonRect.w) && (y_MouseClicked >= startButtonRect.y && y_MouseClicked <= startButtonRect.y + startButtonRect.h)){
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, startButtonRect)){
         Locator["game"] = !Locator["game"];
         Locator["main_menu"] = !Locator["main_menu"];
     }
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, leaderButtonRect)){
+        Locator["leaderboard"] = !Locator["leaderboard"];
+        Locator["main_menu"] = !Locator["main_menu"];
+    }
+
 
 }
 
 
+void leaderboard(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
+
+    // initialing and Drawing background
+
+    SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+    // data box
+    SDL_Rect fillRect = {50, 50, 500, 500};
+    SDL_RenderFillRect(renderer, &fillRect);
+
+    // back button
+    SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
+    SDL_RenderCopy(renderer, backText, &backTextRectSrc, &backTextRect);
+
+//    // setting button
+//    SDL_RenderCopy(renderer, settingButton, &settingButtonRectSrc, &settingButtonRect);
+//
+//    // exit button
+//    SDL_RenderCopy(renderer, exitButton, &exitButtonRectSrc, &exitButtonRect);
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)){
+        Locator["leaderboard"] = !Locator["leaderboard"];
+        Locator["main_menu"] = !Locator["main_menu"];
+    }
+}
 
 
 

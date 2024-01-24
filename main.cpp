@@ -52,6 +52,7 @@ void loop() {
     map<string, bool> Locator;
     Locator["main_menu"] = true;
     Locator["start_menu"] = false;
+    Locator["leaderboard"] = false;
     Locator["game"] = false;
 
 
@@ -98,10 +99,10 @@ void loop() {
 
         if (Locator["main_menu"])
             Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
-
-        else if (Locator["game"]){
+        else if (Locator["leaderboard"])
+            leaderboard(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
+        else if (Locator["game"])
             handleGameProcess();
-        }
 
 
         // //Present to renderer
