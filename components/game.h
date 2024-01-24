@@ -17,6 +17,12 @@ bool ball_is_being_thrown = false;
 double dxOfThrownBall;
 double dyOfThrownBall;
 
+int number_of_balls = 0;
+
+bool game_is_finished;
+string sate;
+
+
 BALL sample_ball = {
         .type ='s',
         .color = RED,
@@ -77,7 +83,7 @@ BALL balls[MAX_NUMBER_OF_ROWS][12] = {0};
 
 
 // Page state
-string state = "game_is_running";
+string game_page_state = "game_is_running";
 
 
 
@@ -101,7 +107,6 @@ void handleTargeterEvent(int type);
 
 bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point);
 
-double calculateDistance(DOUBLE_POINT a, DOUBLE_POINT b);
 
 void handleShootBall(BALL &shooting_ball, BALL &reserved_ball);
 
@@ -127,6 +132,9 @@ void handleFallingBalls();
 
 void handleGameProcess() {
 
+    game_is_finished = false;
+    game_page_state = "game";
+
     initializeBalls();
     BALL shooter_ball;
     BALL reserved_ball;
@@ -134,7 +142,7 @@ void handleGameProcess() {
 
     bool game_loop = SDL_TRUE;
 
-    while (game_loop) {
+    while (game_loop && !game_is_finished) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 game_loop = SDL_FALSE;
@@ -165,7 +173,23 @@ void handleGameProcess() {
             }
         }
 
-        Game(shooter_ball , reserved_ball);
+        if (game_page_state == "game") {
+
+            Game(shooter_ball, reserved_ball);
+
+        } else if (game_page_state == "pause_menu") {
+
+
+        } else if (game_page_state == "quit_menu") {
+
+
+        } else {
+
+
+        }
+
+
+
 
         //  Delay and update window
         SDL_RenderPresent(renderer);
@@ -176,7 +200,7 @@ void handleGameProcess() {
 }
 
 
-void Game(BALL shooter_ball ,BALL reserved_ball) {
+void Game(BALL shooter_ball, BALL reserved_ball) {
 
 
     // Blank out the renderer with all black
@@ -437,12 +461,6 @@ bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
 }
 
 
-double calculateDistance(DOUBLE_POINT a, DOUBLE_POINT b) {
-    return sqrt((a.y - b.y) * (a.y - b.y) +
-                (a.x - b.x) * (a.x - b.x));
-}
-
-
 void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
 
     if (!ball_is_being_thrown) {
@@ -484,7 +502,7 @@ void handleBallShooting() {
 
 
 void checkCollShooterAndBalls() {
-    for (int i = 0; i < FINAL_ROWS+1; i++) {
+    for (int i = 0; i < FINAL_ROWS + 1; i++) {
         for (int j = NUMBER_OF_BALLS_IN_EACH_COL - 1; j >= 0; j--) {
             BALL &ball = balls[i][j];
             if (calculateDistance(ball.center, thrown_ball.center) <= radius_of_balls * 2) {
@@ -799,7 +817,7 @@ void handleFallingBalls() {
 }
 
 
-void handleScor(){
+void handleScor() {
 
 }
 

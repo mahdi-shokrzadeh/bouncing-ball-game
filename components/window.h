@@ -39,9 +39,7 @@ void textRender(SDL_Surface* &surface, SDL_Texture* &texture,
     dest.h = surface->h * multiplier;
 }
 
-bool checkInOut(int x, int y, SDL_Rect rect) {
-    return (x >= rect.x && x <= rect.x + rect.w) && (y >= rect.y && y <= rect.y + rect.h);
-}
+
 
 void initializeButtons() {
 

@@ -21,8 +21,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL2_gfxPrimitives.h>
-//#include <SDL2/SDL2_gfx.h>
+//#include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL2_gfx.h>
 
 using namespace std;
 
@@ -32,6 +32,7 @@ using namespace std;
 #include "common/themes.h"
 #include "components/settings.h"
 #include "components/structs.h"
+#include "common/functions.h"
 #include "components/window.h"
 #include "components/game.h"
 #include "components/filemanage.h"
