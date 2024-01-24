@@ -59,6 +59,9 @@ double degree = 180.0;
 int targeter_balls_radius = 2;
 double targeter_balls_dist = 9.0;
 
+//BALL falling_ball = {
+//        .type='f',
+//};
 
 // Flag
 ELEMENT flag;
@@ -83,7 +86,26 @@ BALL balls[MAX_NUMBER_OF_ROWS][12] = {0};
 
 
 // Page state
-string game_page_state = "game_is_running";
+string game_page_state;
+
+// buttons coordination
+SDL_Rect menu_btn_rect = {
+        .x = 20,
+        .y = 560,
+        .w = 60,
+        .h = 60,
+};
+
+SDL_Surface *menu_btn_sur;
+SDL_Texture *menu_btn_tex;
+
+
+// mouse
+bool mouse_click = false;
+int mouse_x = 0, mouse_y = 0;
+
+// falling balls speed
+double falling_balls_speed = 2.0;
 
 
 
@@ -107,7 +129,6 @@ void handleTargeterEvent(int type);
 
 bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point);
 
-
 void handleShootBall(BALL &shooting_ball, BALL &reserved_ball);
 
 void handleBallShooting();
@@ -126,6 +147,16 @@ void handleGraphCheck(int i, int j, SDL_Color color);
 
 void handleFallingBalls();
 
+void initializeMenuButtons();
+
+void gameInitialImage(SDL_Surface *&g_button, SDL_Texture *&g_button_tex, char *src);
+
+void handleCheckMenuClicks();
+
+void gameRenderImage(SDL_Texture *&g_button_tex, SDL_Rect dstRect);
+
+void destroyIt(SDL_Surface *&g_button, SDL_Texture *&g_button_tex);
+
 
 // ---------------------------------------------------
 
@@ -135,6 +166,7 @@ void handleGameProcess() {
     game_is_finished = false;
     game_page_state = "game";
 
+
     initializeBalls();
     BALL shooter_ball;
     BALL reserved_ball;
@@ -142,43 +174,55 @@ void handleGameProcess() {
 
     bool game_loop = SDL_TRUE;
 
+    // buttons
+    initializeMenuButtons();
+
     while (game_loop && !game_is_finished) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 game_loop = SDL_FALSE;
                 main_loop = SDL_FALSE;
             } else if (event.type == SDL_KEYDOWN) {
-                switch (event.key.keysym.sym) {
+                if (game_page_state == "game") {
+                    switch (event.key.keysym.sym) {
+                        case SDLK_SPACE:
+                            swapShootingBalls(shooter_ball, reserved_ball);
+                            drawShootingBalls(shooter_ball, reserved_ball);
+                            break;
 
-                    case SDLK_SPACE:
-                        swapShootingBalls(shooter_ball, reserved_ball);
-                        drawShootingBalls(shooter_ball, reserved_ball);
-                        break;
+                        case SDLK_RIGHT :
+                            handleTargeterEvent(0);
+                            break;
 
-                    case SDLK_RIGHT :
-                        handleTargeterEvent(0);
-                        break;
+                        case SDLK_s :
+                            handleShootBall(shooter_ball, reserved_ball);
+                            break;
 
-                    case SDLK_s :
-                        handleShootBall(shooter_ball, reserved_ball);
-                        break;
+                        case SDLK_LEFT :
+                            handleTargeterEvent(1);
+                            break;
 
-                    case SDLK_LEFT :
-                        handleTargeterEvent(1);
-                        break;
-
-                    default:
-                        game_loop = SDL_TRUE;
+                        default:
+                            game_loop = SDL_TRUE;
+                    }
                 }
+
+
+            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                mouse_click = true;
+                mouse_x = event.button.x;
+                mouse_y = event.button.y;
+            } else if (event.type == SDL_MOUSEBUTTONUP) {
+                mouse_click = false;
             }
         }
 
         if (game_page_state == "game") {
-
             Game(shooter_ball, reserved_ball);
 
         } else if (game_page_state == "pause_menu") {
 
+            SDL_RenderPresent(renderer);
 
         } else if (game_page_state == "quit_menu") {
 
@@ -189,11 +233,19 @@ void handleGameProcess() {
         }
 
 
+        // checking clicks
+        handleCheckMenuClicks();
 
 
         //  Delay and update window
         SDL_RenderPresent(renderer);
         SDL_Delay(DELAY);
+
+
+        if (!game_loop) {
+            // destroy everything
+            destroyIt(menu_btn_sur, menu_btn_tex);
+        }
 
     }
 
@@ -229,6 +281,11 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
                     flag.j = j;
                 }
 
+                // falling balls
+                if(balls[i][j].type == 'f'){
+                    ball.center.y += falling_balls_speed;
+                }
+
             }
         }
     }
@@ -243,7 +300,7 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
 
 
     // shooter
-    SDL_Rect shooter_section = {10, 510, 580, 200};
+    SDL_Rect shooter_section = {10, 550, 580, 160};
     SDL_RenderDrawRect(renderer, &shooter_section);
     drawShootingBalls(shooter_ball, reserved_ball);
 
@@ -260,6 +317,8 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
         flag.i = FINAL_ROWS;
     }
 
+    // Draw pause menu button
+    gameRenderImage(menu_btn_tex, menu_btn_rect);
 
     // handle ball shooting
     if (ball_is_being_thrown) {
@@ -810,16 +869,64 @@ void handleFallingBalls() {
     for (int i = 0; i < element.i; i++) {
         for (int j = 0; j < 12; j++) {
             if (balls[i][j].type != 's') {
-                if (!vectorContainsElement(visited, {i, j})) balls[i][j] = gone_ball;
+                if (!vectorContainsElement(visited, {i, j})) balls[i][j].type='f';
             }
         }
     }
 }
 
 
+void gameInitialImage(SDL_Surface *&g_button, SDL_Texture *&g_button_tex, char *src) {
+    g_button = IMG_Load(src);
+    if (g_button == NULL) {
+        cout << "Error loading image: " << IMG_GetError() << std::endl;
+    } else {
+        g_button_tex = SDL_CreateTextureFromSurface(renderer, g_button);
+        if (g_button_tex == NULL) {
+            cout << "Error creating texture";
+        }
+//
+//        SDL_Rect dstRect = {x, y, w, h};
+//
+//        SDL_RenderCopy(renderer, g_button_tex, NULL, &dstRect);
+//
+//        SDL_FreeSurface(g_button);
+//        SDL_DestroyTexture(g_button_tex);
+    }
+}
+
+
+void initializeMenuButtons() {
+    gameInitialImage(menu_btn_sur, menu_btn_tex, "assets/Game/menu2.png");
+
+}
+
+
+void gameRenderImage(SDL_Texture *&g_button_tex, SDL_Rect dstRect) {
+    SDL_RenderCopy(renderer, g_button_tex, NULL, &dstRect);
+}
+
 void handleScor() {
 
 }
 
+void destroyIt(SDL_Surface *&g_button, SDL_Texture *&g_button_tex) {
+
+    SDL_FreeSurface(g_button);
+    SDL_DestroyTexture(g_button_tex);
+}
+
+
+void handleCheckMenuClicks() {
+
+    if (!mouse_click) return;
+    bool menuIsClicked = checkInOut(mouse_x, mouse_y, menu_btn_rect);
+    if (game_page_state == "game") {
+        game_page_state = "pause_menu";
+    } else if (game_page_state == "pause_menu") {
+        game_page_state = "game";
+    }
+    mouse_click = false;
+}
 
 #endif //BOUNCING_BALL_GAME_GAME_H

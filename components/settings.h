@@ -22,6 +22,11 @@
 #define FINAL_ROWS (ESCAPE_FOR_BALLS_ARRAY + NUMBER_OF_ROWS)
 
 
+// Each ball score
+#define BALL_SCORE 10
+
+
+
 // targeter
 #define TARGETER_SPEED 0.9
 
