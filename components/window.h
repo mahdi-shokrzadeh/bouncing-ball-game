@@ -3,38 +3,29 @@
 
 // building and destroying
 
-void buttonMaker(SDL_Surface *surface, SDL_Texture *texture, SDL_Rect &src, SDL_Rect &dest, char address[64]) {
+void buttonMaker(SDL_Surface* &surface, SDL_Texture* &texture,
+                 SDL_Rect &src, SDL_Rect &dest,
+                 int x, int y, int multiplier, char address[64]) {
+
     surface = IMG_Load(address);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-        src.x = 0;
-        src.y = 0;
-        src.w = surface->w;
-        src.h = surface->h;
+    src.x = 0;
+    src.y = 0;
+    src.w = surface->w;
+    src.h = surface->h;
 
-    dest.x = 10;
-    dest.y = 660;
-    dest.w = surface->w * 2;
-    dest.h = surface->h * 2;
+    dest.x = x;
+    dest.y = y;
+    dest.w = surface->w * multiplier;
+    dest.h = surface->h * multiplier;
 }
 
 void initializeButtons() {
 
     //setting button
 
-    settingButtonSurface = IMG_Load("assets/UiUx/setting.svg");
-    settingButton = SDL_CreateTextureFromSurface(renderer, settingButtonSurface);
-    settingButtonRectSrc.x = 0;
-    settingButtonRectSrc.y = 0;
-    settingButtonRectSrc.w = settingButtonSurface->w;
-    settingButtonRectSrc.h = settingButtonSurface->h;
-    settingButtonRect.x = 10;
-    settingButtonRect.y = 660;
-    settingButtonRect.w = settingButtonSurface->w * 2;
-    settingButtonRect.h = settingButtonSurface->h * 2;
-
-
-    //buttonMaker(settingButtonSurface, settingButton, settingButtonRectSrc, settingButtonRect, "assets/UiUx/setting.svg");
+    buttonMaker(settingButtonSurface, settingButton, settingButtonRectSrc, settingButtonRect, 10, 660, 2, "assets/UiUx/setting.svg");
 
     //exit button
     exitButtonSurface = IMG_Load("assets/UiUx/exit.svg");
