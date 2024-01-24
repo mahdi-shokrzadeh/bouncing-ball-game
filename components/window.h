@@ -56,6 +56,8 @@ void initializeButtons() {
     //start button
     imageRender(startButtonSurface, startButton,startButtonRectSrc,
                 startButtonRect, 100, 300, 0.3, th.button);
+    imageRender(startHoverButtonSurface, startHoverButton,startHoverButtonRectSrc,
+                startHoverButtonRect, 100, 300, 0.3, th.buttonHover);
     textRender(startTextSurface, startText, startTextRectSrc,
                startTextRect, 163, 364, 0.5, "Start");
 
@@ -82,6 +84,8 @@ void destroyButtons() {
 
     SDL_FreeSurface(startButtonSurface);
     SDL_DestroyTexture(startButton);
+    SDL_FreeSurface(startHoverButtonSurface);
+    SDL_DestroyTexture(startHoverButton);
     SDL_FreeSurface(startTextSurface);
     SDL_DestroyTexture(startText);
 
@@ -109,7 +113,10 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
 
     // start button
 
-    SDL_RenderCopy(renderer, startButton, &startButtonRectSrc, &startButtonRect);
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, startButtonRect))
+        SDL_RenderCopy(renderer, startButton, &startButtonRectSrc, &startButtonRect);
+    else
+        SDL_RenderCopy(renderer, startHoverButton, &startHoverButtonRectSrc, &startHoverButtonRect);
     SDL_RenderCopy(renderer, startText, &startTextRectSrc, &startTextRect);
 
     // Leaderboard button
@@ -125,12 +132,8 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
     SDL_RenderCopy(renderer, exitButton, &exitButtonRectSrc, &exitButtonRect);
 
 
-    // mouse actions
+    // mouse click actions
 
-    // start actions
-    /*if(x_MouseWhere >= startBtn.x && x_MouseWhere <= startBtn.x + startBtn.w && y_MouseWhere >= startBtn.y && y_MouseWhere <= startBtn.y + startBtn.h){
-        void;
-    }*/
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, startButtonRect)){
         Locator["game"] = !Locator["game"];
         Locator["main_menu"] = !Locator["main_menu"];
