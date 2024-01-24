@@ -132,6 +132,7 @@ int main(int argv, char **args) {
 
     Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);
     music = Mix_LoadMUS(th.music);
+    Mix_VolumeMusic(musicVolume * 128 / 100);
     Mix_PlayMusic(music, -1);
 
     bgSurface = IMG_Load(th.bg);

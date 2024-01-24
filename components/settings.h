@@ -40,7 +40,6 @@ SDL_Renderer *renderer;
 SDL_bool main_loop = SDL_TRUE;
 
 
-// SDL font
 // SDL setup
 TTF_Font *font = NULL;
 
@@ -54,8 +53,8 @@ SDL_Rect bgRect;
 
 
 // Setting default
-int soundVolume = 10;
-int musicVolume = 10;
+int soundVolume = 0;
+int musicVolume = 0;
 theme th = th1;
 
 
