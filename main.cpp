@@ -21,8 +21,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-//#include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL2/SDL2_gfx.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
+//#include <SDL2/SDL2_gfx.h>
 
 using namespace std;
 
@@ -128,7 +128,7 @@ int main(int argv, char **args) {
     SDL_GetCurrentDisplayMode(0, &DM);
 
     TTF_Init();
-    font = TTF_OpenFont(th.font, 50);
+    font = TTF_OpenFont(th.fontLoc, th.fontSize);
 
     Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);
     music = Mix_LoadMUS(th.music);
