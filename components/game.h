@@ -183,6 +183,8 @@ void Game(BALL shooter_ball ,BALL reserved_ball) {
     SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
     SDL_RenderClear(renderer);
 
+    //SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
 
     // targeter
     drawTargeter();
