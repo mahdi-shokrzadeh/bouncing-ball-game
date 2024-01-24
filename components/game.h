@@ -107,6 +107,9 @@ int mouse_x = 0, mouse_y = 0;
 // falling balls speed
 double falling_balls_speed = 2.0;
 
+// Score
+int score = 0;
+
 
 
 // Game
@@ -826,6 +829,8 @@ void handleGraphCheck(int i, int j, SDL_Color color) {
         // clearing balls
         for (ELEMENT el: visited) {
             balls[el.i][el.j] = gone_ball;
+            // Adding up score
+            score += 10;
         }
     }
 
