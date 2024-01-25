@@ -21,8 +21,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-//#include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL2/SDL2_gfx.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
+//#include <SDL2/SDL2_gfx.h>
 
 using namespace std;
 
@@ -53,10 +53,16 @@ void loop() {
     map<string, bool> Locator;
     Locator["main_menu"] = true;
     Locator["start_menu"] = false;
+    Locator["level_selector"] = false;
+    Locator["normal_or_timed"] = true;// true == normal, false == timed
+    Locator["random_mode"] = false;
+    Locator["infinite_mode"] = false;
     Locator["leaderboard"] = false;
     Locator["setting_menu"] = false;
     Locator["quit_menu"] = false;
     Locator["game"] = false;
+
+    int levelNum = 0;
 
 
     while (main_loop) {
@@ -102,6 +108,8 @@ void loop() {
 
         if (Locator["main_menu"])
             Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
+        else if (Locator["start_menu"])
+            start_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["leaderboard"])
             leaderboard(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["setting_menu"])
