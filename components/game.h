@@ -64,7 +64,7 @@ double targeter_balls_dist = 9.0;
 //};
 
 // Flag
-ELEMENT flag={ESCAPE_FOR_BALLS_ARRAY + 2 , 0};
+ELEMENT flag = {ESCAPE_FOR_BALLS_ARRAY + 2, 0};
 ELEMENT downer_flag = {0, 0};
 
 
@@ -289,14 +289,16 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
                     flag.i = i;
                     flag.j = j;
                 }
-                if (ball.type != 'e' && ball.center.y <= 530 && ball.center.y >= 500  && downer_flag.i != i ) {
-                    downer_flag.i = i;
-                }
+
+                // setting downer flag
+//                if (ball.type != 'e' && ball.center.y <= 530 && ball.center.y >= 500 && downer_flag.i != i) {
+//                    downer_flag.i = i;
+//                }
 
                 // falling balls
                 if (ball.type == 'f') {
                     ball.center.y += falling_balls_speed;
-                    if(ball.center.y >= SCREEN_HEIGHT) {
+                    if (ball.center.y >= SCREEN_HEIGHT) {
                         ball.center = {10000, 10000};
                         ball.type = 's';
                     }
@@ -970,10 +972,20 @@ void setRandomColorForShootingBall(SDL_Color &color) {
 
     vector<int> available_colors;
 
-    cout << "Flag i : " << flag.i << endl;
-    cout << "Downer i : " << downer_flag.i << endl;
 
-    for (int i = downer_flag.i; i <= flag.i; i++) {
+    int k = 0;
+    bool l = true;
+    while (l) {
+        for (int j = 0; j <= 11; j++) {
+            if (balls[k][j].type != 's' && balls[k][j].type != 'f' && balls[k][j].type != 'e') {
+                l = false;
+            }
+        }
+        k++;
+    }
+//    cout << "k : " << k << endl;
+
+    for (int i = k; i <= flag.i; i++) {
         for (int j = 0; j <= 11; j++) {
             if (available_colors.size() == 6) break;
             BALL ball = balls[i][j];
