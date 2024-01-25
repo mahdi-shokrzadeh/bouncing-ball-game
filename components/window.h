@@ -39,8 +39,6 @@ void textRender(SDL_Surface* &surface, SDL_Texture* &texture,
     dest.h = surface->h * multiplier;
 }
 
-
-
 void initializeButtons() {
 
     //setting button
@@ -69,19 +67,51 @@ void initializeButtons() {
 
     //back button
     imageRender(backButtonSurface, backButton,backButtonRectSrc,
-                backButtonRect, 220, 580, 0.3, th.button);
+                backButtonRect, 200, 580, 0.3, th.button);
     imageRender(backHoverButtonSurface, backHoverButton,backHoverButtonRectSrc,
-                backHoverButtonRect, 220, 580, 0.3, th.buttonHover);
+                backHoverButtonRect, 200, 580, 0.3, th.buttonHover);
     textRender(backTextSurface, backText, backTextRectSrc,
-               backTextRect, 280, 645, 0.5, "Back");
+               backTextRect, 260, 645, 0.5, "Back");
 
     //quit menu
     textRender(DoYouWantToQuitTextSurface, DoYouWantToQuitText, DoYouWantToQuitTextRectSrc,
                DoYouWantToQuitTextRect, 70, 240, 0.5, "Do you Really want to quit the Game? :(");
     imageRender(iWantQuitButtonSurface, iWantQuitButton,iWantQuitButtonRectSrc,
-                iWantQuitButtonRect, 220, 260, 0.3, th.buttonQuit);
+                iWantQuitButtonRect, 200, 260, 0.3, th.buttonQuit);
     textRender(iWantQuitTextSurface, iWantQuitText, iWantQuitTextRectSrc,
-               iWantQuitTextRect, 260, 305, 1, "Yes!");
+               iWantQuitTextRect, 240, 305, 1, "Yes!");
+
+    //normal mode menu
+    imageRender(normalModeButtonSurface, normalModeButton,normalModeButtonRectSrc,
+                normalModeButtonRect, 100, 200, 0.3, th.button);
+    imageRender(normalModeHoverButtonSurface, normalModeHoverButton,normalModeHoverButtonRectSrc,
+                normalModeHoverButtonRect, 100, 200, 0.3, th.buttonHover);
+    textRender(normalModeTextSurface, normalModeText, normalModeTextRectSrc,
+               normalModeTextRect, 163, 270, 0.5, "Normal");
+
+    //timed mode menu
+    imageRender(timedModeButtonSurface, timedModeButton,timedModeButtonRectSrc,
+                timedModeButtonRect, 300, 200, 0.3, th.button);
+    imageRender(timedModeHoverButtonSurface, timedModeHoverButton,timedModeHoverButtonRectSrc,
+                timedModeHoverButtonRect, 300, 200, 0.3, th.buttonHover);
+    textRender(timedModeTextSurface, timedModeText, timedModeTextRectSrc,
+               timedModeTextRect, 345, 270, 0.5, "Timed");
+
+    //random mode menu
+    imageRender(randomModeButtonSurface, randomModeButton,randomModeButtonRectSrc,
+                randomModeButtonRect, 100, 400, 0.3, th.button);
+    imageRender(randomModeHoverButtonSurface, randomModeHoverButton, randomModeHoverButtonRectSrc,
+                randomModeHoverButtonRect, 100, 400, 0.3, th.buttonHover);
+    textRender(randomModeTextSurface, randomModeText, randomModeTextRectSrc,
+               randomModeTextRect, 163, 470, 0.5, "Random");
+
+    //infinite mode menu
+    imageRender(infiniteModeButtonSurface, infiniteModeButton,infiniteModeButtonRectSrc,
+                infiniteModeButtonRect, 300, 400, 0.3, th.button);
+    imageRender(infiniteModeHoverButtonSurface, infiniteModeHoverButton,infiniteModeHoverButtonRectSrc,
+                infiniteModeHoverButtonRect, 300, 400, 0.3, th.buttonHover);
+    textRender(infiniteModeTextSurface, infiniteModeText, infiniteModeTextRectSrc,
+               infiniteModeTextRect, 345, 470, 0.5, "Infinite");
 
 }
 
@@ -119,6 +149,35 @@ void destroyButtons() {
     SDL_DestroyTexture(iWantQuitButton);
     SDL_FreeSurface(iWantQuitTextSurface);
     SDL_DestroyTexture(iWantQuitText);
+
+    SDL_FreeSurface(normalModeButtonSurface);
+    SDL_DestroyTexture(normalModeButton);
+    SDL_FreeSurface(normalModeHoverButtonSurface);
+    SDL_DestroyTexture(normalModeHoverButton);
+    SDL_FreeSurface(normalModeTextSurface);
+    SDL_DestroyTexture(normalModeText);
+
+    SDL_FreeSurface(timedModeButtonSurface);
+    SDL_DestroyTexture(timedModeButton);
+    SDL_FreeSurface(timedModeHoverButtonSurface);
+    SDL_DestroyTexture(timedModeHoverButton);
+    SDL_FreeSurface(timedModeTextSurface);
+    SDL_DestroyTexture(timedModeText);
+
+    SDL_FreeSurface(randomModeButtonSurface);
+    SDL_DestroyTexture(randomModeButton);
+    SDL_FreeSurface(randomModeHoverButtonSurface);
+    SDL_DestroyTexture(randomModeHoverButton);
+    SDL_FreeSurface(randomModeTextSurface);
+    SDL_DestroyTexture(randomModeText);
+
+    SDL_FreeSurface(infiniteModeButtonSurface);
+    SDL_DestroyTexture(infiniteModeButton);
+    SDL_FreeSurface(infiniteModeHoverButtonSurface);
+    SDL_DestroyTexture(infiniteModeHoverButton);
+    SDL_FreeSurface(infiniteModeTextSurface);
+    SDL_DestroyTexture(infiniteModeText);
+
 }
 
 // Menus
@@ -156,7 +215,7 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
     // mouse click actions
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, startButtonRect)){
-        Locator["game"] = !Locator["game"];
+        Locator["start_menu"] = !Locator["start_menu"];
         Locator["main_menu"] = !Locator["main_menu"];
     }
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, leaderButtonRect)){
@@ -173,6 +232,84 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
     }
 
 
+
+}
+
+void start_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
+
+    // initialing and Drawing background
+
+    SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+    // normal mode button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, normalModeButtonRect))
+        SDL_RenderCopy(renderer, normalModeButton, &normalModeButtonRectSrc, &normalModeButtonRect);
+    else
+        SDL_RenderCopy(renderer, normalModeHoverButton, &normalModeHoverButtonRectSrc, &normalModeHoverButtonRect);
+    SDL_RenderCopy(renderer, normalModeText, &normalModeTextRectSrc, &normalModeTextRect);
+
+    // timed mode button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, timedModeButtonRect))
+        SDL_RenderCopy(renderer, timedModeButton, &timedModeButtonRectSrc, &timedModeButtonRect);
+    else
+        SDL_RenderCopy(renderer, timedModeHoverButton, &timedModeHoverButtonRectSrc, &timedModeHoverButtonRect);
+    SDL_RenderCopy(renderer, timedModeText, &timedModeTextRectSrc, &timedModeTextRect);
+
+    // random mode button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, randomModeButtonRect))
+        SDL_RenderCopy(renderer, randomModeButton, &randomModeButtonRectSrc, &randomModeButtonRect);
+    else
+        SDL_RenderCopy(renderer, randomModeHoverButton, &randomModeHoverButtonRectSrc, &randomModeHoverButtonRect);
+    SDL_RenderCopy(renderer, randomModeText, &randomModeTextRectSrc, &randomModeTextRect);
+
+    // infinite mode button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, infiniteModeButtonRect))
+        SDL_RenderCopy(renderer, infiniteModeButton, &infiniteModeButtonRectSrc, &infiniteModeButtonRect);
+    else
+        SDL_RenderCopy(renderer, infiniteModeHoverButton, &infiniteModeHoverButtonRectSrc, &infiniteModeHoverButtonRect);
+    SDL_RenderCopy(renderer, infiniteModeText, &infiniteModeTextRectSrc, &infiniteModeTextRect);
+
+    // back button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, backButtonRect))
+        SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
+    else
+        SDL_RenderCopy(renderer, backHoverButton, &backHoverButtonRectSrc, &backHoverButtonRect);
+    SDL_RenderCopy(renderer, backText, &backTextRectSrc, &backTextRect);
+
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, normalModeButtonRect)) {
+        Locator["start_menu"] = !Locator["start_menu"];
+        //Locator["level_selector"] = !Locator["level_selector"];
+        //Locator["normal_or_timed"] = true;
+        Locator["game"] = !Locator["game"];
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, timedModeButtonRect)) {
+        Locator["start_menu"] = !Locator["start_menu"];
+        //Locator["level_selector"] = !Locator["level_selector"];
+        //Locator["normal_or_timed"] = false;
+        Locator["main_menu"] = !Locator["main_menu"];
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, randomModeButtonRect)) {
+        Locator["start_menu"] = !Locator["start_menu"];
+        //Locator["random_mode"] = !Locator["random_mode"];
+        Locator["main_menu"] = !Locator["main_menu"];
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, infiniteModeButtonRect)) {
+        Locator["start_menu"] = !Locator["start_menu"];
+        //Locator["infinite_mode"] = !Locator["infinite_mode"];
+        Locator["main_menu"] = !Locator["main_menu"];
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)) {
+        Locator["start_menu"] = !Locator["start_menu"];
+        Locator["main_menu"] = !Locator["main_menu"];
+    }
 
 }
 

@@ -152,6 +152,58 @@ SDL_Texture *iWantQuitText;
 SDL_Rect iWantQuitTextRectSrc;
 SDL_Rect iWantQuitTextRect;
 
+SDL_Surface *normalModeButtonSurface = NULL;
+SDL_Texture *normalModeButton = NULL;
+SDL_Rect normalModeButtonRect;
+SDL_Rect normalModeButtonRectSrc;
+SDL_Surface *normalModeHoverButtonSurface = NULL;
+SDL_Texture *normalModeHoverButton = NULL;
+SDL_Rect normalModeHoverButtonRect;
+SDL_Rect normalModeHoverButtonRectSrc;
+SDL_Surface *normalModeTextSurface;
+SDL_Texture *normalModeText;
+SDL_Rect normalModeTextRectSrc;
+SDL_Rect normalModeTextRect;
+
+SDL_Surface *timedModeButtonSurface = NULL;
+SDL_Texture *timedModeButton = NULL;
+SDL_Rect timedModeButtonRect;
+SDL_Rect timedModeButtonRectSrc;
+SDL_Surface *timedModeHoverButtonSurface = NULL;
+SDL_Texture *timedModeHoverButton = NULL;
+SDL_Rect timedModeHoverButtonRect;
+SDL_Rect timedModeHoverButtonRectSrc;
+SDL_Surface *timedModeTextSurface;
+SDL_Texture *timedModeText;
+SDL_Rect timedModeTextRectSrc;
+SDL_Rect timedModeTextRect;
+
+SDL_Surface *randomModeButtonSurface = NULL;
+SDL_Texture *randomModeButton = NULL;
+SDL_Rect randomModeButtonRect;
+SDL_Rect randomModeButtonRectSrc;
+SDL_Surface *randomModeHoverButtonSurface = NULL;
+SDL_Texture *randomModeHoverButton = NULL;
+SDL_Rect randomModeHoverButtonRect;
+SDL_Rect randomModeHoverButtonRectSrc;
+SDL_Surface *randomModeTextSurface;
+SDL_Texture *randomModeText;
+SDL_Rect randomModeTextRectSrc;
+SDL_Rect randomModeTextRect;
+
+SDL_Surface *infiniteModeButtonSurface = NULL;
+SDL_Texture *infiniteModeButton = NULL;
+SDL_Rect infiniteModeButtonRect;
+SDL_Rect infiniteModeButtonRectSrc;
+SDL_Surface *infiniteModeHoverButtonSurface = NULL;
+SDL_Texture *infiniteModeHoverButton = NULL;
+SDL_Rect infiniteModeHoverButtonRect;
+SDL_Rect infiniteModeHoverButtonRectSrc;
+SDL_Surface *infiniteModeTextSurface;
+SDL_Texture *infiniteModeText;
+SDL_Rect infiniteModeTextRectSrc;
+SDL_Rect infiniteModeTextRect;
+
 
 // Setting default
 int soundVolume = 0;
