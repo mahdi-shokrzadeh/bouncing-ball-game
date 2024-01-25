@@ -82,7 +82,7 @@ SDL_Event event;
 
 // Initializing balls
 
-BALL balls[MAX_NUMBER_OF_ROWS][12] = {0};
+BALL balls[100][12] = {0};
 
 
 // Page state
@@ -113,6 +113,8 @@ int score = 0;
 // color handling
 vector<int> balls_recent_color = {1};
 
+// pattern
+int pattern[100][12];
 
 // Game
 
@@ -166,6 +168,7 @@ bool colorsAreTheSame(SDL_Color c1, SDL_Color c2);
 
 void setRandomColorForShootingBall(SDL_Color &color);
 
+void setPattern(int arr[DIMENTION_OF_LEVELS][12]);
 
 // ---------------------------------------------------
 
@@ -349,32 +352,40 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
 
 
 void initializeBalls() {
+
+    setPattern(level_1);
+
     for (int i = 1; i <= FINAL_ROWS; i++) {
         for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box - 1; j++) {
             if (i <= ESCAPE_FOR_BALLS_ARRAY) {
-                balls[i - 1][j] = sample_ball;
+//                balls[i - 1][j] = sample_ball;
             } else {
-                BALL ball = {
-                        .type='c',
-                        .color = {
-                                .r=0,
-                                .g=0,
-                                .b=0,
-                        },
-                        .center = {
-                                .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
-                                .y = double(-(i - 5) * (width_of_ball_box)),
-                        },
-                };
-                setRandomColor(ball.color);
-
-                if (i % 2 == 0) {
-                    balls[i - 1][j] = ball;
+                if (pattern[i - 1][j] == 0) {
+//                    balls[i - 1][j] = sample_ball;
                 } else {
-                    ball.center.x += 0.5 * width_of_ball_box;
-                    balls[i - 1][j] = ball;
+                    BALL ball = {
+                            .type='c',
+                            .color = {
+                                    .r=0,
+                                    .g=0,
+                                    .b=0,
+                            },
+                            .center = {
+                                    .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
+                                    .y = double(-(i - 5) * (width_of_ball_box)),
+                            },
+                    };
+                    setRandomColor(ball.color);
+
+                    if (i % 2 == 0) {
+                        balls[i - 1][j] = ball;
+                    } else {
+                        ball.center.x += 0.5 * width_of_ball_box;
+                        balls[i - 1][j] = ball;
+                    }
                 }
             }
+
 
         }
     }
@@ -398,6 +409,16 @@ void initializeBalls() {
     end_pointer_ball.center.y = double(-(FINAL_ROWS - 5) * (width_of_ball_box));
 
 }
+
+
+void setPattern(int arr[DIMENTION_OF_LEVELS][12]) {
+    for (int i = 0; i < DIMENTION_OF_LEVELS; i++) {
+        for (int j = 0; j <= 11; j++) {
+            pattern[i+ESCAPE_FOR_BALLS_ARRAY][j] = arr[i][j];
+        }
+    }
+}
+
 
 void setRandomColor(SDL_Color &color) {
 
@@ -763,45 +784,86 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
 vector<ELEMENT> findNeighbors(int i, int j, string type) {
 
     vector<ELEMENT> neighbors;
+    if(type == "all"){
+        if (i % 2 == 0) {
+            if (j + 1 <= 11) {
+                // checking the upper line
+                if (balls[i + 1][j + 1].type != 's' && balls[i + 1][j + 1].type != 'f')
+                    neighbors.push_back({i + 1, j + 1});
+                // checking the line
+                if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
+                // checking the downer line
+                if (balls[i - 1][j + 1].type != 's' && balls[i - 1][j + 1].type != 'f') neighbors.push_back({i - 1, j + 1});
+            }
 
-    if (i % 2 == 0) {
-        if (j + 1 <= 11) {
-            // checking the upper line
-            if (balls[i + 1][j + 1].type != 's' && balls[i + 1][j + 1].type != 'f' && type != "down")
-                neighbors.push_back({i + 1, j + 1});
-            // checking the line
-            if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
-            // checking the downer line
-            if (balls[i - 1][j + 1].type != 's' && balls[i - 1][j + 1].type != 'f') neighbors.push_back({i - 1, j + 1});
+            if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f')
+                neighbors.push_back({i + 1, j});
+            if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f') neighbors.push_back({i - 1, j});
+
+            if (j - 1 >= 0) {
+                if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
+            }
+
+        } else {
+            if (j - 1 >= 0) {
+                // checking the upper line
+                if (balls[i + 1][j - 1].type != 's' && balls[i + 1][j - 1].type != 'f')
+                    neighbors.push_back({i + 1, j - 1});
+                // checking the line
+                if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
+                // checking the downer line
+                if (balls[i - 1][j - 1].type != 's' && balls[i - 1][j - 1].type != 'f') neighbors.push_back({i - 1, j - 1});
+            }
+
+            if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' )
+                neighbors.push_back({i + 1, j});
+            if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f') neighbors.push_back({i - 1, j});
+
+            if (j + 1 <= 11) {
+                if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
+            }
         }
+    }else{
+        if (i % 2 == 0) {
+            if (j + 1 <= 11) {
+                // checking the upper line
+                if (balls[i + 1][j + 1].type != 's' && balls[i + 1][j + 1].type != 'f' && i != flag.i)
+                    neighbors.push_back({i + 1, j + 1});
+                // checking the line
+                if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
+                // checking the downer line
+                if (balls[i - 1][j + 1].type != 's' && balls[i - 1][j + 1].type != 'f') neighbors.push_back({i - 1, j + 1});
+            }
 
-        if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && type != "down")
-            neighbors.push_back({i + 1, j});
-        if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f') neighbors.push_back({i - 1, j});
+            if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && i != flag.i)
+                neighbors.push_back({i + 1, j});
+            if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f') neighbors.push_back({i - 1, j});
 
-        if (j - 1 >= 0) {
-            if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
-        }
+            if (j - 1 >= 0) {
+                if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
+            }
 
-    } else {
-        if (j - 1 >= 0) {
-            // checking the upper line
-            if (balls[i + 1][j - 1].type != 's' && balls[i + 1][j - 1].type != 'f' && type != "down")
-                neighbors.push_back({i + 1, j - 1});
-            // checking the line
-            if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
-            // checking the downer line
-            if (balls[i - 1][j - 1].type != 's' && balls[i - 1][j - 1].type != 'f') neighbors.push_back({i - 1, j - 1});
-        }
+        } else {
+            if (j - 1 >= 0) {
+                // checking the upper line
+                if (balls[i + 1][j - 1].type != 's' && balls[i + 1][j - 1].type != 'f' && i != flag.i)
+                    neighbors.push_back({i + 1, j - 1});
+                // checking the line
+                if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
+                // checking the downer line
+                if (balls[i - 1][j - 1].type != 's' && balls[i - 1][j - 1].type != 'f') neighbors.push_back({i - 1, j - 1});
+            }
 
-        if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && type != "down")
-            neighbors.push_back({i + 1, j});
-        if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f') neighbors.push_back({i - 1, j});
+            if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && i != flag.i)
+                neighbors.push_back({i + 1, j});
+            if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f') neighbors.push_back({i - 1, j});
 
-        if (j + 1 <= 11) {
-            if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
+            if (j + 1 <= 11) {
+                if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
+            }
         }
     }
+
 
     return neighbors;
 }
@@ -977,7 +1039,7 @@ void setRandomColorForShootingBall(SDL_Color &color) {
     bool l = true;
     while (l) {
         for (int j = 0; j <= 11; j++) {
-            if (balls[k][j].type != 's' && balls[k][j].type != 'f' && balls[k][j].type != 'e') {
+            if (balls[k][j].type == 'c') {
                 l = false;
             }
         }
