@@ -28,8 +28,8 @@ BALL sample_ball = {
         .color = RED,
 
         .center = {
-                .x = 0,
-                .y = 0,
+                .x = 10000,
+                .y = 10000,
         },
 };
 
@@ -284,8 +284,11 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
             if (balls[i][j].type != 's') {
                 BALL &ball = balls[i][j];
                 ball.center.y += vertical_speed;
-                aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
-                             ball.color.r, ball.color.g, ball.color.b, 255);
+                if (ball.center.y <= SCREEN_HEIGHT + 30 && ball.center.y >= -40) {
+                    aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
+                                 ball.color.r, ball.color.g, ball.color.b, 255);
+                }
+
 
                 // updating the flags
                 if (ball.center.y >= -70 && ball.center.y <= -40 && flag.i != i) {
@@ -358,10 +361,10 @@ void initializeBalls() {
     for (int i = 1; i <= FINAL_ROWS; i++) {
         for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box - 1; j++) {
             if (i <= ESCAPE_FOR_BALLS_ARRAY) {
-//                balls[i - 1][j] = sample_ball;
+                balls[i - 1][j] = sample_ball;
             } else {
                 if (pattern[i - 1][j] == 0) {
-//                    balls[i - 1][j] = sample_ball;
+                    balls[i - 1][j] = sample_ball;
                 } else {
                     BALL ball = {
                             .type='c',
@@ -408,13 +411,14 @@ void initializeBalls() {
     }
     end_pointer_ball.center.y = double(-(FINAL_ROWS - 5) * (width_of_ball_box));
 
+
 }
 
 
 void setPattern(int arr[DIMENTION_OF_LEVELS][12]) {
     for (int i = 0; i < DIMENTION_OF_LEVELS; i++) {
         for (int j = 0; j <= 11; j++) {
-            pattern[i+ESCAPE_FOR_BALLS_ARRAY][j] = arr[i][j];
+            pattern[i + ESCAPE_FOR_BALLS_ARRAY][j] = arr[i][j];
         }
     }
 }
@@ -466,7 +470,9 @@ void initializeShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
 
     setRandomColorForShootingBall(shooter_ball.color);
     setRandomColorForShootingBall(reserved_ball.color);
-    while (reserved_ball.color.r == shooter_ball.color.r) setRandomColorForShootingBall(reserved_ball.color);
+    while (colorsAreTheSame(reserved_ball.color, shooter_ball.color)) {
+        setRandomColorForShootingBall(reserved_ball.color);
+    }
 
 }
 
@@ -784,7 +790,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
 vector<ELEMENT> findNeighbors(int i, int j, string type) {
 
     vector<ELEMENT> neighbors;
-    if(type == "all"){
+    if (type == "all") {
         if (i % 2 == 0) {
             if (j + 1 <= 11) {
                 // checking the upper line
@@ -793,7 +799,8 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
                 // checking the line
                 if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
                 // checking the downer line
-                if (balls[i - 1][j + 1].type != 's' && balls[i - 1][j + 1].type != 'f') neighbors.push_back({i - 1, j + 1});
+                if (balls[i - 1][j + 1].type != 's' && balls[i - 1][j + 1].type != 'f')
+                    neighbors.push_back({i - 1, j + 1});
             }
 
             if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f')
@@ -812,10 +819,11 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
                 // checking the line
                 if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
                 // checking the downer line
-                if (balls[i - 1][j - 1].type != 's' && balls[i - 1][j - 1].type != 'f') neighbors.push_back({i - 1, j - 1});
+                if (balls[i - 1][j - 1].type != 's' && balls[i - 1][j - 1].type != 'f')
+                    neighbors.push_back({i - 1, j - 1});
             }
 
-            if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' )
+            if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f')
                 neighbors.push_back({i + 1, j});
             if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f') neighbors.push_back({i - 1, j});
 
@@ -823,7 +831,7 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
                 if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
             }
         }
-    }else{
+    } else {
         if (i % 2 == 0) {
             if (j + 1 <= 11) {
                 // checking the upper line
@@ -832,7 +840,8 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
                 // checking the line
                 if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
                 // checking the downer line
-                if (balls[i - 1][j + 1].type != 's' && balls[i - 1][j + 1].type != 'f') neighbors.push_back({i - 1, j + 1});
+                if (balls[i - 1][j + 1].type != 's' && balls[i - 1][j + 1].type != 'f')
+                    neighbors.push_back({i - 1, j + 1});
             }
 
             if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && i != flag.i)
@@ -851,7 +860,8 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
                 // checking the line
                 if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
                 // checking the downer line
-                if (balls[i - 1][j - 1].type != 's' && balls[i - 1][j - 1].type != 'f') neighbors.push_back({i - 1, j - 1});
+                if (balls[i - 1][j - 1].type != 's' && balls[i - 1][j - 1].type != 'f')
+                    neighbors.push_back({i - 1, j - 1});
             }
 
             if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && i != flag.i)
@@ -1034,7 +1044,6 @@ void setRandomColorForShootingBall(SDL_Color &color) {
 
     vector<int> available_colors;
 
-
     int k = 0;
     bool l = true;
     while (l) {
@@ -1045,14 +1054,14 @@ void setRandomColorForShootingBall(SDL_Color &color) {
         }
         k++;
     }
-//    cout << "k : " << k << endl;
+    k--;
 
     for (int i = k; i <= flag.i; i++) {
         for (int j = 0; j <= 11; j++) {
             if (available_colors.size() == 6) break;
             BALL ball = balls[i][j];
 
-            if (ball.type != 'e' && ball.type != 's' && ball.type != 'f' && ball.type != ' ') {
+            if (ball.type != 'e' && ball.type != 's' && ball.type != 'f') {
 
                 if (colorsAreTheSame(ball.color, RED)) {
                     if (!contains(available_colors, 0)) available_colors.push_back(0);
@@ -1074,39 +1083,45 @@ void setRandomColorForShootingBall(SDL_Color &color) {
 
     if (available_colors.empty()) return;
 
-    int i = rand() % 6;
 
-    switch (i) {
-        case (0):
+    int random_number;
+
+    while(true){
+        random_number = rand() % 6;
+        if (random_number == 0) {
             if (contains(available_colors, 0)) {
                 color = RED;
-                break;
+                return;
             }
-        case (1):
+        } else if (random_number == 1) {
             if (contains(available_colors, 1)) {
                 color = CYAN;
-                break;
+                return;
             }
-        case (2) :
-            if (contains(available_colors, 0)) {
+        } else if (random_number == 2) {
+            if (contains(available_colors, 2)) {
                 color = BLUE;
-                break;
+                return;
             }
-        case (3) :
+        } else if (random_number == 3) {
             if (contains(available_colors, 3)) {
                 color = PURPLE;
-                break;
+                return;
             }
-        case (4) :
+        } else if (random_number == 4) {
             if (contains(available_colors, 4)) {
                 color = AQUA;
-                break;
+                return;
             }
-        default:
+        } else {
             if (contains(available_colors, 5)) {
                 color = YELLOW;
+                return;
             }
+        }
     }
+
+
 }
 
 
