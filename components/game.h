@@ -64,8 +64,8 @@ double targeter_balls_dist = 9.0;
 //};
 
 // Flag
-ELEMENT flag;
-
+ELEMENT flag={ESCAPE_FOR_BALLS_ARRAY + 2 , 0};
+ELEMENT downer_flag = {0, 0};
 
 
 // variables related to balls
@@ -111,7 +111,7 @@ double falling_balls_speed = 2.0;
 int score = 0;
 
 // color handling
-vector <int> balls_recent_color={1};
+vector<int> balls_recent_color = {1};
 
 
 // Game
@@ -161,6 +161,10 @@ void handleCheckMenuClicks();
 void gameRenderImage(SDL_Texture *&g_button_tex, SDL_Rect dstRect);
 
 void destroyIt(SDL_Surface *&g_button, SDL_Texture *&g_button_tex);
+
+bool colorsAreTheSame(SDL_Color c1, SDL_Color c2);
+
+void setRandomColorForShootingBall(SDL_Color &color);
 
 
 // ---------------------------------------------------
@@ -280,15 +284,22 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
                 aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
                              ball.color.r, ball.color.g, ball.color.b, 255);
 
-                // updating the flag
-                if (ball.center.y >= -60 && ball.center.y <= -40 && flag.i != i) {
+                // updating the flags
+                if (ball.center.y >= -70 && ball.center.y <= -40 && flag.i != i) {
                     flag.i = i;
                     flag.j = j;
                 }
+                if (ball.type != 'e' && ball.center.y <= 530 && ball.center.y >= 500  && downer_flag.i != i ) {
+                    downer_flag.i = i;
+                }
 
                 // falling balls
-                if(balls[i][j].type == 'f'){
+                if (ball.type == 'f') {
                     ball.center.y += falling_balls_speed;
+                    if(ball.center.y >= SCREEN_HEIGHT) {
+                        ball.center = {10000, 10000};
+                        ball.type = 's';
+                    }
                 }
 
             }
@@ -406,7 +417,7 @@ void setRandomColor(SDL_Color &color) {
             color = AQUA;
             break;
         case (5):
-            if(!contains(balls_recent_color , 5)){
+            if (!contains(balls_recent_color, 5)) {
                 color = WHEAT;
                 break;
             }
@@ -415,7 +426,7 @@ void setRandomColor(SDL_Color &color) {
     }
     balls_recent_color.push_back(i);
 
-    if(balls_recent_color.size() > 6){
+    if (balls_recent_color.size() > 6) {
         balls_recent_color.erase(balls_recent_color.begin());
     }
 }
@@ -430,9 +441,9 @@ void initializeShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
     reserved_ball.center.x = center_of_reserved_ball.x;
     reserved_ball.center.y = center_of_reserved_ball.y;
 
-    setRandomColor(shooter_ball.color);
-    setRandomColor(reserved_ball.color);
-    while (reserved_ball.color.r == shooter_ball.color.r) setRandomColor(reserved_ball.color);
+    setRandomColorForShootingBall(shooter_ball.color);
+    setRandomColorForShootingBall(reserved_ball.color);
+    while (reserved_ball.color.r == shooter_ball.color.r) setRandomColorForShootingBall(reserved_ball.color);
 
 }
 
@@ -545,8 +556,9 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
         reserved_ball.center = center_of_reserved_ball;
         shooting_ball.type = 'c';
         reserved_ball.type = 'c';
-        setRandomColor(reserved_ball.color);
-        while (reserved_ball.color.r == shooting_ball.color.r) setRandomColor(reserved_ball.color);
+//        setRandomColor(reserved_ball.color);
+//        while (reserved_ball.color.r == shooting_ball.color.r) setRandomColor(reserved_ball.color);
+        setRandomColorForShootingBall(reserved_ball.color);
         dxOfThrownBall = sin(degree * M_PI / 180.0) * SPEED_OF_THROWN_BALL;
         dyOfThrownBall = cos(degree * M_PI / 180.0) * SPEED_OF_THROWN_BALL;
         drawShootingBalls(shooting_ball, reserved_ball);
@@ -753,15 +765,17 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
     if (i % 2 == 0) {
         if (j + 1 <= 11) {
             // checking the upper line
-            if (balls[i + 1][j + 1].type != 's' && balls[i + 1][j + 1].type != 'f' && type != "down") neighbors.push_back({i + 1, j + 1});
+            if (balls[i + 1][j + 1].type != 's' && balls[i + 1][j + 1].type != 'f' && type != "down")
+                neighbors.push_back({i + 1, j + 1});
             // checking the line
             if (balls[i][j + 1].type != 's' && balls[i][j + 1].type != 'f') neighbors.push_back({i, j + 1});
             // checking the downer line
             if (balls[i - 1][j + 1].type != 's' && balls[i - 1][j + 1].type != 'f') neighbors.push_back({i - 1, j + 1});
         }
 
-        if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && type != "down") neighbors.push_back({i + 1, j});
-        if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f' ) neighbors.push_back({i - 1, j});
+        if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && type != "down")
+            neighbors.push_back({i + 1, j});
+        if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f') neighbors.push_back({i - 1, j});
 
         if (j - 1 >= 0) {
             if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
@@ -770,14 +784,16 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
     } else {
         if (j - 1 >= 0) {
             // checking the upper line
-            if (balls[i + 1][j - 1].type != 's' && balls[i + 1][j - 1].type != 'f' && type != "down") neighbors.push_back({i + 1, j - 1});
+            if (balls[i + 1][j - 1].type != 's' && balls[i + 1][j - 1].type != 'f' && type != "down")
+                neighbors.push_back({i + 1, j - 1});
             // checking the line
             if (balls[i][j - 1].type != 's' && balls[i][j - 1].type != 'f') neighbors.push_back({i, j - 1});
             // checking the downer line
             if (balls[i - 1][j - 1].type != 's' && balls[i - 1][j - 1].type != 'f') neighbors.push_back({i - 1, j - 1});
         }
 
-        if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && type != "down") neighbors.push_back({i + 1, j});
+        if (balls[i + 1][j].type != 's' && balls[i + 1][j].type != 'f' && type != "down")
+            neighbors.push_back({i + 1, j});
         if (balls[i - 1][j].type != 's' && balls[i - 1][j].type != 'f') neighbors.push_back({i - 1, j});
 
         if (j + 1 <= 11) {
@@ -868,7 +884,7 @@ void handleFallingBalls() {
     for (int j = 0; j <= 11; j++) {
         queue.push_back({element.i, j});
     }
-    cout << element.i << endl;
+//    cout << element.i << endl;
 
     while (!queue.empty()) {
 
@@ -886,7 +902,7 @@ void handleFallingBalls() {
     for (int i = 0; i < element.i; i++) {
         for (int j = 0; j < 12; j++) {
             if (balls[i][j].type != 's') {
-                if (!vectorContainsElement(visited, {i, j})) balls[i][j].type='f';
+                if (!vectorContainsElement(visited, {i, j})) balls[i][j].type = 'f';
             }
         }
     }
@@ -944,5 +960,80 @@ void handleCheckMenuClicks() {
     }
     mouse_click = false;
 }
+
+bool colorsAreTheSame(SDL_Color c1, SDL_Color c2) {
+    return (c1.r == c2.r && c1.g == c2.g && c1.b == c2.b);
+}
+
+
+void setRandomColorForShootingBall(SDL_Color &color) {
+
+    vector<int> available_colors;
+
+    cout << "Flag i : " << flag.i << endl;
+    cout << "Downer i : " << downer_flag.i << endl;
+
+    for (int i = downer_flag.i; i <= flag.i; i++) {
+        for (int j = 0; j <= 11; j++) {
+            if (available_colors.size() == 6) break;
+            BALL ball = balls[i][j];
+
+            if (ball.type != 'e' && ball.type != 's' && ball.type != 'f' && ball.type != ' ') {
+
+                if (colorsAreTheSame(ball.color, RED)) {
+                    if (!contains(available_colors, 0)) available_colors.push_back(0);
+                } else if (colorsAreTheSame(ball.color, CYAN)) {
+                    if (!contains(available_colors, 1)) available_colors.push_back(1);
+                } else if (colorsAreTheSame(ball.color, BLUE)) {
+                    if (!contains(available_colors, 2)) available_colors.push_back(2);
+                } else if (colorsAreTheSame(ball.color, PURPLE)) {
+                    if (!contains(available_colors, 3)) available_colors.push_back(3);
+                } else if (colorsAreTheSame(ball.color, AQUA)) {
+                    if (!contains(available_colors, 4)) available_colors.push_back(4);
+                } else if (colorsAreTheSame(ball.color, YELLOW)) {
+                    if (!contains(available_colors, 5)) available_colors.push_back(5);
+                }
+            }
+
+        }
+    }
+
+    if (available_colors.empty()) return;
+
+    int i = rand() % 6;
+
+    switch (i) {
+        case (0):
+            if (contains(available_colors, 0)) {
+                color = RED;
+                break;
+            }
+        case (1):
+            if (contains(available_colors, 1)) {
+                color = CYAN;
+                break;
+            }
+        case (2) :
+            if (contains(available_colors, 0)) {
+                color = BLUE;
+                break;
+            }
+        case (3) :
+            if (contains(available_colors, 3)) {
+                color = PURPLE;
+                break;
+            }
+        case (4) :
+            if (contains(available_colors, 4)) {
+                color = AQUA;
+                break;
+            }
+        default:
+            if (contains(available_colors, 5)) {
+                color = YELLOW;
+            }
+    }
+}
+
 
 #endif //BOUNCING_BALL_GAME_GAME_H
