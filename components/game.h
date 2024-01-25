@@ -231,7 +231,7 @@ void handleGameProcess() {
 
         } else if (game_page_state == "pause_menu") {
 
-            SDL_RenderPresent(renderer);
+//            SDL_RenderPresent(renderer);
 
         } else if (game_page_state == "quit_menu") {
 
