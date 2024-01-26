@@ -1,6 +1,59 @@
 #ifndef BOUNCING_BALL_GAME_WINDOW_H
 #define BOUNCING_BALL_GAME_WINDOW_H
 
+// rendering balls texture
+
+void initializeBallsTexture() {
+
+    redNormalBallSurface = IMG_Load("assets/Game/Balls/red.png");
+    redNormalBall = SDL_CreateTextureFromSurface(renderer, redNormalBallSurface);
+
+    blueNormalBallSurface = IMG_Load("assets/Game/Balls/blue.png");
+    blueNormalBall = SDL_CreateTextureFromSurface(renderer, blueNormalBallSurface);
+
+    greenNormalBallSurface = IMG_Load("assets/Game/Balls/green.png");
+    greenNormalBall = SDL_CreateTextureFromSurface(renderer, greenNormalBallSurface);
+
+    yellowNormalBallSurface = IMG_Load("assets/Game/Balls/yellow.png");
+    yellowNormalBall = SDL_CreateTextureFromSurface(renderer, yellowNormalBallSurface);
+
+    purpleNormalBallSurface = IMG_Load("assets/Game/Balls/purple.png");
+    purpleNormalBall = SDL_CreateTextureFromSurface(renderer, purpleNormalBallSurface);
+
+    cyanNormalBallSurface = IMG_Load("assets/Game/Balls/cyan.png");
+    cyanNormalBall = SDL_CreateTextureFromSurface(renderer, cyanNormalBallSurface);
+
+    silverNormalBallSurface = IMG_Load("assets/Game/Balls/silver.png");
+    silverNormalBall = SDL_CreateTextureFromSurface(renderer, silverNormalBallSurface);
+
+}
+
+void destroyBallsTexture() {
+
+    SDL_FreeSurface(redNormalBallSurface);
+    SDL_DestroyTexture(redNormalBall);
+
+    SDL_FreeSurface(blueNormalBallSurface);
+    SDL_DestroyTexture(blueNormalBall);
+
+    SDL_FreeSurface(yellowNormalBallSurface);
+    SDL_DestroyTexture(yellowNormalBall);
+
+    SDL_FreeSurface(greenNormalBallSurface);
+    SDL_DestroyTexture(greenNormalBall);
+
+    SDL_FreeSurface(cyanNormalBallSurface);
+    SDL_DestroyTexture(cyanNormalBall);
+
+    SDL_FreeSurface(purpleNormalBallSurface);
+    SDL_DestroyTexture(purpleNormalBall);
+
+    SDL_FreeSurface(silverNormalBallSurface);
+    SDL_DestroyTexture(silverNormalBall);
+
+}
+
+
 // building and destroying
 
 void imageRender(SDL_Surface* &surface, SDL_Texture* &texture,
@@ -39,7 +92,15 @@ void textRender(SDL_Surface* &surface, SDL_Texture* &texture,
     dest.h = surface->h * multiplier;
 }
 
-void initializeButtons() {
+void initializeButtonsAndBG() {
+
+    bgSurface = IMG_Load(th.bg);
+    bg = SDL_CreateTextureFromSurface(renderer, bgSurface);
+
+    bgRect.x = 0;
+    bgRect.y = 0;
+    bgRect.w = bgSurface->w;
+    bgRect.h = bgSurface->h;
 
     //setting button
     imageRender(settingButtonSurface, settingButton,settingButtonRectSrc,
@@ -48,6 +109,22 @@ void initializeButtons() {
     //exit button
     imageRender(exitButtonSurface, exitButton,exitButtonRectSrc,
                 exitButtonRect, 550, 660, 2, "assets/UiUx/exit.svg");
+
+    //music off button
+    imageRender(musicOffButtonSurface, musicOffButton,musicOffButtonRectSrc,
+                musicOffButtonRect, 60, 120, 2, "assets/UiUx/music_off.svg");
+
+    //music on button
+    imageRender(musicOnButtonSurface, musicOnButton,musicOnButtonRectSrc,
+                musicOnButtonRect, 60, 120, 2, "assets/UiUx/music_on.svg");
+
+    //volume off button
+    imageRender(volumeOffButtonSurface, volumeOffButton,volumeOffButtonRectSrc,
+                volumeOffButtonRect, 60, 60, 2, "assets/UiUx/volume_off.svg");
+
+    //volume on button
+    imageRender(volumeOnButtonSurface, volumeOnButton,volumeOnButtonRectSrc,
+                volumeOnButtonRect, 60, 60, 2, "assets/UiUx/volume_on.svg");
 
     //start button
     imageRender(startButtonSurface, startButton,startButtonRectSrc,
@@ -153,14 +230,57 @@ void initializeButtons() {
     textRender(level5TextSurface, level5Text, level5TextRectSrc,
                level5TextRect, 260, 545, 0.5, "level 5");
 
+    //Jungle theme button
+    theme temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Jungle;
+    imageRender(jungleThemeButtonSurface, jungleThemeButton,jungleThemeButtonRectSrc,
+                jungleThemeButtonRect, 200, 280, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
+    imageRender(jungleThemeHoverButtonSurface, jungleThemeHoverButton,jungleThemeHoverButtonRectSrc,
+                jungleThemeHoverButtonRect, 200, 280, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
+    textRender(jungleThemeTextSurface, jungleThemeText, jungleThemeTextRectSrc,
+               jungleThemeTextRect, 260, 345, 0.5, "Jungle");
+
+    //Ocean theme button
+    temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Ocean;
+    imageRender(oceanThemeButtonSurface, oceanThemeButton,oceanThemeButtonRectSrc,
+                oceanThemeButtonRect, 200, 380, 0.2, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
+    imageRender(oceanThemeHoverButtonSurface, oceanThemeHoverButton,oceanThemeHoverButtonRectSrc,
+                oceanThemeHoverButtonRect, 200, 380, 0.2, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
+    textRender(oceanThemeTextSurface, oceanThemeText, oceanThemeTextRectSrc,
+               oceanThemeTextRect, 260, 445, 0.5, "Ocean");
+
+    //Space theme button
+    temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Space;
+    imageRender(spaceThemeButtonSurface, spaceThemeButton,spaceThemeButtonRectSrc,
+                spaceThemeButtonRect, 200, 480, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
+    imageRender(spaceThemeHoverButtonSurface, spaceThemeHoverButton,spaceThemeHoverButtonRectSrc,
+                spaceThemeHoverButtonRect, 200, 480, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
+    textRender(spaceThemeTextSurface, spaceThemeText, spaceThemeTextRectSrc,
+               spaceThemeTextRect, 260, 545, 0.5, "Space");
+
 }
 
-void destroyButtons() {
+void destroyButtonsAndBG() {
+
+    SDL_FreeSurface(bgSurface);
+    SDL_DestroyTexture(bg);
+
     SDL_FreeSurface(settingButtonSurface);
     SDL_DestroyTexture(settingButton);
 
     SDL_FreeSurface(exitButtonSurface);
     SDL_DestroyTexture(exitButton);
+
+    SDL_FreeSurface(musicOnButtonSurface);
+    SDL_DestroyTexture(musicOnButton);
+
+    SDL_FreeSurface(musicOffButtonSurface);
+    SDL_DestroyTexture(musicOffButton);
+
+    SDL_FreeSurface(volumeOnButtonSurface);
+    SDL_DestroyTexture(volumeOnButton);
+
+    SDL_FreeSurface(volumeOffButtonSurface);
+    SDL_DestroyTexture(volumeOffButton);
 
     SDL_FreeSurface(startButtonSurface);
     SDL_DestroyTexture(startButton);
@@ -252,6 +372,48 @@ void destroyButtons() {
     SDL_DestroyTexture(level5HoverButton);
     SDL_FreeSurface(level5TextSurface);
     SDL_DestroyTexture(level5Text);
+
+    SDL_FreeSurface(jungleThemeButtonSurface);
+    SDL_DestroyTexture(jungleThemeButton);
+    SDL_FreeSurface(jungleThemeHoverButtonSurface);
+    SDL_DestroyTexture(jungleThemeHoverButton);
+    SDL_FreeSurface(jungleThemeTextSurface);
+    SDL_DestroyTexture(jungleThemeText);
+
+    SDL_FreeSurface(oceanThemeButtonSurface);
+    SDL_DestroyTexture(oceanThemeButton);
+    SDL_FreeSurface(oceanThemeHoverButtonSurface);
+    SDL_DestroyTexture(oceanThemeHoverButton);
+    SDL_FreeSurface(oceanThemeTextSurface);
+    SDL_DestroyTexture(oceanThemeText);
+
+
+    SDL_FreeSurface(spaceThemeButtonSurface);
+    SDL_DestroyTexture(spaceThemeButton);
+    SDL_FreeSurface(spaceThemeHoverButtonSurface);
+    SDL_DestroyTexture(spaceThemeHoverButton);
+    SDL_FreeSurface(spaceThemeTextSurface);
+    SDL_DestroyTexture(spaceThemeText);
+
+
+}
+
+void reInitialingSoundMusic() {
+    soundInsideRect.w = soundVolume;
+    musicInsideRect.w = musicVolume;
+    Mix_VolumeMusic(musicVolume * 128 / 100);
+}
+
+void themeChanger(theme newTheme) {
+    destroyButtonsAndBG();
+    Mix_FreeMusic(music);
+    TTF_CloseFont(font);
+
+    th = newTheme;
+    font = TTF_OpenFont(th.fontLoc, th.fontSize);
+    initializeButtonsAndBG();
+    music = Mix_LoadMUS(th.music);
+    Mix_PlayMusic(music, -1);
 
 }
 
@@ -513,6 +675,109 @@ void leaderboard(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int
 
 void settingMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
 
+    // initialing and Drawing background
+
+    SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+    // setting box
+    SDL_RenderFillRect(renderer, &settingBox);
+
+    // volume off on button
+    if(soundVolume)
+        SDL_RenderCopy(renderer, volumeOnButton, &volumeOnButtonRectSrc, &volumeOnButtonRect);
+    else
+        SDL_RenderCopy(renderer, volumeOffButton, &volumeOffButtonRectSrc, &volumeOffButtonRect);
+
+    // music off on button
+    if(musicVolume)
+        SDL_RenderCopy(renderer, musicOnButton, &musicOnButtonRectSrc, &musicOnButtonRect);
+    else
+        SDL_RenderCopy(renderer, musicOffButton, &musicOffButtonRectSrc, &musicOffButtonRect);
+
+    // bars
+    SDL_SetRenderDrawColor(renderer, WHITE.r, WHITE.g, WHITE.b, 255);
+    SDL_RenderFillRect(renderer, &soundOutsideRect) ;
+    SDL_RenderFillRect(renderer, &musicOutsideRect) ;
+
+    SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
+    SDL_RenderFillRect(renderer, &soundInsideRect) ;
+    SDL_RenderFillRect(renderer, &musicInsideRect) ;
+
+    // jungle theme button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, jungleThemeButtonRect))
+        SDL_RenderCopy(renderer, jungleThemeButton, &jungleThemeButtonRectSrc, &jungleThemeButtonRect);
+    else
+        SDL_RenderCopy(renderer, jungleThemeHoverButton, &jungleThemeHoverButtonRectSrc, &jungleThemeHoverButtonRect);
+    SDL_RenderCopy(renderer, jungleThemeText, &jungleThemeTextRectSrc, &jungleThemeTextRect);
+
+    // ocean theme button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, oceanThemeButtonRect))
+        SDL_RenderCopy(renderer, oceanThemeButton, &oceanThemeButtonRectSrc, &oceanThemeButtonRect);
+    else
+        SDL_RenderCopy(renderer, oceanThemeHoverButton, &oceanThemeHoverButtonRectSrc, &oceanThemeHoverButtonRect);
+    SDL_RenderCopy(renderer, oceanThemeText, &oceanThemeTextRectSrc, &oceanThemeTextRect);
+
+    // space theme button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, spaceThemeButtonRect))
+        SDL_RenderCopy(renderer, spaceThemeButton, &spaceThemeButtonRectSrc, &spaceThemeButtonRect);
+    else
+        SDL_RenderCopy(renderer, spaceThemeHoverButton, &spaceThemeHoverButtonRectSrc, &spaceThemeHoverButtonRect);
+    SDL_RenderCopy(renderer, spaceThemeText, &spaceThemeTextRectSrc, &spaceThemeTextRect);
+
+    // back button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, backButtonRect))
+        SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
+    else
+        SDL_RenderCopy(renderer, backHoverButton, &backHoverButtonRectSrc, &backHoverButtonRect);
+    SDL_RenderCopy(renderer, backText, &backTextRectSrc, &backTextRect);
+
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, volumeOnButtonRect)){
+        if(soundVolume) soundVolume = 0;
+        else soundVolume = 100;
+        reInitialingSoundMusic();
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, musicOnButtonRect)){
+        if(musicVolume) musicVolume = 0;
+        else musicVolume = 100;
+        reInitialingSoundMusic();
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, soundOutsideRect)) {
+        soundVolume = (x_MouseClicked - soundOutsideRect.x);
+        reInitialingSoundMusic();
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, musicOutsideRect)) {
+        musicVolume = (x_MouseClicked - musicOutsideRect.x);
+        reInitialingSoundMusic();
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, jungleThemeButtonRect)) {
+        themeChanger(Jungle);
+    }
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, oceanThemeButtonRect)) {
+        themeChanger(Ocean);
+    }
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, spaceThemeButtonRect)) {
+        themeChanger(Space);
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)) {
+        Locator["setting_menu"] = !Locator["setting_menu"];
+        Locator["main_menu"] = !Locator["main_menu"];
+        settingWriter();
+    }
+
+
+    if(MouseClicked)
+        MouseClicked = !MouseClicked;
+
+
 }
 
 void quitMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
@@ -525,7 +790,6 @@ void quitMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
     SDL_RenderCopy(renderer, bg, NULL, &bgRect);
 
     // question box
-    SDL_Rect questionBox = {50, 200, 500, 200};
     SDL_RenderFillRect(renderer, &questionBox);
     SDL_RenderCopy(renderer, DoYouWantToQuitText, &DoYouWantToQuitTextRectSrc, &DoYouWantToQuitTextRect);
 

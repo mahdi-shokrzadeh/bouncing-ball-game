@@ -81,7 +81,7 @@ void settingReader() {
     settingfile.close();
 }
 
-void settingWriter(int soundVolumeSet, int musicVolumeSet, int whatTheme) {
+void settingWriter() {
 
     ofstream settingfile;
     settingfile.open("./database/setting.txt");
@@ -91,9 +91,9 @@ void settingWriter(int soundVolumeSet, int musicVolumeSet, int whatTheme) {
         return;
     }
 
-    settingfile << soundVolumeSet << endl;
-    settingfile << musicVolumeSet << endl;
-    settingfile << whatTheme;
+    settingfile << soundVolume << endl;
+    settingfile << musicVolume << endl;
+    settingfile << th.num;
     settingfile.close();
 }
 

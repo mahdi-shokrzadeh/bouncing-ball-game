@@ -108,6 +108,14 @@ SDL_Surface *bgSurface = NULL;
 SDL_Texture *bg = NULL;
 SDL_Rect bgRect;
 
+//
+
+// Setting default
+int soundVolume = 0;
+int musicVolume = 0;
+theme th = th1;
+
+
 // Buttons setup for making them global
 
 SDL_Surface *settingButtonSurface = NULL;
@@ -119,6 +127,32 @@ SDL_Surface *exitButtonSurface = NULL;
 SDL_Texture *exitButton = NULL;
 SDL_Rect exitButtonRect;
 SDL_Rect exitButtonRectSrc;
+
+SDL_Rect settingBox = {50, 50, 500, 500};
+SDL_Rect soundOutsideRect = {108, 60, 100, 48};
+SDL_Rect soundInsideRect = {108, 60, soundVolume, 48};
+SDL_Rect musicOutsideRect = {108, 120, 100, 48};
+SDL_Rect musicInsideRect = {108, 120, musicVolume, 48};
+
+SDL_Surface *musicOnButtonSurface = NULL;
+SDL_Texture *musicOnButton = NULL;
+SDL_Rect musicOnButtonRect;
+SDL_Rect musicOnButtonRectSrc;
+
+SDL_Surface *musicOffButtonSurface = NULL;
+SDL_Texture *musicOffButton = NULL;
+SDL_Rect musicOffButtonRect;
+SDL_Rect musicOffButtonRectSrc;
+
+SDL_Surface *volumeOnButtonSurface = NULL;
+SDL_Texture *volumeOnButton = NULL;
+SDL_Rect volumeOnButtonRect;
+SDL_Rect volumeOnButtonRectSrc;
+
+SDL_Surface *volumeOffButtonSurface = NULL;
+SDL_Texture *volumeOffButton = NULL;
+SDL_Rect volumeOffButtonRect;
+SDL_Rect volumeOffButtonRectSrc;
 
 SDL_Surface *startButtonSurface = NULL;
 SDL_Texture *startButton = NULL;
@@ -159,10 +193,50 @@ SDL_Texture *backText;
 SDL_Rect backTextRectSrc;
 SDL_Rect backTextRect;
 
+SDL_Surface *jungleThemeButtonSurface = NULL;
+SDL_Texture *jungleThemeButton = NULL;
+SDL_Rect jungleThemeButtonRect;
+SDL_Rect jungleThemeButtonRectSrc;
+SDL_Surface *jungleThemeHoverButtonSurface = NULL;
+SDL_Texture *jungleThemeHoverButton = NULL;
+SDL_Rect jungleThemeHoverButtonRect;
+SDL_Rect jungleThemeHoverButtonRectSrc;
+SDL_Surface *jungleThemeTextSurface;
+SDL_Texture *jungleThemeText;
+SDL_Rect jungleThemeTextRectSrc;
+SDL_Rect jungleThemeTextRect;
+
+SDL_Surface *spaceThemeButtonSurface = NULL;
+SDL_Texture *spaceThemeButton = NULL;
+SDL_Rect spaceThemeButtonRect;
+SDL_Rect spaceThemeButtonRectSrc;
+SDL_Surface *spaceThemeHoverButtonSurface = NULL;
+SDL_Texture *spaceThemeHoverButton = NULL;
+SDL_Rect spaceThemeHoverButtonRect;
+SDL_Rect spaceThemeHoverButtonRectSrc;
+SDL_Surface *spaceThemeTextSurface;
+SDL_Texture *spaceThemeText;
+SDL_Rect spaceThemeTextRectSrc;
+SDL_Rect spaceThemeTextRect;
+
+SDL_Surface *oceanThemeButtonSurface = NULL;
+SDL_Texture *oceanThemeButton = NULL;
+SDL_Rect oceanThemeButtonRect;
+SDL_Rect oceanThemeButtonRectSrc;
+SDL_Surface *oceanThemeHoverButtonSurface = NULL;
+SDL_Texture *oceanThemeHoverButton = NULL;
+SDL_Rect oceanThemeHoverButtonRect;
+SDL_Rect oceanThemeHoverButtonRectSrc;
+SDL_Surface *oceanThemeTextSurface;
+SDL_Texture *oceanThemeText;
+SDL_Rect oceanThemeTextRectSrc;
+SDL_Rect oceanThemeTextRect;
+
 SDL_Surface *DoYouWantToQuitTextSurface;
 SDL_Texture *DoYouWantToQuitText;
 SDL_Rect DoYouWantToQuitTextRectSrc;
 SDL_Rect DoYouWantToQuitTextRect;
+SDL_Rect questionBox = {50, 200, 500, 200};
 
 SDL_Surface *iWantQuitButtonSurface = NULL;
 SDL_Texture *iWantQuitButton = NULL;
@@ -289,6 +363,23 @@ SDL_Surface *level5TextSurface;
 SDL_Texture *level5Text;
 SDL_Rect level5TextRectSrc;
 SDL_Rect level5TextRect;
+
+// balls variables
+
+SDL_Surface *redNormalBallSurface = NULL;
+SDL_Texture *redNormalBall = NULL;
+SDL_Surface *blueNormalBallSurface = NULL;
+SDL_Texture *blueNormalBall = NULL;
+SDL_Surface *cyanNormalBallSurface = NULL;
+SDL_Texture *cyanNormalBall = NULL;
+SDL_Surface *greenNormalBallSurface = NULL;
+SDL_Texture *greenNormalBall = NULL;
+SDL_Surface *purpleNormalBallSurface = NULL;
+SDL_Texture *purpleNormalBall = NULL;
+SDL_Surface *yellowNormalBallSurface = NULL;
+SDL_Texture *yellowNormalBall = NULL;
+SDL_Surface *silverNormalBallSurface = NULL;
+SDL_Texture *silverNormalBall = NULL;
 
 
 // Setting default
