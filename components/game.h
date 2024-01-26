@@ -109,7 +109,7 @@ bool mouse_click = false;
 int mouse_x = 0, mouse_y = 0;
 
 // falling balls speed
-double falling_balls_speed = 2.0;
+double falling_balls_speed = 1.9;
 double falling_ball_acc = 0.011;
 
 // score
@@ -364,7 +364,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                 // falling balls
                 if (ball.type == 'f') {
 
-                    i % 2 == 0 ? ball.center.x += 0.07 : ball.center.x -= 0.07 ;
+                    i % 2 == 0 ? ball.center.x += 0.09 : ball.center.x -= 0.03 ;
                     ball.center.y += falling_balls_speed;
                     falling_balls_speed += falling_ball_acc;
                     ball_is_falling = true;
@@ -1083,7 +1083,7 @@ void handleFallingBalls() {
     }
 
     // removing the other balls
-    falling_balls_speed = 2.0;
+    falling_balls_speed = 1.9;
     for (int i = 0; i < element.i; i++) {
         for (int j = 0; j < 12; j++) {
             if (balls[i][j].type != 's' && balls[i][j].center.y >= -20 && !vectorContainsElement(visited, {i, j})) {
@@ -1299,7 +1299,7 @@ void handleWin() {
 
         score += 15;
         textRender(score_surface, score_texture, score_rect_src, score_rect,
-                   67, 300, 1.0, "Your final score: "+to_string(score));
+                   60, 300, 1.0, "Your final score: "+to_string(score));
         SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
         #ifdef _WIN32
                 Sleep(30);
