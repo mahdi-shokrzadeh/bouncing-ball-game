@@ -41,5 +41,10 @@ struct level {
 };
 
 
+typedef struct GAME_INF {
+    user user;
+    level level;
+} GAME_INF;
+
 
 #endif //BOUNCING_BALL_GAME_STRUCTS_H
