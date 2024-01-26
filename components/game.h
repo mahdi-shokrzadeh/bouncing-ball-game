@@ -43,17 +43,17 @@ BALL end_pointer_ball = {
 };
 
 
-//BALL gone_ball = {
-//        .type ='s',
-//        .color = RED,
-//
-//        .center = {
-//                .x = -10000,
-//                .y = -20000,
-//        },
-//};
+BALL gone_ball = {
 
-BALL gone_ball;
+        .type ='s',
+        .color = PINK,
+        .center = {
+                .x = 10000,
+                .y = 20000,
+        },
+
+};
+
 
 double degree = 180.0;
 int targeter_balls_radius = 2;
