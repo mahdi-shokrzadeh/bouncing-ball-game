@@ -1,6 +1,14 @@
 #ifndef BOUNCING_BALL_GAME_GAME_H
 #define BOUNCING_BALL_GAME_GAME_H
 
+#ifdef _WIN32
+
+    #include <windows.h>
+
+#else
+    #include <unistd.h>
+#endif
+
 // variables related to targeter
 DOUBLE_POINT center_of_shooting_ball = {
         .x = 300,
@@ -122,10 +130,33 @@ vector<int> balls_recent_color = {1};
 // pattern
 int pattern[100][12];
 
+
+// win
+SDL_Surface *win_surface;
+SDL_Texture *win_texture;
+SDL_Rect win_rect_src, win_rect;
+ELEMENT win_coor = {
+        130,
+        300,
+};
+
+
+// loose
+SDL_Surface *loose_surface;
+SDL_Texture *loose_texture;
+SDL_Rect loose_rect_src, loose_rect;
+ELEMENT loose_coor = {
+        160,
+        270,
+};
+
+// shooter
+SDL_Rect shooter_section = {10, 550, 580, 160};
+
 // Game
 
 string game_state = "running";
-
+int time_to_wait = 10;
 
 void handleGameProcess();
 
@@ -187,6 +218,11 @@ vector<int> getAvailableColorsVector();
 
 int colorToInt(SDL_Color color);
 
+void handleWin();
+
+void drawSomeSections();
+
+void handleGameOver();
 
 // ---------------------------------------------------
 
@@ -259,6 +295,9 @@ void handleGameProcess() {
 
         } else if (game_page_state == "over") {
 
+            handleGameOver();
+        } else if (game_page_state == "win") {
+            handleWin();
         }
 
 
@@ -275,9 +314,9 @@ void handleGameProcess() {
 
             // destroy everything
             destroyIt(menu_btn_sur, menu_btn_tex);
-
             destroyIt(score_surface, score_texture);
-
+            destroyIt(win_surface, win_texture);
+            destroyIt(loose_surface, loose_texture);
         }
 
     }
@@ -287,7 +326,7 @@ void handleGameProcess() {
 
 void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
-
+    bool ball_is_falling = false;
     // Blank out the renderer with all black
     SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
     SDL_RenderClear(renderer);
@@ -323,6 +362,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                 // falling balls
                 if (ball.type == 'f') {
                     ball.center.y += falling_balls_speed;
+                    ball_is_falling == true;
                     if (ball.center.y >= SCREEN_HEIGHT + 20) {
                         ball.center = {10000, 10000};
                         ball.type = 's';
@@ -354,7 +394,6 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
 
     // shooter
-    SDL_Rect shooter_section = {10, 550, 580, 160};
     SDL_RenderDrawRect(renderer, &shooter_section);
     drawShootingBalls(shooter_ball, reserved_ball);
 
@@ -399,19 +438,19 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
 
     if (number_of_balls == 0 && !ball_is_being_thrown) {
-
         game_state = "win";
-
         // deleting the shooting and reserved ball
         shooter_ball.color = BLACK;
         reserved_ball.color = BLACK;
-
     }
 
     // handle winning state
-    if (temp_fell_balls <= 0 && number_of_balls == 0 && !ball_is_being_thrown) {
-        game_page_state = "win";
-        cout << "Won!" << endl;
+    if (!ball_is_falling && number_of_balls == 0 && !ball_is_being_thrown) {
+        if (time_to_wait == 0) {
+            game_page_state = "win";
+            cout << "Won!" << endl;
+        }
+        time_to_wait--;
     }
 
 }
@@ -952,6 +991,7 @@ void filterByColor(vector<ELEMENT> &elements, SDL_Color color) {
     }
 }
 
+
 bool vectorContainsElement(const vector<ELEMENT> &elements, ELEMENT el) {
     for (ELEMENT e: elements) {
         if (e.i == el.i && e.j == el.j) return true;
@@ -962,7 +1002,6 @@ bool vectorContainsElement(const vector<ELEMENT> &elements, ELEMENT el) {
 
 void handleGraphCheck(int i, int j, SDL_Color color) {
 
-//    cout << i << endl << endl;
     vector<ELEMENT> visited;
     vector<ELEMENT> queue;
 
@@ -992,9 +1031,13 @@ void handleGraphCheck(int i, int j, SDL_Color color) {
     if (visited.size() > LEAST_BALLS_NUMBER) {
         // clearing balls
         for (ELEMENT el: visited) {
-            balls[el.i][el.j] = gone_ball;
-            // Adding up score
-            score += 10;
+            // important condition!
+            if (balls[el.i][el.j].center.y >= -20) {
+                balls[el.i][el.j] = gone_ball;
+                // Adding up score
+                score += 10;
+            }
+
         }
     }
 
@@ -1037,12 +1080,10 @@ void handleFallingBalls() {
     // removing the other balls
     for (int i = 0; i < element.i; i++) {
         for (int j = 0; j < 12; j++) {
-            if (balls[i][j].type != 's') {
-                if (!vectorContainsElement(visited, {i, j})) {
-                    balls[i][j].type = 'f';
-                    fell_balls++;
-                    temp_fell_balls++;
-                }
+            if (balls[i][j].type != 's' && balls[i][j].center.y >= -20 && !vectorContainsElement(visited, {i, j})) {
+                balls[i][j].type = 'f';
+                fell_balls++;
+                temp_fell_balls++;
             }
         }
     }
@@ -1071,9 +1112,6 @@ void gameRenderImage(SDL_Texture *&g_button_tex, SDL_Rect dstRect) {
     SDL_RenderCopy(renderer, g_button_tex, NULL, &dstRect);
 }
 
-void handleScor() {
-
-}
 
 void destroyIt(SDL_Surface *&g_button, SDL_Texture *&g_button_tex) {
 
@@ -1093,6 +1131,7 @@ void handleCheckMenuClicks() {
     }
     mouse_click = false;
 }
+
 
 bool colorsAreTheSame(SDL_Color c1, SDL_Color c2) {
     return (c1.r == c2.r && c1.g == c2.g && c1.b == c2.b);
@@ -1127,6 +1166,7 @@ void setRandomColorForShootingBall(SDL_Color &color) {
 
 }
 
+
 int calculateBalls() {
     int n = 0;
     for (int i = 0; i < 100; i++) {
@@ -1139,6 +1179,7 @@ int calculateBalls() {
     }
     return n;
 }
+
 
 vector<int> getAvailableColorsVector() {
 
@@ -1154,7 +1195,6 @@ vector<int> getAvailableColorsVector() {
         k++;
     }
     k--;
-    int final_rows = 100;
     for (int i = k; i <= flag.i; i++) {
         for (int j = 0; j <= 11; j++) {
             if (available_colors.size() == 6) break;
@@ -1183,6 +1223,7 @@ vector<int> getAvailableColorsVector() {
     return available_colors;
 }
 
+
 int colorToInt(SDL_Color color) {
     int i = 0;
     if (colorsAreTheSame(color, CYAN)) {
@@ -1203,7 +1244,7 @@ int colorToInt(SDL_Color color) {
 void checkColorOfShootingBalls(BALL &ball) {
 
     vector<int> available_colors = getAvailableColorsVector();
-    if (contains(available_colors, colorToInt(ball.color)) || flag.i <= 14) return;
+    if (contains(available_colors, colorToInt(ball.color)) || flag.i <= 10) return;
     if (available_colors.empty()) {
         cout << "Problem!" << endl;
         return;
@@ -1211,6 +1252,76 @@ void checkColorOfShootingBalls(BALL &ball) {
     setRandomColorForShootingBall(ball.color);
     cout << "Changed!" << endl;
 
+}
+
+
+void drawSomeSections() {
+    // shooter
+    SDL_RenderDrawRect(renderer, &shooter_section);
+
+    // draw pause menu button
+    gameRenderImage(menu_btn_tex, menu_btn_rect);
+
+}
+
+
+void handleWin() {
+
+    // Blank out the renderer with all black
+    SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
+    SDL_RenderClear(renderer);
+
+    // drawing some parts
+//    drawSomeSections();
+
+    textRender(win_surface, win_texture, win_rect_src, win_rect,
+               win_coor.i, win_coor.j, 0.6, "You popped all bubbles!");
+    SDL_RenderCopy(renderer, win_texture, &win_rect_src, &win_rect);
+    SDL_RenderPresent(renderer);
+
+    #ifdef _WIN32
+        Sleep(4000);
+    #else
+        sleep(4);
+    #endif
+
+    while (fell_balls > 0) {
+
+        SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
+        SDL_RenderClear(renderer);
+
+        score += 15;
+        textRender(score_surface, score_texture, score_rect_src, score_rect,
+                   67, 300, 1.0, "Your final score: "+to_string(score));
+        SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
+        #ifdef _WIN32
+                Sleep(30);
+        #else
+                usleep(30000);
+        #endif
+        fell_balls--;
+        SDL_RenderPresent(renderer);
+
+    }
+
+    game_page_state = "out";
+
+}
+
+
+void handleGameOver(){
+
+    // Blank out the renderer with all black
+    SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
+    SDL_RenderClear(renderer);
+
+    // drawing some parts
+//    drawSomeSections();
+
+    textRender(loose_surface, loose_texture, loose_rect_src, loose_rect,
+               loose_coor.i, loose_coor.j, 1.0, "Game Over!");
+    SDL_RenderCopy(renderer, loose_texture, &loose_rect_src, &loose_rect);
+    SDL_RenderPresent(renderer);
 }
 
 #endif //BOUNCING_BALL_GAME_GAME_H
