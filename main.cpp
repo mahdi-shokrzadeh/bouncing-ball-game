@@ -160,6 +160,7 @@ int main(int argv, char **args) {
     SDL_SetWindowTitle(window, "Bouncing Ball Gameeeeee!!!!");
 
     initializeButtonsAndBG();
+    initializeBallsTexture();
 
 
     //loop
@@ -181,6 +182,7 @@ int main(int argv, char **args) {
     SDL_FreeSurface(icon);
 
     destroyButtonsAndBG();
+    destroyBallsTexture();
 
     TTF_Quit();
     SDL_Quit();

@@ -1,6 +1,59 @@
 #ifndef BOUNCING_BALL_GAME_WINDOW_H
 #define BOUNCING_BALL_GAME_WINDOW_H
 
+// rendering balls texture
+
+void initializeBallsTexture() {
+
+    redNormalBallSurface = IMG_Load("assets/Game/Balls/red.png");
+    redNormalBall = SDL_CreateTextureFromSurface(renderer, redNormalBallSurface);
+
+    blueNormalBallSurface = IMG_Load("assets/Game/Balls/blue.png");
+    blueNormalBall = SDL_CreateTextureFromSurface(renderer, blueNormalBallSurface);
+
+    greenNormalBallSurface = IMG_Load("assets/Game/Balls/green.png");
+    greenNormalBall = SDL_CreateTextureFromSurface(renderer, greenNormalBallSurface);
+
+    yellowNormalBallSurface = IMG_Load("assets/Game/Balls/yellow.png");
+    yellowNormalBall = SDL_CreateTextureFromSurface(renderer, yellowNormalBallSurface);
+
+    purpleNormalBallSurface = IMG_Load("assets/Game/Balls/purple.png");
+    purpleNormalBall = SDL_CreateTextureFromSurface(renderer, purpleNormalBallSurface);
+
+    cyanNormalBallSurface = IMG_Load("assets/Game/Balls/cyan.png");
+    cyanNormalBall = SDL_CreateTextureFromSurface(renderer, cyanNormalBallSurface);
+
+    silverNormalBallSurface = IMG_Load("assets/Game/Balls/silver.png");
+    silverNormalBall = SDL_CreateTextureFromSurface(renderer, silverNormalBallSurface);
+
+}
+
+void destroyBallsTexture() {
+
+    SDL_FreeSurface(redNormalBallSurface);
+    SDL_DestroyTexture(redNormalBall);
+
+    SDL_FreeSurface(blueNormalBallSurface);
+    SDL_DestroyTexture(blueNormalBall);
+
+    SDL_FreeSurface(yellowNormalBallSurface);
+    SDL_DestroyTexture(yellowNormalBall);
+
+    SDL_FreeSurface(greenNormalBallSurface);
+    SDL_DestroyTexture(greenNormalBall);
+
+    SDL_FreeSurface(cyanNormalBallSurface);
+    SDL_DestroyTexture(cyanNormalBall);
+
+    SDL_FreeSurface(purpleNormalBallSurface);
+    SDL_DestroyTexture(purpleNormalBall);
+
+    SDL_FreeSurface(silverNormalBallSurface);
+    SDL_DestroyTexture(silverNormalBall);
+
+}
+
+
 // building and destroying
 
 void imageRender(SDL_Surface* &surface, SDL_Texture* &texture,

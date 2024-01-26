@@ -343,5 +343,22 @@ SDL_Texture *level5Text;
 SDL_Rect level5TextRectSrc;
 SDL_Rect level5TextRect;
 
+// balls variables
+
+SDL_Surface *redNormalBallSurface = NULL;
+SDL_Texture *redNormalBall = NULL;
+SDL_Surface *blueNormalBallSurface = NULL;
+SDL_Texture *blueNormalBall = NULL;
+SDL_Surface *cyanNormalBallSurface = NULL;
+SDL_Texture *cyanNormalBall = NULL;
+SDL_Surface *greenNormalBallSurface = NULL;
+SDL_Texture *greenNormalBall = NULL;
+SDL_Surface *purpleNormalBallSurface = NULL;
+SDL_Texture *purpleNormalBall = NULL;
+SDL_Surface *yellowNormalBallSurface = NULL;
+SDL_Texture *yellowNormalBall = NULL;
+SDL_Surface *silverNormalBallSurface = NULL;
+SDL_Texture *silverNormalBall = NULL;
+
 
 #endif //BOUNCING_BALL_GAME_SETTINGS_H
