@@ -365,7 +365,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                 if (ball.type == 'f') {
 
                     i % 2 == 0 ? ball.center.x += 0.09 : ball.center.x -= 0.03 ;
-                    ball.center.y += falling_balls_speed;
+                    ball.center.y += falling_balls_speed*(1000+150-i)/1000.0;
                     falling_balls_speed += falling_ball_acc;
                     ball_is_falling = true;
                     if (ball.center.y >= SCREEN_HEIGHT + 20) {
