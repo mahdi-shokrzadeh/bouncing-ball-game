@@ -257,7 +257,7 @@ void destroyButtons() {
 
 // Menus
 
-void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
+void Main_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
 
     // initialing and Drawing background
 
@@ -305,12 +305,13 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
         Locator["quit_menu"] = !Locator["quit_menu"];
         Locator["main_menu"] = !Locator["main_menu"];
     }
-
+    if(MouseClicked)
+        MouseClicked = !MouseClicked;
 
 
 }
 
-void start_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, bool &normal_or_timed) {
+void start_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, bool &normal_or_timed) {
 
     // initialing and Drawing background
 
@@ -384,9 +385,13 @@ void start_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x
         Locator["main_menu"] = !Locator["main_menu"];
     }
 
+    if(MouseClicked)
+        MouseClicked = !MouseClicked;
+
+
 }
 
-void level_selector(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, int &levelNum) {
+void level_selector(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, int &levelNum) {
 
     // initialing and Drawing background
 
@@ -470,9 +475,12 @@ void level_selector(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, i
         Locator["level_selector"] = !Locator["level_selector"];
     }
 
+    if(MouseClicked)
+        MouseClicked = !MouseClicked;
+
 }
 
-void leaderboard(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
+void leaderboard(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
 
     // initialing and Drawing background
 
@@ -496,13 +504,18 @@ void leaderboard(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int 
         Locator["leaderboard"] = !Locator["leaderboard"];
         Locator["main_menu"] = !Locator["main_menu"];
     }
+
+    if(MouseClicked)
+        MouseClicked = !MouseClicked;
+
+
 }
 
-void settingMenu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
+void settingMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
 
 }
 
-void quitMenu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
+void quitMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
 
     // initialing and Drawing background
 
@@ -537,6 +550,10 @@ void quitMenu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_M
         Locator["quit_menu"] = !Locator["quit_menu"];
         main_loop = SDL_FALSE;
     }
+
+    if(MouseClicked)
+        MouseClicked = !MouseClicked;
+
 
 }
 
