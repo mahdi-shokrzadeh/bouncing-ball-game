@@ -25,7 +25,10 @@ double calculateDistance(DOUBLE_POINT a, DOUBLE_POINT b) {
 }
 
 bool contains(vector<int> &vec, int num) {
-    return find(vec.begin(), vec.end(), num) != vec.end();
+    for(auto i : vec){
+        if (i == num) return true;
+    }
+    return false;
 }
 
 
