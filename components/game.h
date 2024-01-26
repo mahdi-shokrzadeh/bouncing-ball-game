@@ -19,8 +19,6 @@ double dyOfThrownBall;
 
 int number_of_balls = 0;
 
-string sate;
-
 
 BALL sample_ball = {
         .type ='s',
@@ -64,7 +62,6 @@ double targeter_balls_dist = 9.0;
 
 // Flag
 ELEMENT flag = {ESCAPE_FOR_BALLS_ARRAY + 2, 0};
-ELEMENT downer_flag = {0, 0};
 
 
 // variables related to balls
@@ -109,6 +106,7 @@ double falling_balls_speed = 2.0;
 // score
 int score = 0;
 int fell_balls = 0;
+int temp_fell_balls = 0;
 SDL_Surface *score_surface;
 SDL_Texture *score_texture;
 SDL_Rect score_rect_src;
@@ -125,6 +123,9 @@ vector<int> balls_recent_color = {1};
 int pattern[100][12];
 
 // Game
+
+string game_state = "running";
+
 
 void handleGameProcess();
 
@@ -177,6 +178,8 @@ bool colorsAreTheSame(SDL_Color c1, SDL_Color c2);
 void setRandomColorForShootingBall(SDL_Color &color);
 
 void setPattern(int arr[DIMENTION_OF_LEVELS][12]);
+
+int calculateBalls();
 
 // ---------------------------------------------------
 
@@ -237,6 +240,7 @@ void handleGameProcess() {
         }
 
         if (game_page_state == "game") {
+
             Game(shooter_ball, reserved_ball);
 
         } else if (game_page_state == "pause_menu") {
@@ -246,8 +250,7 @@ void handleGameProcess() {
         } else if (game_page_state == "quit_menu") {
 
 
-        } else {
-
+        } else if (game_page_state == "over"){
 
         }
 
@@ -307,19 +310,27 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
                     flag.j = j;
                 }
 
-                // setting downer flag
-//                if (ball.type != 'e' && ball.center.y <= 530 && ball.center.y >= 500 && downer_flag.i != i) {
-//                    downer_flag.i = i;
-//                }
+
 
                 // falling balls
                 if (ball.type == 'f') {
                     ball.center.y += falling_balls_speed;
-                    if (ball.center.y >= SCREEN_HEIGHT) {
+                    if (ball.center.y >= SCREEN_HEIGHT+4) {
                         ball.center = {10000, 10000};
                         ball.type = 's';
+                        temp_fell_balls --;
                     }
                 }
+
+
+
+                // checking if game is over or win
+                // c -> also lock and other types
+                if(ball.center.y >= 530 && (ball.type == 'c' || ball.type == 'e')){
+                    game_state = "over";
+                    game_page_state = "over";
+                }
+
 
             }
         }
@@ -363,12 +374,32 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
     SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
 
 
+
     // handle ball shooting
-    if (ball_is_being_thrown) {
+    if (ball_is_being_thrown && game_state == "running") {
         handleBallShooting();
         checkCollShooterAndBalls();
     }
 
+    // set number of balls
+    number_of_balls = calculateBalls();
+
+
+    if( number_of_balls == 0 && !ball_is_being_thrown){
+
+        game_state = "win";
+
+        // deleting the shooting and reserved ball
+        shooter_ball.color = BLACK;
+        reserved_ball.color = BLACK;
+
+    }
+
+    // handle winning state
+    if(temp_fell_balls <= 0 && number_of_balls == 0 && !ball_is_being_thrown){
+        game_page_state ="win";
+        cout << "Won!" << endl;
+    }
 
 }
 
@@ -556,12 +587,6 @@ void drawTargeter() {
 
 void handleTargeterEvent(int type) {
     switch (type) {
-//        case 0:
-//            targeter_vertical_speed -= 0.5;
-//            break;
-//        case 1:
-//            targeter_vertical_speed += 0.5;
-//        break;
         case 0:
             if (degree >= 100)
                 degree -= TARGETER_SPEED;
@@ -597,6 +622,7 @@ bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
 void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
 
     if (!ball_is_being_thrown) {
+
         ball_is_being_thrown = true;
         thrown_ball = shooting_ball;
         shooting_ball = reserved_ball;
@@ -682,7 +708,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                 el.i = i;
                 el.j = j + 1;
 
-                cout << "Right 2 <45" << endl;
+//                cout << "Right 2 <45" << endl;
             } else {
                 // checking if ball is the last or first item of row
                 if (j + 1 != 12) {
@@ -691,7 +717,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                     balls[i - 1][j + 1] = new_ball;
                     el.i = i - 1;
                     el.j = j + 1;
-                    cout << "DSDSF" << endl;
+//                    cout << "DSDSF" << endl;
 
                 } else {
                     new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
@@ -699,7 +725,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                     balls[i - 1][j] = new_ball;
                     el.i = i - 1;
                     el.j = j;
-                    cout << "Right 2" << endl;
+//                    cout << "Right 2" << endl;
                 }
 
             }
@@ -722,14 +748,14 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                 }
 
 
-                cout << "Left 2 <45" << endl;
+//                cout << "Left 2 <45" << endl;
             } else {
                 new_ball.center.x = double((j) * (width_of_ball_box) + radius_of_balls + dist_from_left);
                 new_ball.center.y = double(ball.center.y + width_of_ball_box);
                 balls[i - 1][j] = new_ball;
                 el.i = i - 1;
                 el.j = j;
-                cout << "Left 2" << endl;
+//                cout << "Left 2" << endl;
             }
 
 
@@ -749,7 +775,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                     balls[i][j + 1] = new_ball;
                     el.i = i;
                     el.j = j + 1;
-                    cout << "Right 1 <45" << endl;
+//                    cout << "Right 1 <45" << endl;
 
                 }
 
@@ -761,7 +787,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                 balls[i - 1][j] = new_ball;
                 el.i = i - 1;
                 el.j = j;
-                cout << "Right 1 " << endl;
+//                cout << "Right 1 " << endl;
 
             }
 
@@ -772,7 +798,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                 balls[i][j - 1] = new_ball;
                 el.i = i;
                 el.j = j - 1;
-                cout << "LEFT 1 <45" << endl;
+//                cout << "LEFT 1 <45" << endl;
 
             } else {
                 if (j + 1 != 1) {
@@ -781,7 +807,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                     balls[i - 1][j - 1] = new_ball;
                     el.i = i - 1;
                     el.j = j - 1;
-                    cout << "LEFT 1" << endl;
+//                    cout << "LEFT 1" << endl;
 
                 } else {
                     new_ball.center.x = double((j + 0.5) * (width_of_ball_box) + radius_of_balls + dist_from_left);
@@ -789,7 +815,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
                     balls[i - 1][0] = new_ball;
                     el.i = i - 1;
                     el.j = 0;
-                    cout << "LEFT 1 ex" << endl;
+//                    cout << "LEFT 1 ex" << endl;
                 }
 
             }
@@ -998,6 +1024,7 @@ void handleFallingBalls() {
                 if (!vectorContainsElement(visited, {i, j})) {
                     balls[i][j].type = 'f';
                     fell_balls++;
+                    temp_fell_balls++;
                 }
             }
         }
@@ -1138,6 +1165,20 @@ void setRandomColorForShootingBall(SDL_Color &color) {
 
 
 }
+
+int calculateBalls(){
+    int n=0;
+    for(int i = 0 ; i < 100; i++){
+        for(int j = 0 ; j < 12 ; j++){
+            // other types must be added
+            if(balls[i][j].type == 'c'){
+                n++;
+            }
+        }
+    }
+    return n;
+}
+
 
 
 #endif //BOUNCING_BALL_GAME_GAME_H
