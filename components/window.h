@@ -49,6 +49,22 @@ void initializeButtons() {
     imageRender(exitButtonSurface, exitButton,exitButtonRectSrc,
                 exitButtonRect, 550, 660, 2, "assets/UiUx/exit.svg");
 
+    //music off button
+    imageRender(musicOffButtonSurface, musicOffButton,musicOffButtonRectSrc,
+                musicOffButtonRect, 60, 120, 2, "assets/UiUx/music_off.svg");
+
+    //music on button
+    imageRender(musicOnButtonSurface, musicOnButton,musicOnButtonRectSrc,
+                musicOnButtonRect, 60, 120, 2, "assets/UiUx/music_on.svg");
+
+    //volume off button
+    imageRender(volumeOffButtonSurface, volumeOffButton,volumeOffButtonRectSrc,
+                volumeOffButtonRect, 60, 60, 2, "assets/UiUx/volume_off.svg");
+
+    //volume on button
+    imageRender(volumeOnButtonSurface, volumeOnButton,volumeOnButtonRectSrc,
+                volumeOnButtonRect, 60, 60, 2, "assets/UiUx/volume_on.svg");
+
     //start button
     imageRender(startButtonSurface, startButton,startButtonRectSrc,
                 startButtonRect, 100, 300, 0.3, th.button);
@@ -162,6 +178,18 @@ void destroyButtons() {
     SDL_FreeSurface(exitButtonSurface);
     SDL_DestroyTexture(exitButton);
 
+    SDL_FreeSurface(musicOnButtonSurface);
+    SDL_DestroyTexture(musicOnButton);
+
+    SDL_FreeSurface(musicOffButtonSurface);
+    SDL_DestroyTexture(musicOffButton);
+
+    SDL_FreeSurface(volumeOnButtonSurface);
+    SDL_DestroyTexture(volumeOnButton);
+
+    SDL_FreeSurface(volumeOffButtonSurface);
+    SDL_DestroyTexture(volumeOffButton);
+
     SDL_FreeSurface(startButtonSurface);
     SDL_DestroyTexture(startButton);
     SDL_FreeSurface(startHoverButtonSurface);
@@ -253,6 +281,12 @@ void destroyButtons() {
     SDL_FreeSurface(level5TextSurface);
     SDL_DestroyTexture(level5Text);
 
+}
+
+void reInitialingSoundMusic() {
+    soundInsideRect.w = soundVolume;
+    musicInsideRect.w = musicVolume;
+    Mix_VolumeMusic(musicVolume * 128 / 100);
 }
 
 // Menus
@@ -513,6 +547,76 @@ void leaderboard(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int
 
 void settingMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
 
+    // initialing and Drawing background
+
+    SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+    // setting box
+    SDL_RenderFillRect(renderer, &settingBox);
+
+    // volume off on button
+    if(soundVolume)
+        SDL_RenderCopy(renderer, volumeOnButton, &volumeOnButtonRectSrc, &volumeOnButtonRect);
+    else
+        SDL_RenderCopy(renderer, volumeOffButton, &volumeOffButtonRectSrc, &volumeOffButtonRect);
+
+    // music off on button
+    if(musicVolume)
+        SDL_RenderCopy(renderer, musicOnButton, &musicOnButtonRectSrc, &musicOnButtonRect);
+    else
+        SDL_RenderCopy(renderer, musicOffButton, &musicOffButtonRectSrc, &musicOffButtonRect);
+
+    // bars
+    SDL_SetRenderDrawColor(renderer, WHITE.r, WHITE.g, WHITE.b, 255);
+    SDL_RenderFillRect(renderer, &soundOutsideRect) ;
+    SDL_RenderFillRect(renderer, &musicOutsideRect) ;
+
+    SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
+    SDL_RenderFillRect(renderer, &soundInsideRect) ;
+    SDL_RenderFillRect(renderer, &musicInsideRect) ;
+
+    // back button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, backButtonRect))
+        SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
+    else
+        SDL_RenderCopy(renderer, backHoverButton, &backHoverButtonRectSrc, &backHoverButtonRect);
+    SDL_RenderCopy(renderer, backText, &backTextRectSrc, &backTextRect);
+
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, volumeOnButtonRect)){
+        if(soundVolume) soundVolume = 0;
+        else soundVolume = 100;
+        reInitialingSoundMusic();
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, musicOnButtonRect)){
+        if(musicVolume) musicVolume = 0;
+        else musicVolume = 100;
+        reInitialingSoundMusic();
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, soundOutsideRect)) {
+        soundVolume = (x_MouseClicked - soundOutsideRect.x);
+        reInitialingSoundMusic();
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, musicOutsideRect)) {
+        musicVolume = (x_MouseClicked - musicOutsideRect.x);
+        reInitialingSoundMusic();
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)){
+        Locator["setting_menu"] = !Locator["setting_menu"];
+        Locator["main_menu"] = !Locator["main_menu"];
+        }
+
+    if(MouseClicked)
+        MouseClicked = !MouseClicked;
+
+
 }
 
 void quitMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
@@ -525,7 +629,6 @@ void quitMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
     SDL_RenderCopy(renderer, bg, NULL, &bgRect);
 
     // question box
-    SDL_Rect questionBox = {50, 200, 500, 200};
     SDL_RenderFillRect(renderer, &questionBox);
     SDL_RenderCopy(renderer, DoYouWantToQuitText, &DoYouWantToQuitTextRectSrc, &DoYouWantToQuitTextRect);
 

@@ -133,6 +133,7 @@ int main(int argv, char **args) {
 
     srand(time(NULL));
     settingReader();
+    reInitialingSoundMusic();
 
     // SDL Inits
     Uint32 SDL_flags = SDL_INIT_EVERYTHING;

@@ -87,6 +87,14 @@ SDL_Surface *bgSurface = NULL;
 SDL_Texture *bg = NULL;
 SDL_Rect bgRect;
 
+//
+
+// Setting default
+int soundVolume = 0;
+int musicVolume = 0;
+theme th = th1;
+
+
 // Buttons setup for making them global
 
 SDL_Surface *settingButtonSurface = NULL;
@@ -98,6 +106,32 @@ SDL_Surface *exitButtonSurface = NULL;
 SDL_Texture *exitButton = NULL;
 SDL_Rect exitButtonRect;
 SDL_Rect exitButtonRectSrc;
+
+SDL_Rect settingBox = {50, 50, 500, 500};
+SDL_Rect soundOutsideRect = {108, 60, 100, 48};
+SDL_Rect soundInsideRect = {108, 60, soundVolume, 48};
+SDL_Rect musicOutsideRect = {108, 120, 100, 48};
+SDL_Rect musicInsideRect = {108, 120, musicVolume, 48};
+
+SDL_Surface *musicOnButtonSurface = NULL;
+SDL_Texture *musicOnButton = NULL;
+SDL_Rect musicOnButtonRect;
+SDL_Rect musicOnButtonRectSrc;
+
+SDL_Surface *musicOffButtonSurface = NULL;
+SDL_Texture *musicOffButton = NULL;
+SDL_Rect musicOffButtonRect;
+SDL_Rect musicOffButtonRectSrc;
+
+SDL_Surface *volumeOnButtonSurface = NULL;
+SDL_Texture *volumeOnButton = NULL;
+SDL_Rect volumeOnButtonRect;
+SDL_Rect volumeOnButtonRectSrc;
+
+SDL_Surface *volumeOffButtonSurface = NULL;
+SDL_Texture *volumeOffButton = NULL;
+SDL_Rect volumeOffButtonRect;
+SDL_Rect volumeOffButtonRectSrc;
 
 SDL_Surface *startButtonSurface = NULL;
 SDL_Texture *startButton = NULL;
@@ -142,6 +176,7 @@ SDL_Surface *DoYouWantToQuitTextSurface;
 SDL_Texture *DoYouWantToQuitText;
 SDL_Rect DoYouWantToQuitTextRectSrc;
 SDL_Rect DoYouWantToQuitTextRect;
+SDL_Rect questionBox = {50, 200, 500, 200};
 
 SDL_Surface *iWantQuitButtonSurface = NULL;
 SDL_Texture *iWantQuitButton = NULL;
@@ -268,13 +303,6 @@ SDL_Surface *level5TextSurface;
 SDL_Texture *level5Text;
 SDL_Rect level5TextRectSrc;
 SDL_Rect level5TextRect;
-
-
-// Setting default
-int soundVolume = 0;
-int musicVolume = 0;
-theme th = th1;
-
 
 
 #endif //BOUNCING_BALL_GAME_SETTINGS_H
