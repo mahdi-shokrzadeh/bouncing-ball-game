@@ -19,7 +19,6 @@ double dyOfThrownBall;
 
 int number_of_balls = 0;
 
-bool game_is_finished;
 string sate;
 
 
@@ -109,6 +108,15 @@ double falling_balls_speed = 2.0;
 
 // score
 int score = 0;
+int fell_balls = 0;
+SDL_Surface *score_surface;
+SDL_Texture *score_texture;
+SDL_Rect score_rect_src;
+SDL_Rect score_rect;
+
+int score_x = 390;
+int score_y = 660;
+
 
 // color handling
 vector<int> balls_recent_color = {1};
@@ -175,7 +183,6 @@ void setPattern(int arr[DIMENTION_OF_LEVELS][12]);
 
 void handleGameProcess() {
 
-    game_is_finished = false;
     game_page_state = "game";
 
 
@@ -189,7 +196,7 @@ void handleGameProcess() {
     // buttons
     initializeMenuButtons();
 
-    while (game_loop && !game_is_finished) {
+    while (game_loop) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 game_loop = SDL_FALSE;
@@ -255,8 +262,12 @@ void handleGameProcess() {
 
 
         if (!game_loop) {
+
             // destroy everything
             destroyIt(menu_btn_sur, menu_btn_tex);
+
+            destroyIt(score_surface, score_texture);
+
         }
 
     }
@@ -341,8 +352,16 @@ void Game(BALL shooter_ball, BALL reserved_ball) {
         flag.i = FINAL_ROWS;
     }
 
-    // Draw pause menu button
+    // draw pause menu button
     gameRenderImage(menu_btn_tex, menu_btn_rect);
+
+
+    // score
+
+    textRender(score_surface, score_texture, score_rect_src, score_rect,
+               score_x, score_y, 0.7, to_string(score));
+    SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
+
 
     // handle ball shooting
     if (ball_is_being_thrown) {
@@ -976,7 +995,10 @@ void handleFallingBalls() {
     for (int i = 0; i < element.i; i++) {
         for (int j = 0; j < 12; j++) {
             if (balls[i][j].type != 's') {
-                if (!vectorContainsElement(visited, {i, j})) balls[i][j].type = 'f';
+                if (!vectorContainsElement(visited, {i, j})) {
+                    balls[i][j].type = 'f';
+                    fell_balls++;
+                }
             }
         }
     }
@@ -992,13 +1014,6 @@ void gameInitialImage(SDL_Surface *&g_button, SDL_Texture *&g_button_tex, char *
         if (g_button_tex == NULL) {
             cout << "Error creating texture";
         }
-//
-//        SDL_Rect dstRect = {x, y, w, h};
-//
-//        SDL_RenderCopy(renderer, g_button_tex, NULL, &dstRect);
-//
-//        SDL_FreeSurface(g_button);
-//        SDL_DestroyTexture(g_button_tex);
     }
 }
 
@@ -1086,7 +1101,7 @@ void setRandomColorForShootingBall(SDL_Color &color) {
 
     int random_number;
 
-    while(true){
+    while (true) {
         random_number = rand() % 6;
         if (random_number == 0) {
             if (contains(available_colors, 0)) {
