@@ -382,10 +382,5 @@ SDL_Surface *silverNormalBallSurface = NULL;
 SDL_Texture *silverNormalBall = NULL;
 
 
-// Setting default
-int soundVolume = 0;
-int musicVolume = 0;
-theme th = th1;
-
 
 #endif //BOUNCING_BALL_GAME_SETTINGS_H
