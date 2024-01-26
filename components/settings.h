@@ -204,6 +204,71 @@ SDL_Texture *infiniteModeText;
 SDL_Rect infiniteModeTextRectSrc;
 SDL_Rect infiniteModeTextRect;
 
+SDL_Surface *level1ButtonSurface = NULL;
+SDL_Texture *level1Button = NULL;
+SDL_Rect level1ButtonRect;
+SDL_Rect level1ButtonRectSrc;
+SDL_Surface *level1HoverButtonSurface = NULL;
+SDL_Texture *level1HoverButton = NULL;
+SDL_Rect level1HoverButtonRect;
+SDL_Rect level1HoverButtonRectSrc;
+SDL_Surface *level1TextSurface;
+SDL_Texture *level1Text;
+SDL_Rect level1TextRectSrc;
+SDL_Rect level1TextRect;
+
+SDL_Surface *level2ButtonSurface = NULL;
+SDL_Texture *level2Button = NULL;
+SDL_Rect level2ButtonRect;
+SDL_Rect level2ButtonRectSrc;
+SDL_Surface *level2HoverButtonSurface = NULL;
+SDL_Texture *level2HoverButton = NULL;
+SDL_Rect level2HoverButtonRect;
+SDL_Rect level2HoverButtonRectSrc;
+SDL_Surface *level2TextSurface;
+SDL_Texture *level2Text;
+SDL_Rect level2TextRectSrc;
+SDL_Rect level2TextRect;
+
+SDL_Surface *level3ButtonSurface = NULL;
+SDL_Texture *level3Button = NULL;
+SDL_Rect level3ButtonRect;
+SDL_Rect level3ButtonRectSrc;
+SDL_Surface *level3HoverButtonSurface = NULL;
+SDL_Texture *level3HoverButton = NULL;
+SDL_Rect level3HoverButtonRect;
+SDL_Rect level3HoverButtonRectSrc;
+SDL_Surface *level3TextSurface;
+SDL_Texture *level3Text;
+SDL_Rect level3TextRectSrc;
+SDL_Rect level3TextRect;
+
+SDL_Surface *level4ButtonSurface = NULL;
+SDL_Texture *level4Button = NULL;
+SDL_Rect level4ButtonRect;
+SDL_Rect level4ButtonRectSrc;
+SDL_Surface *level4HoverButtonSurface = NULL;
+SDL_Texture *level4HoverButton = NULL;
+SDL_Rect level4HoverButtonRect;
+SDL_Rect level4HoverButtonRectSrc;
+SDL_Surface *level4TextSurface;
+SDL_Texture *level4Text;
+SDL_Rect level4TextRectSrc;
+SDL_Rect level4TextRect;
+
+SDL_Surface *level5ButtonSurface = NULL;
+SDL_Texture *level5Button = NULL;
+SDL_Rect level5ButtonRect;
+SDL_Rect level5ButtonRectSrc;
+SDL_Surface *level5HoverButtonSurface = NULL;
+SDL_Texture *level5HoverButton = NULL;
+SDL_Rect level5HoverButtonRect;
+SDL_Rect level5HoverButtonRectSrc;
+SDL_Surface *level5TextSurface;
+SDL_Texture *level5Text;
+SDL_Rect level5TextRectSrc;
+SDL_Rect level5TextRect;
+
 
 // Setting default
 int soundVolume = 0;

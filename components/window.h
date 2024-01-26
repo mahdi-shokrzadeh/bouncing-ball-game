@@ -113,6 +113,46 @@ void initializeButtons() {
     textRender(infiniteModeTextSurface, infiniteModeText, infiniteModeTextRectSrc,
                infiniteModeTextRect, 345, 470, 0.5, "Infinite");
 
+    //level 1 button
+    imageRender(level1ButtonSurface, level1Button,level1ButtonRectSrc,
+                level1ButtonRect, 200, 80, 0.3, th.button);
+    imageRender(level1HoverButtonSurface, level1HoverButton,level1HoverButtonRectSrc,
+                level1HoverButtonRect, 200, 80, 0.3, th.buttonHover);
+    textRender(level1TextSurface, level1Text, level1TextRectSrc,
+               level1TextRect, 260, 145, 0.5, "level 1");
+
+    //level 2 button
+    imageRender(level2ButtonSurface, level2Button,level2ButtonRectSrc,
+                level2ButtonRect, 200, 180, 0.3, th.button);
+    imageRender(level2HoverButtonSurface, level2HoverButton,level2HoverButtonRectSrc,
+                level2HoverButtonRect, 200, 180, 0.3, th.buttonHover);
+    textRender(level2TextSurface, level2Text, level2TextRectSrc,
+               level2TextRect, 260, 245, 0.5, "level 2");
+
+    //level 3 button
+    imageRender(level3ButtonSurface, level3Button,level3ButtonRectSrc,
+                level3ButtonRect, 200, 280, 0.3, th.button);
+    imageRender(level3HoverButtonSurface, level3HoverButton,level3HoverButtonRectSrc,
+                level3HoverButtonRect, 200, 280, 0.3, th.buttonHover);
+    textRender(level3TextSurface, level3Text, level3TextRectSrc,
+               level3TextRect, 260, 345, 0.5, "level 3");
+
+    //level 4 button
+    imageRender(level4ButtonSurface, level4Button,level4ButtonRectSrc,
+                level4ButtonRect, 200, 380, 0.3, th.button);
+    imageRender(level4HoverButtonSurface, level4HoverButton,level4HoverButtonRectSrc,
+                level4HoverButtonRect, 200, 380, 0.3, th.buttonHover);
+    textRender(level4TextSurface, level4Text, level4TextRectSrc,
+               level4TextRect, 260, 445, 0.5, "level 4");
+
+    //level 5 button
+    imageRender(level5ButtonSurface, level5Button,level5ButtonRectSrc,
+                level5ButtonRect, 200, 480, 0.3, th.button);
+    imageRender(level5HoverButtonSurface, level5HoverButton,level5HoverButtonRectSrc,
+                level5HoverButtonRect, 200, 480, 0.3, th.buttonHover);
+    textRender(level5TextSurface, level5Text, level5TextRectSrc,
+               level5TextRect, 260, 545, 0.5, "level 5");
+
 }
 
 void destroyButtons() {
@@ -178,6 +218,41 @@ void destroyButtons() {
     SDL_FreeSurface(infiniteModeTextSurface);
     SDL_DestroyTexture(infiniteModeText);
 
+    SDL_FreeSurface(level1ButtonSurface);
+    SDL_DestroyTexture(level1Button);
+    SDL_FreeSurface(level1HoverButtonSurface);
+    SDL_DestroyTexture(level1HoverButton);
+    SDL_FreeSurface(level1TextSurface);
+    SDL_DestroyTexture(level1Text);
+
+    SDL_FreeSurface(level2ButtonSurface);
+    SDL_DestroyTexture(level2Button);
+    SDL_FreeSurface(level2HoverButtonSurface);
+    SDL_DestroyTexture(level2HoverButton);
+    SDL_FreeSurface(level2TextSurface);
+    SDL_DestroyTexture(level2Text);
+
+    SDL_FreeSurface(level3ButtonSurface);
+    SDL_DestroyTexture(level3Button);
+    SDL_FreeSurface(level3HoverButtonSurface);
+    SDL_DestroyTexture(level3HoverButton);
+    SDL_FreeSurface(level3TextSurface);
+    SDL_DestroyTexture(level3Text);
+
+    SDL_FreeSurface(level4ButtonSurface);
+    SDL_DestroyTexture(level4Button);
+    SDL_FreeSurface(level4HoverButtonSurface);
+    SDL_DestroyTexture(level4HoverButton);
+    SDL_FreeSurface(level4TextSurface);
+    SDL_DestroyTexture(level4Text);
+
+    SDL_FreeSurface(level5ButtonSurface);
+    SDL_DestroyTexture(level5Button);
+    SDL_FreeSurface(level5HoverButtonSurface);
+    SDL_DestroyTexture(level5HoverButton);
+    SDL_FreeSurface(level5TextSurface);
+    SDL_DestroyTexture(level5Text);
+
 }
 
 // Menus
@@ -235,7 +310,7 @@ void Main_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_
 
 }
 
-void start_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
+void start_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, bool &normal_or_timed) {
 
     // initialing and Drawing background
 
@@ -282,16 +357,14 @@ void start_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, normalModeButtonRect)) {
         Locator["start_menu"] = !Locator["start_menu"];
-        //Locator["level_selector"] = !Locator["level_selector"];
-        //Locator["normal_or_timed"] = true;
-        Locator["game"] = !Locator["game"];
+        Locator["level_selector"] = !Locator["level_selector"];
+        normal_or_timed = true;
     }
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, timedModeButtonRect)) {
         Locator["start_menu"] = !Locator["start_menu"];
-        //Locator["level_selector"] = !Locator["level_selector"];
-        //Locator["normal_or_timed"] = false;
-        Locator["main_menu"] = !Locator["main_menu"];
+        Locator["level_selector"] = !Locator["level_selector"];
+        normal_or_timed = false;
     }
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, randomModeButtonRect)) {
@@ -309,6 +382,92 @@ void start_Menu(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)) {
         Locator["start_menu"] = !Locator["start_menu"];
         Locator["main_menu"] = !Locator["main_menu"];
+    }
+
+}
+
+void level_selector(bool MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, int &levelNum) {
+
+    // initialing and Drawing background
+
+    SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+
+    // level1 button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, level1ButtonRect))
+        SDL_RenderCopy(renderer, level1Button, &level1ButtonRectSrc, &level1ButtonRect);
+    else
+        SDL_RenderCopy(renderer, level1HoverButton, &level1HoverButtonRectSrc, &level1HoverButtonRect);
+    SDL_RenderCopy(renderer, level1Text, &level1TextRectSrc, &level1TextRect);
+
+    // level2 button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, level2ButtonRect))
+        SDL_RenderCopy(renderer, level2Button, &level2ButtonRectSrc, &level2ButtonRect);
+    else
+        SDL_RenderCopy(renderer, level2HoverButton, &level2HoverButtonRectSrc, &level2HoverButtonRect);
+    SDL_RenderCopy(renderer, level2Text, &level2TextRectSrc, &level2TextRect);
+
+    // level3 button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, level3ButtonRect))
+        SDL_RenderCopy(renderer, level3Button, &level3ButtonRectSrc, &level3ButtonRect);
+    else
+        SDL_RenderCopy(renderer, level3HoverButton, &level3HoverButtonRectSrc, &level3HoverButtonRect);
+    SDL_RenderCopy(renderer, level3Text, &level3TextRectSrc, &level3TextRect);
+
+    // level4 button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, level4ButtonRect))
+        SDL_RenderCopy(renderer, level4Button, &level4ButtonRectSrc, &level4ButtonRect);
+    else
+        SDL_RenderCopy(renderer, level4HoverButton, &level4HoverButtonRectSrc, &level4HoverButtonRect);
+    SDL_RenderCopy(renderer, level4Text, &level4TextRectSrc, &level4TextRect);
+
+    // level5 button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, level5ButtonRect))
+        SDL_RenderCopy(renderer, level5Button, &level5ButtonRectSrc, &level5ButtonRect);
+    else
+        SDL_RenderCopy(renderer, level5HoverButton, &level5HoverButtonRectSrc, &level5HoverButtonRect);
+    SDL_RenderCopy(renderer, level5Text, &level5TextRectSrc, &level5TextRect);
+
+
+    // back button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, backButtonRect))
+        SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
+    else
+        SDL_RenderCopy(renderer, backHoverButton, &backHoverButtonRectSrc, &backHoverButtonRect);
+    SDL_RenderCopy(renderer, backText, &backTextRectSrc, &backTextRect);
+
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level1ButtonRect)) {
+        Locator["level_selector"] = !Locator["level_selector"];
+        levelNum = 1;
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level2ButtonRect)) {
+        Locator["level_selector"] = !Locator["level_selector"];
+        levelNum = 2;
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level3ButtonRect)) {
+        Locator["level_selector"] = !Locator["level_selector"];
+        levelNum = 3;
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level4ButtonRect)) {
+        Locator["level_selector"] = !Locator["level_selector"];
+        levelNum = 4;
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level5ButtonRect)) {
+        Locator["level_selector"] = !Locator["level_selector"];
+        levelNum = 5;
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)) {
+        Locator["start_menu"] = !Locator["start_menu"];
+        Locator["level_selector"] = !Locator["level_selector"];
     }
 
 }

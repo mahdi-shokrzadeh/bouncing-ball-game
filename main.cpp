@@ -54,14 +54,14 @@ void loop() {
     Locator["main_menu"] = true;
     Locator["start_menu"] = false;
     Locator["level_selector"] = false;
-    Locator["normal_or_timed"] = true;// true == normal, false == timed
     Locator["random_mode"] = false;
     Locator["infinite_mode"] = false;
     Locator["leaderboard"] = false;
     Locator["setting_menu"] = false;
     Locator["quit_menu"] = false;
-    Locator["game"] = false;
+    //Locator["game"] = false;
 
+    bool normal_or_timed = true;// true == normal, false == timed
     int levelNum = 0;
 
 
@@ -109,14 +109,16 @@ void loop() {
         if (Locator["main_menu"])
             Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["start_menu"])
-            start_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
+            start_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, normal_or_timed);
+        else if (Locator["level_selector"])
+            level_selector(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, levelNum);
         else if (Locator["leaderboard"])
             leaderboard(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["setting_menu"])
             settingMenu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if(Locator["quit_menu"])
             quitMenu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
-        else if (Locator["game"])
+        else if (normal_or_timed && levelNum == 1)
             handleGameProcess();
 
 
