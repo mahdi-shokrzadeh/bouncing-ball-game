@@ -110,6 +110,7 @@ int mouse_x = 0, mouse_y = 0;
 
 // falling balls speed
 double falling_balls_speed = 2.0;
+double falling_ball_acc = 0.011;
 
 // score
 int score = 0;
@@ -156,7 +157,7 @@ SDL_Rect shooter_section = {10, 550, 580, 160};
 // Game
 
 string game_state = "running";
-int time_to_wait = 10;
+int time_to_wait = 9;
 
 void handleGameProcess();
 
@@ -340,6 +341,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
     // drawing balls
 
     for (int i = 0; i < FINAL_ROWS; i++) {
+        int p = rand()%2;
         for (int j = 0; j < 12; j++) {
             if (balls[i][j].type != 's') {
                 BALL &ball = balls[i][j];
@@ -361,8 +363,11 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
                 // falling balls
                 if (ball.type == 'f') {
+
+                    i % 2 == 0 ? ball.center.x += 0.07 : ball.center.x -= 0.07 ;
                     ball.center.y += falling_balls_speed;
-                    ball_is_falling == true;
+                    falling_balls_speed += falling_ball_acc;
+                    ball_is_falling = true;
                     if (ball.center.y >= SCREEN_HEIGHT + 20) {
                         ball.center = {10000, 10000};
                         ball.type = 's';
@@ -1078,12 +1083,14 @@ void handleFallingBalls() {
     }
 
     // removing the other balls
+    falling_balls_speed = 2.0;
     for (int i = 0; i < element.i; i++) {
         for (int j = 0; j < 12; j++) {
             if (balls[i][j].type != 's' && balls[i][j].center.y >= -20 && !vectorContainsElement(visited, {i, j})) {
                 balls[i][j].type = 'f';
                 fell_balls++;
                 temp_fell_balls++;
+
             }
         }
     }
@@ -1280,9 +1287,9 @@ void handleWin() {
     SDL_RenderPresent(renderer);
 
     #ifdef _WIN32
-        Sleep(4000);
+        Sleep(3000);
     #else
-        sleep(4);
+        sleep(3);
     #endif
 
     while (fell_balls > 0) {
