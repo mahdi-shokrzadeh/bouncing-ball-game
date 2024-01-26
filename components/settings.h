@@ -24,7 +24,7 @@
 
 // Each ball score
 #define BALL_SCORE 10
-
+#define FALLING_BALL_SCORE 15
 
 
 
