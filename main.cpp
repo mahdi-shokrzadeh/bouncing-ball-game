@@ -33,9 +33,9 @@ using namespace std;
 #include "components/settings.h"
 #include "components/structs.h"
 #include "common/functions.h"
+#include "components/filemanage.h"
 #include "components/window.h"
 #include "components/game.h"
-#include "components/filemanage.h"
 
 
 
@@ -154,20 +154,12 @@ int main(int argv, char **args) {
     Mix_VolumeMusic(musicVolume * 128 / 100);
     Mix_PlayMusic(music, -1);
 
-    bgSurface = IMG_Load(th.bg);
-    bg = SDL_CreateTextureFromSurface(renderer, bgSurface);
-
-    bgRect.x = 0;
-    bgRect.y = 0;
-    bgRect.w = bgSurface->w;
-    bgRect.h = bgSurface->h;
-
     //set icon and title
     SDL_Surface *icon = IMG_Load("assets/icon.png");
     SDL_SetWindowIcon(window, icon);
     SDL_SetWindowTitle(window, "Bouncing Ball Gameeeeee!!!!");
 
-    initializeButtons();
+    initializeButtonsAndBG();
 
 
     //loop
@@ -186,12 +178,9 @@ int main(int argv, char **args) {
     Mix_FreeMusic(music);
     music = NULL;
 
-    SDL_FreeSurface(bgSurface);
-    SDL_DestroyTexture(bg);
-
     SDL_FreeSurface(icon);
 
-    destroyButtons();
+    destroyButtonsAndBG();
 
     TTF_Quit();
     SDL_Quit();

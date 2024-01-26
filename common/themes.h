@@ -37,9 +37,4 @@ const theme Space = {3, "assets/Space/bg.jpg", "assets/Space/music.mp3",
                      BLUE, CYAN, WHITE};
 
 
-void themeChanger(theme newTheme) {
-
-}
-
-
 #endif //BOUNCING_BALL_GAME_THEMES_H

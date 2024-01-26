@@ -172,6 +172,45 @@ SDL_Texture *backText;
 SDL_Rect backTextRectSrc;
 SDL_Rect backTextRect;
 
+SDL_Surface *jungleThemeButtonSurface = NULL;
+SDL_Texture *jungleThemeButton = NULL;
+SDL_Rect jungleThemeButtonRect;
+SDL_Rect jungleThemeButtonRectSrc;
+SDL_Surface *jungleThemeHoverButtonSurface = NULL;
+SDL_Texture *jungleThemeHoverButton = NULL;
+SDL_Rect jungleThemeHoverButtonRect;
+SDL_Rect jungleThemeHoverButtonRectSrc;
+SDL_Surface *jungleThemeTextSurface;
+SDL_Texture *jungleThemeText;
+SDL_Rect jungleThemeTextRectSrc;
+SDL_Rect jungleThemeTextRect;
+
+SDL_Surface *spaceThemeButtonSurface = NULL;
+SDL_Texture *spaceThemeButton = NULL;
+SDL_Rect spaceThemeButtonRect;
+SDL_Rect spaceThemeButtonRectSrc;
+SDL_Surface *spaceThemeHoverButtonSurface = NULL;
+SDL_Texture *spaceThemeHoverButton = NULL;
+SDL_Rect spaceThemeHoverButtonRect;
+SDL_Rect spaceThemeHoverButtonRectSrc;
+SDL_Surface *spaceThemeTextSurface;
+SDL_Texture *spaceThemeText;
+SDL_Rect spaceThemeTextRectSrc;
+SDL_Rect spaceThemeTextRect;
+
+SDL_Surface *oceanThemeButtonSurface = NULL;
+SDL_Texture *oceanThemeButton = NULL;
+SDL_Rect oceanThemeButtonRect;
+SDL_Rect oceanThemeButtonRectSrc;
+SDL_Surface *oceanThemeHoverButtonSurface = NULL;
+SDL_Texture *oceanThemeHoverButton = NULL;
+SDL_Rect oceanThemeHoverButtonRect;
+SDL_Rect oceanThemeHoverButtonRectSrc;
+SDL_Surface *oceanThemeTextSurface;
+SDL_Texture *oceanThemeText;
+SDL_Rect oceanThemeTextRectSrc;
+SDL_Rect oceanThemeTextRect;
+
 SDL_Surface *DoYouWantToQuitTextSurface;
 SDL_Texture *DoYouWantToQuitText;
 SDL_Rect DoYouWantToQuitTextRectSrc;

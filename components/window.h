@@ -39,7 +39,15 @@ void textRender(SDL_Surface* &surface, SDL_Texture* &texture,
     dest.h = surface->h * multiplier;
 }
 
-void initializeButtons() {
+void initializeButtonsAndBG() {
+
+    bgSurface = IMG_Load(th.bg);
+    bg = SDL_CreateTextureFromSurface(renderer, bgSurface);
+
+    bgRect.x = 0;
+    bgRect.y = 0;
+    bgRect.w = bgSurface->w;
+    bgRect.h = bgSurface->h;
 
     //setting button
     imageRender(settingButtonSurface, settingButton,settingButtonRectSrc,
@@ -169,9 +177,40 @@ void initializeButtons() {
     textRender(level5TextSurface, level5Text, level5TextRectSrc,
                level5TextRect, 260, 545, 0.5, "level 5");
 
+    //Jungle theme button
+    theme temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Jungle;
+    imageRender(jungleThemeButtonSurface, jungleThemeButton,jungleThemeButtonRectSrc,
+                jungleThemeButtonRect, 200, 280, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
+    imageRender(jungleThemeHoverButtonSurface, jungleThemeHoverButton,jungleThemeHoverButtonRectSrc,
+                jungleThemeHoverButtonRect, 200, 280, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
+    textRender(jungleThemeTextSurface, jungleThemeText, jungleThemeTextRectSrc,
+               jungleThemeTextRect, 260, 345, 0.5, "Jungle");
+
+    //Ocean theme button
+    temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Ocean;
+    imageRender(oceanThemeButtonSurface, oceanThemeButton,oceanThemeButtonRectSrc,
+                oceanThemeButtonRect, 200, 380, 0.2, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
+    imageRender(oceanThemeHoverButtonSurface, oceanThemeHoverButton,oceanThemeHoverButtonRectSrc,
+                oceanThemeHoverButtonRect, 200, 380, 0.2, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
+    textRender(oceanThemeTextSurface, oceanThemeText, oceanThemeTextRectSrc,
+               oceanThemeTextRect, 260, 445, 0.5, "Ocean");
+
+    //Space theme button
+    temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Space;
+    imageRender(spaceThemeButtonSurface, spaceThemeButton,spaceThemeButtonRectSrc,
+                spaceThemeButtonRect, 200, 480, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
+    imageRender(spaceThemeHoverButtonSurface, spaceThemeHoverButton,spaceThemeHoverButtonRectSrc,
+                spaceThemeHoverButtonRect, 200, 480, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
+    textRender(spaceThemeTextSurface, spaceThemeText, spaceThemeTextRectSrc,
+               spaceThemeTextRect, 260, 545, 0.5, "Space");
+
 }
 
-void destroyButtons() {
+void destroyButtonsAndBG() {
+
+    SDL_FreeSurface(bgSurface);
+    SDL_DestroyTexture(bg);
+
     SDL_FreeSurface(settingButtonSurface);
     SDL_DestroyTexture(settingButton);
 
@@ -281,12 +320,48 @@ void destroyButtons() {
     SDL_FreeSurface(level5TextSurface);
     SDL_DestroyTexture(level5Text);
 
+    SDL_FreeSurface(jungleThemeButtonSurface);
+    SDL_DestroyTexture(jungleThemeButton);
+    SDL_FreeSurface(jungleThemeHoverButtonSurface);
+    SDL_DestroyTexture(jungleThemeHoverButton);
+    SDL_FreeSurface(jungleThemeTextSurface);
+    SDL_DestroyTexture(jungleThemeText);
+
+    SDL_FreeSurface(oceanThemeButtonSurface);
+    SDL_DestroyTexture(oceanThemeButton);
+    SDL_FreeSurface(oceanThemeHoverButtonSurface);
+    SDL_DestroyTexture(oceanThemeHoverButton);
+    SDL_FreeSurface(oceanThemeTextSurface);
+    SDL_DestroyTexture(oceanThemeText);
+
+
+    SDL_FreeSurface(spaceThemeButtonSurface);
+    SDL_DestroyTexture(spaceThemeButton);
+    SDL_FreeSurface(spaceThemeHoverButtonSurface);
+    SDL_DestroyTexture(spaceThemeHoverButton);
+    SDL_FreeSurface(spaceThemeTextSurface);
+    SDL_DestroyTexture(spaceThemeText);
+
+
 }
 
 void reInitialingSoundMusic() {
     soundInsideRect.w = soundVolume;
     musicInsideRect.w = musicVolume;
     Mix_VolumeMusic(musicVolume * 128 / 100);
+}
+
+void themeChanger(theme newTheme) {
+    destroyButtonsAndBG();
+    Mix_FreeMusic(music);
+    TTF_CloseFont(font);
+
+    th = newTheme;
+    font = TTF_OpenFont(th.fontLoc, th.fontSize);
+    initializeButtonsAndBG();
+    music = Mix_LoadMUS(th.music);
+    Mix_PlayMusic(music, -1);
+
 }
 
 // Menus
@@ -578,6 +653,27 @@ void settingMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int
     SDL_RenderFillRect(renderer, &soundInsideRect) ;
     SDL_RenderFillRect(renderer, &musicInsideRect) ;
 
+    // jungle theme button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, jungleThemeButtonRect))
+        SDL_RenderCopy(renderer, jungleThemeButton, &jungleThemeButtonRectSrc, &jungleThemeButtonRect);
+    else
+        SDL_RenderCopy(renderer, jungleThemeHoverButton, &jungleThemeHoverButtonRectSrc, &jungleThemeHoverButtonRect);
+    SDL_RenderCopy(renderer, jungleThemeText, &jungleThemeTextRectSrc, &jungleThemeTextRect);
+
+    // ocean theme button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, oceanThemeButtonRect))
+        SDL_RenderCopy(renderer, oceanThemeButton, &oceanThemeButtonRectSrc, &oceanThemeButtonRect);
+    else
+        SDL_RenderCopy(renderer, oceanThemeHoverButton, &oceanThemeHoverButtonRectSrc, &oceanThemeHoverButtonRect);
+    SDL_RenderCopy(renderer, oceanThemeText, &oceanThemeTextRectSrc, &oceanThemeTextRect);
+
+    // space theme button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, spaceThemeButtonRect))
+        SDL_RenderCopy(renderer, spaceThemeButton, &spaceThemeButtonRectSrc, &spaceThemeButtonRect);
+    else
+        SDL_RenderCopy(renderer, spaceThemeHoverButton, &spaceThemeHoverButtonRectSrc, &spaceThemeHoverButtonRect);
+    SDL_RenderCopy(renderer, spaceThemeText, &spaceThemeTextRectSrc, &spaceThemeTextRect);
+
     // back button
     if(!checkInOut(x_MouseWhere, y_MouseWhere, backButtonRect))
         SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
@@ -608,10 +704,22 @@ void settingMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int
         reInitialingSoundMusic();
     }
 
-    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)){
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, jungleThemeButtonRect)) {
+        themeChanger(Jungle);
+    }
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, oceanThemeButtonRect)) {
+        themeChanger(Ocean);
+    }
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, spaceThemeButtonRect)) {
+        themeChanger(Space);
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)) {
         Locator["setting_menu"] = !Locator["setting_menu"];
         Locator["main_menu"] = !Locator["main_menu"];
-        }
+        settingWriter();
+    }
+
 
     if(MouseClicked)
         MouseClicked = !MouseClicked;
