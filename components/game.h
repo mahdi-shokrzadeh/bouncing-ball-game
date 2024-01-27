@@ -173,6 +173,8 @@ void drawShootingBalls(BALL shooter_ball, BALL reserved_ball);
 
 void drawTargeter();
 
+void ballDraw(int xCom, int yCom, int radius, SDL_Color color);
+
 void handleTargeterEvent(int type);
 
 bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point);
@@ -332,7 +334,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
     SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
     SDL_RenderClear(renderer);
 
-    //SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
 
 
     // targeter
@@ -347,8 +349,9 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                 BALL &ball = balls[i][j];
                 ball.center.y += vertical_speed;
                 if (ball.center.y <= SCREEN_HEIGHT + 30 && ball.center.y >= -40) {
-                    aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,
-                                 ball.color.r, ball.color.g, ball.color.b, 255);
+                    //aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,ball.color.r, ball.color.g, ball.color.b, 255);
+                    ballDraw(ball.center.x, ball.center.y, radius_of_balls, ball.color);
+
                 }
 
 
@@ -552,7 +555,7 @@ void setRandomColor(SDL_Color &color) {
             color = PURPLE;
             break;
         case (4) :
-            color = AQUA;
+            color = GREEN;
             break;
         case (5):
             if (!contains(balls_recent_color, 5)) {
@@ -596,14 +599,14 @@ void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
 
 void drawShootingBalls(BALL shooter_ball, BALL reserved_ball) {
 
-    aacircleRGBA(renderer, Sint16(shooter_ball.center.x),
-                 Sint16(shooter_ball.center.y),
-                 radius_of_balls, shooter_ball.color.r,
-                 shooter_ball.color.g, shooter_ball.color.b, 255);
+    //aacircleRGBA(renderer, Sint16(shooter_ball.center.x),Sint16(shooter_ball.center.y),radius_of_balls, shooter_ball.color.r,shooter_ball.color.g, shooter_ball.color.b, 255);
+    ballDraw(shooter_ball.center.x,shooter_ball.center.y,radius_of_balls, shooter_ball.color);
 
-    aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), radius_of_balls,
-                 reserved_ball.color.r, reserved_ball.color.g, reserved_ball.color.b, 255);
-//    SDL_RenderPresent(renderer);
+
+    //aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), radius_of_balls,reserved_ball.color.r, reserved_ball.color.g, reserved_ball.color.b, 255);
+    ballDraw(reserved_ball.center.x, reserved_ball.center.y, radius_of_balls, reserved_ball.color);
+
+    //    SDL_RenderPresent(renderer);
 }
 
 
@@ -634,14 +637,47 @@ void drawTargeter() {
 
         if (calculateDistance(targeter_point, center_of_shooting_ball) >= 25) {
 
-            aacircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y),
-                         Sint16(targeter_balls_radius),
-                         SILVER.r, SILVER.g, SILVER.b, 255);
+            filledCircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y),Sint16(targeter_balls_radius),WHITE.r, WHITE.g, WHITE.b, 255);
         }
 
         targeter_point.y += dy;
         targeter_point.x += dx;
     }
+
+}
+
+
+void ballDraw(int xCom, int yCom, int radius, SDL_Color color) {
+
+    SDL_Rect src, dest;
+
+    src.x = 0;
+    src.y = 0;
+    src.w = 400;
+    src.h = 400;
+
+    dest.x = xCom - radius;
+    dest.y = yCom - radius;
+    dest.w = 400 * 0.1;
+    dest.h = 400 * 0.1;
+
+    if(color.r == RED.r && color.g == RED.g && color.b == RED.b)
+        SDL_RenderCopy(renderer, redNormalBall, &src, &dest);
+    else if(color.r == CYAN.r && color.g == CYAN.g && color.b == CYAN.b)
+        SDL_RenderCopy(renderer, cyanNormalBall, &src, &dest);
+    else if(color.r == BLUE.r && color.g == BLUE.g && color.b == BLUE.b)
+        SDL_RenderCopy(renderer, blueNormalBall, &src, &dest);
+    else if(color.r == PURPLE.r && color.g == PURPLE.g && color.b == PURPLE.b)
+        SDL_RenderCopy(renderer, purpleNormalBall, &src, &dest);
+    else if(color.r == GREEN.r && color.g == GREEN.g && color.b == GREEN.b)
+        SDL_RenderCopy(renderer, greenNormalBall, &src, &dest);
+    else if(color.r == WHEAT.r && color.g == WHEAT.g && color.b == WHEAT.b)
+        SDL_RenderCopy(renderer, silverNormalBall, &src, &dest);
+    else if(color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b)
+        SDL_RenderCopy(renderer, yellowNormalBall, &src, &dest);
+    else
+        aacircleRGBA(renderer, Sint16(xCom + radius), Sint16(yCom + radius),Sint16(radius), color.r, color.g, color.b, 255);
+
 
 }
 
@@ -716,8 +752,8 @@ void handleBallShooting() {
     thrown_ball.center.x += dxOfThrownBall;
     thrown_ball.center.y += dyOfThrownBall;
 
-    aacircleRGBA(renderer, Sint16(thrown_ball.center.x), Sint16(thrown_ball.center.y),
-                 Sint16(radius_of_balls), thrown_ball.color.r, thrown_ball.color.g, thrown_ball.color.b, 255);
+    //aacircleRGBA(renderer, Sint16(thrown_ball.center.x), Sint16(thrown_ball.center.y),Sint16(radius_of_balls), thrown_ball.color.r, thrown_ball.color.g, thrown_ball.color.b, 255);
+    ballDraw(thrown_ball.center.x, thrown_ball.center.y,radius_of_balls, thrown_ball.color);
 
 }
 
