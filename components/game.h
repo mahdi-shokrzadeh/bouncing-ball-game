@@ -190,7 +190,7 @@ void drawShootingBalls(BALL shooter_ball, BALL reserved_ball);
 
 void drawTargeter();
 
-void ballDraw(int xCom, int yCom, int radius, SDL_Color color);
+void ballDraw(int xCom, int yCom, int radius, SDL_Color color, BALL ball);
 
 void handleTargeterEvent(int type);
 
@@ -374,7 +374,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                     ball.center.y += vertical_speed;
                     if (ball.center.y <= SCREEN_HEIGHT + 30 && ball.center.y >= -40) {
                         //aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,ball.color.r, ball.color.g, ball.color.b, 255);
-                        ballDraw(ball.center.x, ball.center.y, radius_of_balls, ball.color);
+                        ballDraw(ball.center.x, ball.center.y, radius_of_balls, ball.color, ball);
 
                     }
 
@@ -693,11 +693,11 @@ void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
 void drawShootingBalls(BALL shooter_ball, BALL reserved_ball) {
 
     //aacircleRGBA(renderer, Sint16(shooter_ball.center.x),Sint16(shooter_ball.center.y),radius_of_balls, shooter_ball.color.r,shooter_ball.color.g, shooter_ball.color.b, 255);
-    ballDraw(shooter_ball.center.x, shooter_ball.center.y, radius_of_balls, shooter_ball.color);
+    ballDraw(shooter_ball.center.x, shooter_ball.center.y, radius_of_balls, shooter_ball.color, shooter_ball);
 
 
     //aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), radius_of_balls,reserved_ball.color.r, reserved_ball.color.g, reserved_ball.color.b, 255);
-    ballDraw(reserved_ball.center.x, reserved_ball.center.y, radius_of_balls, reserved_ball.color);
+    ballDraw(reserved_ball.center.x, reserved_ball.center.y, radius_of_balls, reserved_ball.color, reserved_ball);
 
     //    SDL_RenderPresent(renderer);
 }
@@ -741,7 +741,7 @@ void drawTargeter() {
 }
 
 
-void ballDraw(int xCom, int yCom, int radius, SDL_Color color) {
+void ballDraw(int xCom, int yCom, int radius, SDL_Color color, BALL ball) {
 
     SDL_Rect src, dest;
 
@@ -755,24 +755,42 @@ void ballDraw(int xCom, int yCom, int radius, SDL_Color color) {
     dest.w = 400 * 0.11;
     dest.h = 400 * 0.11;
 
-    if (color.r == RED.r && color.g == RED.g && color.b == RED.b)
-        SDL_RenderCopy(renderer, redNormalBall, &src, &dest);
-    else if (color.r == CYAN.r && color.g == CYAN.g && color.b == CYAN.b)
-        SDL_RenderCopy(renderer, cyanNormalBall, &src, &dest);
-    else if (color.r == BLUE.r && color.g == BLUE.g && color.b == BLUE.b)
-        SDL_RenderCopy(renderer, blueNormalBall, &src, &dest);
-    else if (color.r == PURPLE.r && color.g == PURPLE.g && color.b == PURPLE.b)
-        SDL_RenderCopy(renderer, purpleNormalBall, &src, &dest);
-    else if (color.r == GREEN.r && color.g == GREEN.g && color.b == GREEN.b)
-        SDL_RenderCopy(renderer, greenNormalBall, &src, &dest);
-    else if (color.r == WHEAT.r && color.g == WHEAT.g && color.b == WHEAT.b)
-        SDL_RenderCopy(renderer, silverNormalBall, &src, &dest);
-    else if (color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b)
-        SDL_RenderCopy(renderer, yellowNormalBall, &src, &dest);
+    if(ball.level == 1) {
+        if (color.r == RED.r && color.g == RED.g && color.b == RED.b)
+            SDL_RenderCopy(renderer, redLockedBall, &src, &dest);
+        else if (color.r == CYAN.r && color.g == CYAN.g && color.b == CYAN.b)
+            SDL_RenderCopy(renderer, cyanLockedBall, &src, &dest);
+        else if (color.r == BLUE.r && color.g == BLUE.g && color.b == BLUE.b)
+            SDL_RenderCopy(renderer, blueLockedBall, &src, &dest);
+        else if (color.r == PURPLE.r && color.g == PURPLE.g && color.b == PURPLE.b)
+            SDL_RenderCopy(renderer, purpleLockedBall, &src, &dest);
+        else if (color.r == GREEN.r && color.g == GREEN.g && color.b == GREEN.b)
+            SDL_RenderCopy(renderer, greenLockedBall, &src, &dest);
+        else if (color.r == WHEAT.r && color.g == WHEAT.g && color.b == WHEAT.b)
+            SDL_RenderCopy(renderer, silverLockedBall, &src, &dest);
+        else if (color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b)
+            SDL_RenderCopy(renderer, yellowLockedBall, &src, &dest);
+    }
+    else if(ball.level == 0) {
+        if(ball.type != 't') {
+            if (color.r == RED.r && color.g == RED.g && color.b == RED.b)
+                SDL_RenderCopy(renderer, redNormalBall, &src, &dest);
+            else if (color.r == CYAN.r && color.g == CYAN.g && color.b == CYAN.b)
+                SDL_RenderCopy(renderer, cyanNormalBall, &src, &dest);
+            else if (color.r == BLUE.r && color.g == BLUE.g && color.b == BLUE.b)
+                SDL_RenderCopy(renderer, blueNormalBall, &src, &dest);
+            else if (color.r == PURPLE.r && color.g == PURPLE.g && color.b == PURPLE.b)
+                SDL_RenderCopy(renderer, purpleNormalBall, &src, &dest);
+            else if (color.r == GREEN.r && color.g == GREEN.g && color.b == GREEN.b)
+                SDL_RenderCopy(renderer, greenNormalBall, &src, &dest);
+            else if (color.r == WHEAT.r && color.g == WHEAT.g && color.b == WHEAT.b)
+                SDL_RenderCopy(renderer, silverNormalBall, &src, &dest);
+            else if (color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b)
+                SDL_RenderCopy(renderer, yellowNormalBall, &src, &dest);
+        }
+    }
     else
-        aacircleRGBA(renderer, Sint16(xCom + radius), Sint16(yCom + radius), Sint16(radius), color.r, color.g, color.b,
-                     255);
-
+        aacircleRGBA(renderer, Sint16(xCom + radius), Sint16(yCom + radius), Sint16(radius), color.r, color.g, color.b,255);
 
 }
 
@@ -851,7 +869,7 @@ void handleBallShooting() {
     thrown_ball.center.y += dyOfThrownBall;
 
     //aacircleRGBA(renderer, Sint16(thrown_ball.center.x), Sint16(thrown_ball.center.y),Sint16(radius_of_balls), thrown_ball.color.r, thrown_ball.color.g, thrown_ball.color.b, 255);
-    ballDraw(thrown_ball.center.x, thrown_ball.center.y, radius_of_balls, thrown_ball.color);
+    ballDraw(thrown_ball.center.x, thrown_ball.center.y, radius_of_balls, thrown_ball.color, thrown_ball);
 
 }
 

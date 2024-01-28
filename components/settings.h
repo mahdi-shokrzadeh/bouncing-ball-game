@@ -402,6 +402,21 @@ SDL_Texture *silverNormalBall = NULL;
 
 // locked colors variables
 
+SDL_Surface *redLockedBallSurface = NULL;
+SDL_Texture *redLockedBall = NULL;
+SDL_Surface *blueLockedBallSurface = NULL;
+SDL_Texture *blueLockedBall = NULL;
+SDL_Surface *cyanLockedBallSurface = NULL;
+SDL_Texture *cyanLockedBall = NULL;
+SDL_Surface *greenLockedBallSurface = NULL;
+SDL_Texture *greenLockedBall = NULL;
+SDL_Surface *purpleLockedBallSurface = NULL;
+SDL_Texture *purpleLockedBall = NULL;
+SDL_Surface *yellowLockedBallSurface = NULL;
+SDL_Texture *yellowLockedBall = NULL;
+SDL_Surface *silverLockedBallSurface = NULL;
+SDL_Texture *silverLockedBall = NULL;
+
 // multi color ball variables
 
 // game SFX variables
