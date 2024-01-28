@@ -115,6 +115,12 @@ int soundVolume = 0;
 int musicVolume = 0;
 theme th = th1;
 
+// logo
+
+SDL_Surface *logoSurface = NULL;
+SDL_Texture *logo = NULL;
+SDL_Rect logoRectSrc;
+SDL_Rect logoRect;
 
 // Buttons setup for making them global
 

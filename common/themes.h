@@ -5,6 +5,7 @@
 
 struct theme {
     int num;
+    char logo[64]; //logo address
     char bg[64]; //background address
     char music[64]; //music address
     char button[64]; //button address
@@ -19,18 +20,18 @@ struct theme {
     // to be continued...
 };
 
-const theme th1 = {0, "", "", "", "","", "", "", 50, BLUE, CYAN, WHITE};
-const theme Jungle = {1, "assets/Jungle/bg.jpg", "assets/Jungle/music.mp3",
+const theme th1 = {0, "", "", "", "", "","", "", "", 50, BLUE, CYAN, WHITE};
+const theme Jungle = {1, "assets/Jungle/logo.png", "assets/Jungle/bg.jpg", "assets/Jungle/music.mp3",
                       "assets/Jungle/button.png", "assets/Jungle/buttonHover.png", "assets/Jungle/buttonQuit.png",
                       "",
                       "assets/Jungle/font.ttf", 50,
                       BROWN, CHOCOLATE, WHITE};
-const theme Ocean = {2, "assets/Ocean/bg.jpg", "assets/Ocean/music.mp3",
+const theme Ocean = {2, "assets/Ocean/logo.png", "assets/Ocean/bg.jpg", "assets/Ocean/music.mp3",
                      "assets/Ocean/button.png", "assets/Ocean/buttonHover.png", "assets/Ocean/buttonQuit.png",
                      "",
                      "assets/Ocean/font.ttc", 50,
                      GREEN, FOREST_GREEN, WHITE};
-const theme Space = {3, "assets/Space/bg.jpg", "assets/Space/music.mp3",
+const theme Space = {3, "assets/Space/logo.png", "assets/Space/bg.jpg", "assets/Space/music.mp3",
                      "assets/Space/button.png", "assets/Space/buttonHover.png", "assets/Space/buttonQuit.png",
                      "",
                      "assets/Space/font.ttc", 50,

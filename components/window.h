@@ -113,6 +113,19 @@ void initializeButtonsAndBG() {
     bgRect.w = bgSurface->w;
     bgRect.h = bgSurface->h;
 
+    logoSurface = IMG_Load(th.logo);
+    logo = SDL_CreateTextureFromSurface(renderer, logoSurface);
+
+    logoRectSrc.x = 0;
+    logoRectSrc.y = 0;
+    logoRectSrc.w = logoSurface->w;
+    logoRectSrc.h = logoSurface->h;
+
+    logoRect.x = 0;
+    logoRect.y = 0;
+    logoRect.w = logoSurface->w * 0.7;
+    logoRect.h = logoSurface->h * 0.7;
+
     //setting button
     imageRender(settingButtonSurface, settingButton,settingButtonRectSrc,
                 settingButtonRect, 10, 660, 2, "assets/UiUx/setting.svg");
@@ -274,6 +287,9 @@ void destroyButtonsAndBG() {
 
     SDL_FreeSurface(bgSurface);
     SDL_DestroyTexture(bg);
+
+    SDL_FreeSurface(logoSurface);
+    SDL_DestroyTexture(logo);
 
     SDL_FreeSurface(settingButtonSurface);
     SDL_DestroyTexture(settingButton);
@@ -442,6 +458,11 @@ void Main_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x
     SDL_RenderClear(renderer);
 
     SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+    // logo
+
+    SDL_RenderCopy(renderer, logo, &logoRectSrc, &logoRect);
+
 
     // start button
     if(!checkInOut(x_MouseWhere, y_MouseWhere, startButtonRect))
