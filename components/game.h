@@ -42,8 +42,8 @@ BALL end_pointer_ball = {
         .type = 'e',
         .color = RED,
         .center = {
-                .x = 0,
-                .y = 0,
+                .x = 0.0,
+                .y = 0.0,
         },
 };
 
@@ -166,7 +166,6 @@ auto start_time = std::chrono::high_resolution_clock::now();
 int timer = TIMER;
 
 
-
 // timer
 SDL_Surface *timer_surface;
 SDL_Texture *timer_texture;
@@ -175,7 +174,6 @@ ELEMENT timer_coor = {
         30,
         SCREEN_HEIGHT - 60,
 };
-
 
 
 void handleGameProcess();
@@ -210,9 +208,9 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j);
 
 vector<ELEMENT> findNeighbors(int i, int j, string type);
 
-void filterByColor(vector<ELEMENT> &elements, SDL_Color color);
+void filterByColor(vector<ELEMENT> &elements, BALL ball);
 
-void handleGraphCheck(int i, int j, SDL_Color color);
+void handleGraphCheck(int i, int j, BALL in_ball);
 
 void handleFallingBalls();
 
@@ -254,7 +252,7 @@ void handleGameProcess() {
     game_page_state = "game";
 
     // time init
-     start_time = chrono::high_resolution_clock::now();
+    start_time = chrono::high_resolution_clock::now();
 
 
     initializeBalls();
@@ -403,11 +401,9 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                         }
                     }
 
-
-
                     // checking if game is over or win
                     // c -> also lock and other types
-                    if (ball.center.y >= 530 && (ball.type == 'c' || ball.type == 'e')) {
+                    if (ball.center.y >= 530 && (ball.type == 'c' || ball.type == 'e' || ball.type == 't')) {
                         game_state = "over";
                         game_page_state = "over";
                     }
@@ -435,7 +431,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         if (end_pointer_ball.center.y >= -50) {
             SDL_Rect r;
             r.x = 5;
-            r.y = end_pointer_ball.center.y - 85;
+            r.y = int(end_pointer_ball.center.y - 85);
             r.w = SCREEN_WIDTH - 10;
             r.h = 50;
             SDL_SetRenderDrawColor(renderer, PLUM.r, PLUM.g, PLUM.b, 255);
@@ -463,7 +459,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
         // cehck the shooting ball color
 
-        if(!throw_is_disabled){
+        if (!throw_is_disabled) {
             checkColorOfShootingBalls(shooter_ball);
             checkColorOfShootingBalls(reserved_ball);
         }
@@ -472,7 +468,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         number_of_balls = calculateBalls();
 
         // Game Over for timer mode
-        if(game_mode == "time"){
+        if (game_mode == "time") {
 
             // draw timer
 
@@ -480,7 +476,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                        timer_coor.i, timer_coor.j, 0.8, to_string(timer));
             SDL_RenderCopy(renderer, timer_texture, &timer_rect_src, &timer_rect);
 
-            if(timer <= 0){
+            if (timer <= 0) {
                 game_state = "over";
                 game_page_state = "over";
                 return;
@@ -491,7 +487,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start_time);
             if (TIMER - duration.count() != timer) {
                 timer = TIMER - duration.count();
-             }
+            }
 
         }
 
@@ -516,7 +512,6 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
             }
             time_to_wait--;
         }
-
 
     } else if (game_mode == "random") {
 
@@ -543,7 +538,7 @@ void initializeBalls() {
                     balls[i - 1][j] = sample_ball;
                 } else {
                     BALL ball = {
-                            .type='c',
+                            .type='s',
                             .color = {
                                     .r=0,
                                     .g=0,
@@ -555,10 +550,42 @@ void initializeBalls() {
                             },
                     };
 
-                    setRandomColor(ball.color);
-                    if (i == FINAL_ROWS) {
-                        while (colorsAreTheSame(ball.color, WHEAT)) setRandomColor(ball.color);
+                    if (pattern[i - 1][j] == 1 || pattern[i - 1][j] == 2) {
+
+                        ball.type = 'c';
+
+                        // lock
+                        if (pattern[i - 1][j] == 2) {
+                            ball.level = 1;
+                        }
+
+                        setRandomColor(ball.color);
+                        if (i == FINAL_ROWS) {
+                            while (colorsAreTheSame(ball.color, WHEAT)) setRandomColor(ball.color);
+                        }
+
+                    } else if (pattern[i - 1][j] == 3) {
+
+                        ball.type = 't';
+                        int k = rand() % 3;
+
+                        switch (k) {
+                            case 0:
+                                ball.color = BLUE;
+                                ball.second_color = YELLOW;
+                                break;
+                            case 1:
+                                ball.color = RED;
+                                ball.second_color = YELLOW;
+
+                                break;
+                            default:
+                                ball.color = BLUE;
+                                ball.second_color = RED;
+
+                        }
                     }
+
 
                     if (i % 2 == 0) {
                         balls[i - 1][j] = ball;
@@ -566,6 +593,8 @@ void initializeBalls() {
                         ball.center.x += 0.5 * width_of_ball_box;
                         balls[i - 1][j] = ball;
                     }
+
+
                 }
             }
 
@@ -590,8 +619,6 @@ void initializeBalls() {
         }
     }
     end_pointer_ball.center.y = double(-(FINAL_ROWS - 5) * (width_of_ball_box));
-
-
 }
 
 
@@ -753,11 +780,11 @@ void ballDraw(int xCom, int yCom, int radius, SDL_Color color) {
 void handleTargeterEvent(int type) {
     switch (type) {
         case 0:
-            if (degree >= 100)
+            if (degree >= 110)
                 degree -= TARGETER_SPEED;
             break;
         case 1:
-            if (degree <= 260)
+            if (degree <= 250)
                 degree += TARGETER_SPEED;
             break;
         default:
@@ -779,7 +806,6 @@ bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
 
     }
     return false;
-
 
 }
 
@@ -809,7 +835,7 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
 
 void handleBallShooting() {
 
-    if(throw_is_disabled) return;
+    if (throw_is_disabled) return;
 
     if (thrown_ball.center.y + dyOfThrownBall <= 0) {
         ball_is_being_thrown = false;
@@ -844,10 +870,8 @@ void checkCollShooterAndBalls() {
 
 void handleCollShooterAndBalls(BALL &ball, int i, int j) {
     if (!ball_is_being_thrown)return;
-//    cout << balls[15][0].type<<endl;
 
     ELEMENT el;
-
 
     BALL new_ball;
     new_ball.color = thrown_ball.color;
@@ -992,7 +1016,7 @@ void handleCollShooterAndBalls(BALL &ball, int i, int j) {
     }
 
     //    handle graph
-    handleGraphCheck(el.i, el.j, thrown_ball.color);
+    handleGraphCheck(el.i, el.j, thrown_ball);
     // handle balls falling
     handleFallingBalls();
 
@@ -1091,14 +1115,23 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
 }
 
 
-void filterByColor(vector<ELEMENT> &elements, SDL_Color color) {
+void filterByColor(vector<ELEMENT> &elements, BALL ball) {
     for (auto it = elements.begin(); it != elements.end();) {
-        if (!(balls[it->i][it->j].color.r == color.r && balls[it->i][it->j].color.g == color.g &&
-              balls[it->i][it->j].color.b == color.b)) {
-            elements.erase(it);
-        } else {
-            ++it;
+        if (balls[it->i][it->j].type == 't') {
+            if (!colorsAreTheSame(balls[it->i][it->j].color, ball.color) &&
+                !colorsAreTheSame(balls[it->i][it->j].color, ball.second_color)) {
+                elements.erase(it);
+            } else {
+                ++it;
+            }
+        } else if (balls[it->i][it->j].type == 'c') {
+            if (!colorsAreTheSame(balls[it->i][it->j].color, ball.color)) {
+                elements.erase(it);
+            } else {
+                ++it;
+            }
         }
+
     }
 }
 
@@ -1111,7 +1144,7 @@ bool vectorContainsElement(const vector<ELEMENT> &elements, ELEMENT el) {
 }
 
 
-void handleGraphCheck(int i, int j, SDL_Color color) {
+void handleGraphCheck(int i, int j, BALL in_ball) {
 
     vector<ELEMENT> visited;
     vector<ELEMENT> queue;
@@ -1126,7 +1159,7 @@ void handleGraphCheck(int i, int j, SDL_Color color) {
 
         ELEMENT el = queue[0];
         vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
-        filterByColor(vec, color);
+        filterByColor(vec, in_ball);
 
         visited.push_back(el);
         for (ELEMENT el2: vec) {
@@ -1144,9 +1177,15 @@ void handleGraphCheck(int i, int j, SDL_Color color) {
         for (ELEMENT el: visited) {
             // important condition!
             if (balls[el.i][el.j].center.y >= -20) {
-                balls[el.i][el.j] = gone_ball;
-                // Adding up score
-                score += 10;
+                // checking if ball has lock or no
+                if (balls[el.i][el.j].level == 1) {
+                    balls[el.i][el.j].level = 0;
+                } else {
+                    balls[el.i][el.j] = gone_ball;
+                    // Adding up score
+                    score += 10;
+                }
+
             }
 
         }
@@ -1227,7 +1266,6 @@ void gameRenderImage(SDL_Texture *&g_button_tex, SDL_Rect dstRect) {
 
 
 void destroyIt(SDL_Surface *&g_button, SDL_Texture *&g_button_tex) {
-
     SDL_FreeSurface(g_button);
     SDL_DestroyTexture(g_button_tex);
 }
@@ -1272,7 +1310,7 @@ void setRandomColorForShootingBall(SDL_Color &color) {
     } else if (random_number == 3) {
         color = PURPLE;
     } else if (random_number == 4) {
-        color = AQUA;
+        color = GREEN;
     } else {
         color = YELLOW;
     }
@@ -1285,7 +1323,7 @@ int calculateBalls() {
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 12; j++) {
             // other types must be added
-            if (balls[i][j].type == 'c') {
+            if (balls[i][j].type == 'c' || balls[i][j].type == 't') {
                 n++;
             }
         }
@@ -1301,7 +1339,7 @@ vector<int> getAvailableColorsVector() {
     bool l = true;
     while (l) {
         for (int j = 0; j <= 11; j++) {
-            if (balls[k][j].type == 'c') {
+            if (balls[k][j].type == 'c' || balls[k][j].type == 't') {
                 l = false;
             }
         }
@@ -1323,11 +1361,27 @@ vector<int> getAvailableColorsVector() {
                     if (!contains(available_colors, 2)) available_colors.push_back(2);
                 } else if (colorsAreTheSame(ball.color, PURPLE)) {
                     if (!contains(available_colors, 3)) available_colors.push_back(3);
-                } else if (colorsAreTheSame(ball.color, AQUA)) {
+                } else if (colorsAreTheSame(ball.color, GREEN)) {
                     if (!contains(available_colors, 4)) available_colors.push_back(4);
                 } else if (colorsAreTheSame(ball.color, YELLOW)) {
                     if (!contains(available_colors, 5)) available_colors.push_back(5);
                 }
+//                now only doing for first color , second color also can be added!
+//                if(ball.type == 't'){
+//                    if (colorsAreTheSame(ball.second_color, RED)) {
+//                        if (!contains(available_colors, 0)) available_colors.push_back(0);
+//                    } else if (colorsAreTheSame(ball.second_color, CYAN)) {
+//                        if (!contains(available_colors, 1)) available_colors.push_back(1);
+//                    } else if (colorsAreTheSame(ball.second_color, BLUE)) {
+//                        if (!contains(available_colors, 2)) available_colors.push_back(2);
+//                    } else if (colorsAreTheSame(ball.second_color, PURPLE)) {
+//                        if (!contains(available_colors, 3)) available_colors.push_back(3);
+//                    } else if (colorsAreTheSame(ball.second_color, GREEN)) {
+//                        if (!contains(available_colors, 4)) available_colors.push_back(4);
+//                    } else if (colorsAreTheSame(ball.second_color, YELLOW)) {
+//                        if (!contains(available_colors, 5)) available_colors.push_back(5);
+//                    }
+//                }
             }
 
         }
@@ -1345,7 +1399,7 @@ int colorToInt(SDL_Color color) {
         i = 2;
     } else if (colorsAreTheSame(color, PURPLE)) {
         i = 3;
-    } else if (colorsAreTheSame(color, AQUA)) {
+    } else if (colorsAreTheSame(color, GREEN)) {
         i = 4;
     } else if (colorsAreTheSame(color, YELLOW)) {
         i = 5;

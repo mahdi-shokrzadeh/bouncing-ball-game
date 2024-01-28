@@ -10,10 +10,13 @@ typedef struct DOUBLE_POINT {
 // s -> sample ball which will not be rendered.
 
 typedef struct BALL {
+
     char type='s';
-    SDL_Color color;
-    DOUBLE_POINT center;
+    SDL_Color color{};
+    DOUBLE_POINT center{};
     SDL_Color second_color = BLACK;
+    int level = 0;
+
 } BALL;
 
 typedef struct ELEMENT {
