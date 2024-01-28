@@ -190,7 +190,7 @@ void drawShootingBalls(BALL shooter_ball, BALL reserved_ball);
 
 void drawTargeter();
 
-void ballDraw(int xCom, int yCom, int radius, SDL_Color color, BALL ball);
+void ballDraw(BALL ball);
 
 void handleTargeterEvent(int type);
 
@@ -374,7 +374,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                     ball.center.y += vertical_speed;
                     if (ball.center.y <= SCREEN_HEIGHT + 30 && ball.center.y >= -40) {
                         //aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,ball.color.r, ball.color.g, ball.color.b, 255);
-                        ballDraw(ball.center.x, ball.center.y, radius_of_balls, ball.color, ball);
+                        ballDraw(ball);
 
                     }
 
@@ -693,11 +693,11 @@ void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
 void drawShootingBalls(BALL shooter_ball, BALL reserved_ball) {
 
     //aacircleRGBA(renderer, Sint16(shooter_ball.center.x),Sint16(shooter_ball.center.y),radius_of_balls, shooter_ball.color.r,shooter_ball.color.g, shooter_ball.color.b, 255);
-    ballDraw(shooter_ball.center.x, shooter_ball.center.y, radius_of_balls, shooter_ball.color, shooter_ball);
+    ballDraw(shooter_ball);
 
 
     //aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), radius_of_balls,reserved_ball.color.r, reserved_ball.color.g, reserved_ball.color.b, 255);
-    ballDraw(reserved_ball.center.x, reserved_ball.center.y, radius_of_balls, reserved_ball.color, reserved_ball);
+    ballDraw(reserved_ball);
 
     //    SDL_RenderPresent(renderer);
 }
@@ -741,7 +741,10 @@ void drawTargeter() {
 }
 
 
-void ballDraw(int xCom, int yCom, int radius, SDL_Color color, BALL ball) {
+void ballDraw(BALL ball) {
+
+    int xCom = ball.center.x, yCom = ball.center.y, radius = radius_of_balls;
+    SDL_Color color = ball.color;
 
     SDL_Rect src, dest;
 
@@ -869,7 +872,7 @@ void handleBallShooting() {
     thrown_ball.center.y += dyOfThrownBall;
 
     //aacircleRGBA(renderer, Sint16(thrown_ball.center.x), Sint16(thrown_ball.center.y),Sint16(radius_of_balls), thrown_ball.color.r, thrown_ball.color.g, thrown_ball.color.b, 255);
-    ballDraw(thrown_ball.center.x, thrown_ball.center.y, radius_of_balls, thrown_ball.color, thrown_ball);
+    ballDraw(thrown_ball);
 
 }
 
