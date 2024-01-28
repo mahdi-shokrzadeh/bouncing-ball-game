@@ -363,7 +363,6 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                 }
 
 
-
                 // falling balls
                 if (ball.type == 'f') {
 
@@ -448,8 +447,10 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
     if (number_of_balls == 0 && !ball_is_being_thrown) {
         game_state = "win";
         // deleting the shooting and reserved ball
-        shooter_ball.color = BLACK;
-        reserved_ball.color = BLACK;
+//        shooter_ball.color = BLACK;
+//        reserved_ball.color = BLACK;
+            shooter_ball.center.y = 1000;
+            reserved_ball.center.y = 1000;
     }
 
     // handle winning state
@@ -658,8 +659,8 @@ void ballDraw(int xCom, int yCom, int radius, SDL_Color color) {
 
     dest.x = xCom - radius;
     dest.y = yCom - radius;
-    dest.w = 400 * 0.1;
-    dest.h = 400 * 0.1;
+    dest.w = 400 * 0.11;
+    dest.h = 400 * 0.11;
 
     if(color.r == RED.r && color.g == RED.g && color.b == RED.b)
         SDL_RenderCopy(renderer, redNormalBall, &src, &dest);
