@@ -572,13 +572,13 @@ void initializeBalls() {
                                 ball.second_color = YELLOW;
                                 break;
                             case 1:
-                                ball.color = RED;
-                                ball.second_color = YELLOW;
+                                ball.color = YELLOW;
+                                ball.second_color = RED;
 
                                 break;
                             default:
-                                ball.color = BLUE;
-                                ball.second_color = RED;
+                                ball.color = RED;
+                                ball.second_color = BLUE;
 
                         }
                     }
@@ -755,51 +755,52 @@ void ballDraw(BALL ball) {
     dest.w = 400 * 0.11;
     dest.h = 400 * 0.11;
 
-    if(ball.level == 1) {
-        if (color.r == RED.r && color.g == RED.g && color.b == RED.b)
-            SDL_RenderCopy(renderer, redLockedBall, &src, &dest);
-        else if (color.r == CYAN.r && color.g == CYAN.g && color.b == CYAN.b)
-            SDL_RenderCopy(renderer, cyanLockedBall, &src, &dest);
-        else if (color.r == BLUE.r && color.g == BLUE.g && color.b == BLUE.b)
-            SDL_RenderCopy(renderer, blueLockedBall, &src, &dest);
-        else if (color.r == PURPLE.r && color.g == PURPLE.g && color.b == PURPLE.b)
-            SDL_RenderCopy(renderer, purpleLockedBall, &src, &dest);
-        else if (color.r == GREEN.r && color.g == GREEN.g && color.b == GREEN.b)
-            SDL_RenderCopy(renderer, greenLockedBall, &src, &dest);
-        else if (color.r == WHEAT.r && color.g == WHEAT.g && color.b == WHEAT.b)
-            SDL_RenderCopy(renderer, silverLockedBall, &src, &dest);
-        else if (color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b)
-            SDL_RenderCopy(renderer, yellowLockedBall, &src, &dest);
-    }
-    else if(ball.level == 0) {
-        if(ball.type != 't') {
-            if (color.r == RED.r && color.g == RED.g && color.b == RED.b)
+
+    if (ball.type == 'c' || ball.type == 'f') {
+        if (ball.level == 1) {
+            if (colorsAreTheSame(color, RED))
+                SDL_RenderCopy(renderer, redLockedBall, &src, &dest);
+            else if (colorsAreTheSame(color, CYAN))
+                SDL_RenderCopy(renderer, cyanLockedBall, &src, &dest);
+            else if (colorsAreTheSame(color, BLUE))
+                SDL_RenderCopy(renderer, blueLockedBall, &src, &dest);
+            else if (colorsAreTheSame(color, PURPLE))
+                SDL_RenderCopy(renderer, purpleLockedBall, &src, &dest);
+            else if (colorsAreTheSame(color, GREEN))
+                SDL_RenderCopy(renderer, greenLockedBall, &src, &dest);
+            else if (colorsAreTheSame(color, WHEAT))
+                SDL_RenderCopy(renderer, silverLockedBall, &src, &dest);
+            else if (colorsAreTheSame(color, YELLOW))
+                SDL_RenderCopy(renderer, yellowLockedBall, &src, &dest);
+
+        } else if (ball.level == 0) {
+
+            if (colorsAreTheSame(color, RED))
                 SDL_RenderCopy(renderer, redNormalBall, &src, &dest);
-            else if (color.r == CYAN.r && color.g == CYAN.g && color.b == CYAN.b)
+            else if (colorsAreTheSame(color, CYAN))
                 SDL_RenderCopy(renderer, cyanNormalBall, &src, &dest);
-            else if (color.r == BLUE.r && color.g == BLUE.g && color.b == BLUE.b)
+            else if (colorsAreTheSame(color, BLUE))
                 SDL_RenderCopy(renderer, blueNormalBall, &src, &dest);
-            else if (color.r == PURPLE.r && color.g == PURPLE.g && color.b == PURPLE.b)
+            else if (colorsAreTheSame(color, PURPLE))
                 SDL_RenderCopy(renderer, purpleNormalBall, &src, &dest);
-            else if (color.r == GREEN.r && color.g == GREEN.g && color.b == GREEN.b)
+            else if (colorsAreTheSame(color, GREEN))
                 SDL_RenderCopy(renderer, greenNormalBall, &src, &dest);
-            else if (color.r == WHEAT.r && color.g == WHEAT.g && color.b == WHEAT.b)
+            else if (colorsAreTheSame(color, WHEAT))
                 SDL_RenderCopy(renderer, silverNormalBall, &src, &dest);
-            else if (color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b)
+            else if (colorsAreTheSame(color, YELLOW))
                 SDL_RenderCopy(renderer, yellowNormalBall, &src, &dest);
+
         }
-        else {
-            SDL_Color secColor = ball.second_color;
-            if ((color.r == RED.r && color.g == RED.g && color.b == RED.b) && (secColor.r == BLUE.r && secColor.g == BLUE.g && secColor.b == BLUE.b))
-                SDL_RenderCopy(renderer, redBlueBall, &src, &dest);
-            else if ((secColor.r == RED.r && secColor.g == RED.g && secColor.b == RED.b) && (color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b))
-                SDL_RenderCopy(renderer, yellowRedBall, &src, &dest);
-            else if ((color.r == BLUE.r && color.g == BLUE.g && color.b == BLUE.b) && (secColor.r == YELLOW.r && secColor.g == YELLOW.g && secColor.b == YELLOW.b))
-                SDL_RenderCopy(renderer, blueYellowBall, &src, &dest);
-        }
+
+    } else if (ball.type == 't') {
+        if (colorsAreTheSame(ball.color, RED) && colorsAreTheSame(ball.second_color, BLUE))
+            SDL_RenderCopy(renderer, redBlueBall, &src, &dest);
+        else if (colorsAreTheSame(ball.color, YELLOW) && colorsAreTheSame(ball.second_color, RED))
+            SDL_RenderCopy(renderer, yellowRedBall, &src, &dest);
+        else if (colorsAreTheSame(ball.color, BLUE) && colorsAreTheSame(ball.second_color, YELLOW))
+            SDL_RenderCopy(renderer, blueYellowBall, &src, &dest);
     }
-    else
-        aacircleRGBA(renderer, Sint16(xCom + radius), Sint16(yCom + radius), Sint16(radius), color.r, color.g, color.b,255);
+
 
 }
 
@@ -1517,7 +1518,6 @@ void handleGameOver() {
         sleep(3);
     #endif
 
-
     showScore("loose");
 
     game_page_state = "out";
@@ -1525,7 +1525,7 @@ void handleGameOver() {
 }
 
 
-void showScore(string type){
+void showScore(string type) {
 
     while (fell_balls > 0) {
 
@@ -1551,16 +1551,15 @@ void showScore(string type){
 
     }else{
 
-    }
-
     // while loop for getting events
 
-//    bool con = true;
-//    while(con){
-//
-//    }
+    //    bool con = true;
+    //    while(con){
+    //
+    //    }
 
 
+    }
 }
 
 

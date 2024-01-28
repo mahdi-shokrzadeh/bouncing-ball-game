@@ -107,7 +107,7 @@ int level_1[20][12] = {
 
 
 // Timer
-#define TIMER  30
+#define TIMER  50
 
 
 // SDL setup
