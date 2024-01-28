@@ -564,21 +564,20 @@ void initializeBalls() {
                     } else if (pattern[i - 1][j] == 3) {
 
                         ball.type = 't';
-                        int k = rand() % 3;
-
+                        int k = rand() % 2;
                         switch (k) {
                             case 0:
                                 ball.color = BLUE;
                                 ball.second_color = YELLOW;
                                 break;
                             case 1:
-                                ball.color = YELLOW;
-                                ball.second_color = RED;
-
-                                break;
-                            default:
                                 ball.color = RED;
                                 ball.second_color = BLUE;
+                                break;
+
+                            default:
+                                ball.color = YELLOW;
+                                ball.second_color = RED;
 
                         }
                     }
@@ -1150,8 +1149,9 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
 void filterByColor(vector<ELEMENT> &elements, BALL ball) {
     for (auto it = elements.begin(); it != elements.end();) {
         if (balls[it->i][it->j].type == 't') {
+            cout << it->i << " " << it->j << endl;
             if (!colorsAreTheSame(balls[it->i][it->j].color, ball.color) &&
-                !colorsAreTheSame(balls[it->i][it->j].color, ball.second_color)) {
+                !colorsAreTheSame(balls[it->i][it->j].second_color, ball.color)) {
                 elements.erase(it);
             } else {
                 ++it;
@@ -1188,7 +1188,6 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
     queue.push_back(zero);
 
     while (!queue.empty()) {
-
         ELEMENT el = queue[0];
         vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
         filterByColor(vec, in_ball);
@@ -1196,11 +1195,9 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
         visited.push_back(el);
         for (ELEMENT el2: vec) {
             if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
-//            cout << el2.i << " " << el2.j << endl;
         }
 
         queue.erase(queue.begin());
-
     }
 
 
