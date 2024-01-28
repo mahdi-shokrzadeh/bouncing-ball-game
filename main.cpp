@@ -187,7 +187,7 @@ int main(int argv, char **args) {
     destroyBallsTexture();
     destroySoundSFX();
 
-    Mix_CloseAudio();
+    //Mix_CloseAudio();
     TTF_Quit();
     SDL_Quit();
     return 0;
