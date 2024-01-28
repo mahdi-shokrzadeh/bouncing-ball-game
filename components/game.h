@@ -64,10 +64,6 @@ double degree = 180.0;
 int targeter_balls_radius = 2;
 double targeter_balls_dist = 9.0;
 
-//BALL falling_ball = {
-//        .type='f',
-//};
-
 // Flag
 ELEMENT flag = {ESCAPE_FOR_BALLS_ARRAY + 2, 0};
 
@@ -244,6 +240,7 @@ void drawSomeSections();
 
 void handleGameOver();
 
+void showScore(string type);
 // ---------------------------------------------------
 
 
@@ -1483,30 +1480,14 @@ void handleWin() {
     SDL_RenderCopy(renderer, win_texture, &win_rect_src, &win_rect);
     SDL_RenderPresent(renderer);
 
-#ifdef _WIN32
-    Sleep(3000);
-#else
-    sleep(3);
-#endif
+    #ifdef _WIN32
+        Sleep(3000);
+    #else
+        sleep(3);
+    #endif
 
-    while (fell_balls > 0) {
 
-        SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
-        SDL_RenderClear(renderer);
-
-        score += 15;
-        textRender(score_surface, score_texture, score_rect_src, score_rect,
-                   60, 300, 1.0, "Your final score: " + to_string(score));
-        SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
-#ifdef _WIN32
-        Sleep(30);
-#else
-        usleep(30000);
-#endif
-        fell_balls--;
-        SDL_RenderPresent(renderer);
-
-    }
+    showScore("win");
 
     game_page_state = "out";
 
@@ -1529,6 +1510,58 @@ void handleGameOver() {
                loose_coor.i, loose_coor.j, 1.0, "Game Over!");
     SDL_RenderCopy(renderer, loose_texture, &loose_rect_src, &loose_rect);
     SDL_RenderPresent(renderer);
+
+    #ifdef _WIN32
+        Sleep(3000);
+    #else
+        sleep(3);
+    #endif
+
+
+    showScore("loose");
+
+    game_page_state = "out";
+
 }
+
+
+void showScore(string type){
+
+    while (fell_balls > 0) {
+
+        SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
+        SDL_RenderClear(renderer);
+
+        score += 15;
+        textRender(score_surface, score_texture, score_rect_src, score_rect,
+                   60, 300, 1.0, "Your final score: " + to_string(score));
+        SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
+        #ifdef _WIN32
+                Sleep(30);
+        #else
+                usleep(30000);
+        #endif
+        fell_balls--;
+        SDL_RenderPresent(renderer);
+
+    }
+
+    // drawing buttons based on loose ore win state
+    if(type == "win"){
+
+    }else{
+
+    }
+
+    // while loop for getting events
+
+//    bool con = true;
+//    while(con){
+//
+//    }
+
+
+}
+
 
 #endif //BOUNCING_BALL_GAME_GAME_H
