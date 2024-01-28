@@ -126,6 +126,12 @@ int soundVolume = 0;
 int musicVolume = 0;
 theme th = th1;
 
+// logo
+
+SDL_Surface *logoSurface = NULL;
+SDL_Texture *logo = NULL;
+SDL_Rect logoRectSrc;
+SDL_Rect logoRect;
 
 // Buttons setup for making them global
 
@@ -392,6 +398,19 @@ SDL_Texture *yellowNormalBall = NULL;
 SDL_Surface *silverNormalBallSurface = NULL;
 SDL_Texture *silverNormalBall = NULL;
 
+// two colors variables
+
+// locked colors variables
+
+// multi color ball variables
+
+// game SFX variables
+
+Mix_Chunk *winningSound = NULL;
+
+Mix_Chunk *clickSound = NULL;
+
+Mix_Chunk *losingSound = NULL;
 
 
 #endif //BOUNCING_BALL_GAME_SETTINGS_H
