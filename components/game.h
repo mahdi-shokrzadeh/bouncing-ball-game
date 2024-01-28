@@ -3,10 +3,10 @@
 
 #ifdef _WIN32
 
-    #include <windows.h>
+#include <windows.h>
 
 #else
-    #include <unistd.h>
+#include <unistd.h>
 #endif
 
 // variables related to targeter
@@ -157,7 +157,26 @@ SDL_Rect shooter_section = {10, 550, 580, 160};
 // Game
 
 string game_state = "running";
+string game_mode = "time";
 int time_to_wait = 9;
+bool throw_is_disabled = false;
+
+// Timer mode
+auto start_time = std::chrono::high_resolution_clock::now();
+int timer = TIMER;
+
+
+
+// timer
+SDL_Surface *timer_surface;
+SDL_Texture *timer_texture;
+SDL_Rect timer_rect_src, timer_rect;
+ELEMENT timer_coor = {
+        30,
+        SCREEN_HEIGHT - 60,
+};
+
+
 
 void handleGameProcess();
 
@@ -233,6 +252,9 @@ void handleGameOver();
 void handleGameProcess() {
 
     game_page_state = "game";
+
+    // time init
+     start_time = chrono::high_resolution_clock::now();
 
 
     initializeBalls();
@@ -320,6 +342,8 @@ void handleGameProcess() {
             destroyIt(score_surface, score_texture);
             destroyIt(win_surface, win_texture);
             destroyIt(loose_surface, loose_texture);
+            destroyIt(timer_surface, timer_texture);
+
         }
 
     }
@@ -329,138 +353,179 @@ void handleGameProcess() {
 
 void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
-    bool ball_is_falling = false;
-    // Blank out the renderer with all black
-    SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
-    SDL_RenderClear(renderer);
+    if (game_mode == "normal" || game_mode == "time") {
 
-    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+        bool ball_is_falling = false;
+        // Blank out the renderer with all black
+        SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
+        SDL_RenderClear(renderer);
 
-
-    // targeter
-    drawTargeter();
-
-    // drawing balls
-
-    for (int i = 0; i < FINAL_ROWS; i++) {
-        int p = rand()%2;
-        for (int j = 0; j < 12; j++) {
-            if (balls[i][j].type != 's') {
-                BALL &ball = balls[i][j];
-                ball.center.y += vertical_speed;
-                if (ball.center.y <= SCREEN_HEIGHT + 30 && ball.center.y >= -40) {
-                    //aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,ball.color.r, ball.color.g, ball.color.b, 255);
-                    ballDraw(ball.center.x, ball.center.y, radius_of_balls, ball.color);
-
-                }
+        SDL_RenderCopy(renderer, bg, NULL, &bgRect);
 
 
-                // updating the flags
-                if (ball.center.y >= -70 && ball.center.y <= -40 && flag.i != i) {
+        // targeter
+        drawTargeter();
 
-                    flag.i = i;
-                    flag.j = j;
-                }
+        // drawing balls
 
+        for (int i = 0; i < FINAL_ROWS; i++) {
+            int p = rand() % 2;
+            for (int j = 0; j < 12; j++) {
+                if (balls[i][j].type != 's') {
+                    BALL &ball = balls[i][j];
+                    ball.center.y += vertical_speed;
+                    if (ball.center.y <= SCREEN_HEIGHT + 30 && ball.center.y >= -40) {
+                        //aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,ball.color.r, ball.color.g, ball.color.b, 255);
+                        ballDraw(ball.center.x, ball.center.y, radius_of_balls, ball.color);
 
-                // falling balls
-                if (ball.type == 'f') {
-
-                    i % 2 == 0 ? ball.center.x += 0.09 : ball.center.x -= 0.03 ;
-                    ball.center.y += falling_balls_speed*(1000+150-i)/1000.0;
-                    falling_balls_speed += falling_ball_acc;
-                    ball_is_falling = true;
-                    if (ball.center.y >= SCREEN_HEIGHT + 20) {
-                        ball.center = {10000, 10000};
-                        ball.type = 's';
-                        temp_fell_balls--;
                     }
+
+
+                    // updating the flags
+                    if (ball.center.y >= -70 && ball.center.y <= -40 && flag.i != i) {
+
+                        flag.i = i;
+                        flag.j = j;
+                    }
+
+
+                    // falling balls
+                    if (ball.type == 'f') {
+
+                        i % 2 == 0 ? ball.center.x += 0.09 : ball.center.x -= 0.03;
+                        ball.center.y += falling_balls_speed * (1000 + 150 - i) / 1000.0;
+                        falling_balls_speed += falling_ball_acc;
+                        ball_is_falling = true;
+                        if (ball.center.y >= SCREEN_HEIGHT + 20) {
+                            ball.center = {10000, 10000};
+                            ball.type = 's';
+                            temp_fell_balls--;
+                        }
+                    }
+
+
+
+                    // checking if game is over or win
+                    // c -> also lock and other types
+                    if (ball.center.y >= 530 && (ball.type == 'c' || ball.type == 'e')) {
+                        game_state = "over";
+                        game_page_state = "over";
+                    }
+
+
                 }
-
-
-
-                // checking if game is over or win
-                // c -> also lock and other types
-                if (ball.center.y >= 530 && (ball.type == 'c' || ball.type == 'e')) {
-                    game_state = "over";
-                    game_page_state = "over";
-                }
-
-
             }
         }
-    }
-    // updating end_pointer_ball center
-    for (int j = 0; j < 12; j++) {
-        if (balls[FINAL_ROWS][j].type != 's') {
-            BALL &ball = balls[FINAL_ROWS][j];
-            ball.center.y += vertical_speed;
+        // updating end_pointer_ball center
+        for (int j = 0; j < 12; j++) {
+            if (balls[FINAL_ROWS][j].type != 's') {
+                BALL &ball = balls[FINAL_ROWS][j];
+                ball.center.y += vertical_speed;
+            }
         }
-    }
-    end_pointer_ball.center.y += vertical_speed;
+        end_pointer_ball.center.y += vertical_speed;
 
 
-    // shooter
-    SDL_RenderDrawRect(renderer, &shooter_section);
-    drawShootingBalls(shooter_ball, reserved_ball);
+        // shooter
+        SDL_RenderDrawRect(renderer, &shooter_section);
+        drawShootingBalls(shooter_ball, reserved_ball);
 
 
-    // draw the end section
-    if (end_pointer_ball.center.y >= -50) {
-        SDL_Rect r;
-        r.x = 5;
-        r.y = end_pointer_ball.center.y - 85;
-        r.w = SCREEN_WIDTH - 10;
-        r.h = 50;
-        SDL_SetRenderDrawColor(renderer, PLUM.r, PLUM.g, PLUM.b, 255);
-        SDL_RenderFillRect(renderer, &r);
-        flag.i = FINAL_ROWS;
-    }
+        // draw the end section
+        if (end_pointer_ball.center.y >= -50) {
+            SDL_Rect r;
+            r.x = 5;
+            r.y = end_pointer_ball.center.y - 85;
+            r.w = SCREEN_WIDTH - 10;
+            r.h = 50;
+            SDL_SetRenderDrawColor(renderer, PLUM.r, PLUM.g, PLUM.b, 255);
+            SDL_RenderFillRect(renderer, &r);
+            flag.i = FINAL_ROWS;
+        }
 
-    // draw pause menu button
-    gameRenderImage(menu_btn_tex, menu_btn_rect);
-
-
-    // score
-
-    textRender(score_surface, score_texture, score_rect_src, score_rect,
-               score_x, score_y, 0.7, to_string(score));
-    SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
+        // draw pause menu button
+        gameRenderImage(menu_btn_tex, menu_btn_rect);
 
 
+        // score
 
-    // handle ball shooting
-    if (ball_is_being_thrown && game_state == "running") {
-        handleBallShooting();
-        checkCollShooterAndBalls();
-    }
-
-    // cehck the shooting ball color
-    checkColorOfShootingBalls(shooter_ball);
-    checkColorOfShootingBalls(reserved_ball);
+        textRender(score_surface, score_texture, score_rect_src, score_rect,
+                   score_x, score_y, 0.7, to_string(score));
+        SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
 
 
-    // set number of balls
-    number_of_balls = calculateBalls();
+
+        // handle ball shooting
+        if (ball_is_being_thrown && game_state == "running") {
+            handleBallShooting();
+            checkCollShooterAndBalls();
+        }
+
+        // cehck the shooting ball color
+
+        if(!throw_is_disabled){
+            checkColorOfShootingBalls(shooter_ball);
+            checkColorOfShootingBalls(reserved_ball);
+        }
+
+        // set number of balls
+        number_of_balls = calculateBalls();
+
+        // Game Over for timer mode
+        if(game_mode == "time"){
+
+            // draw timer
+
+            textRender(timer_surface, timer_texture, timer_rect_src, timer_rect,
+                       timer_coor.i, timer_coor.j, 0.8, to_string(timer));
+            SDL_RenderCopy(renderer, timer_texture, &timer_rect_src, &timer_rect);
+
+            if(timer <= 0){
+                game_state = "over";
+                game_page_state = "over";
+                return;
+            }
+
+            // updating timer
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start_time);
+            if (TIMER - duration.count() != timer) {
+                timer = TIMER - duration.count();
+             }
+
+        }
 
 
-    if (number_of_balls == 0 && !ball_is_being_thrown) {
-        game_state = "win";
-        // deleting the shooting and reserved ball
+        if (number_of_balls == 0 && !ball_is_being_thrown) {
+            game_state = "win";
+            throw_is_disabled = true;
+
+            // deleting the shooting and reserved ball
 //        shooter_ball.color = BLACK;
 //        reserved_ball.color = BLACK;
-            shooter_ball.center.y = 1000;
-            reserved_ball.center.y = 1000;
+//            shooter_ball.center.y = 1000;
+//            reserved_ball.center.y = 1000;
+
+        }
+
+        // handle winning state
+        if (!ball_is_falling && number_of_balls == 0 && !ball_is_being_thrown) {
+            if (time_to_wait == 0) {
+                game_page_state = "win";
+                cout << "Won!" << endl;
+            }
+            time_to_wait--;
+        }
+
+
+    } else if (game_mode == "random") {
+
+
+    } else {
+
+
     }
 
-    // handle winning state
-    if (!ball_is_falling && number_of_balls == 0 && !ball_is_being_thrown) {
-        if (time_to_wait == 0) {
-            game_page_state = "win";
-            cout << "Won!" << endl;
-        }
-        time_to_wait--;
-    }
 
 }
 
@@ -601,7 +666,7 @@ void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
 void drawShootingBalls(BALL shooter_ball, BALL reserved_ball) {
 
     //aacircleRGBA(renderer, Sint16(shooter_ball.center.x),Sint16(shooter_ball.center.y),radius_of_balls, shooter_ball.color.r,shooter_ball.color.g, shooter_ball.color.b, 255);
-    ballDraw(shooter_ball.center.x,shooter_ball.center.y,radius_of_balls, shooter_ball.color);
+    ballDraw(shooter_ball.center.x, shooter_ball.center.y, radius_of_balls, shooter_ball.color);
 
 
     //aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), radius_of_balls,reserved_ball.color.r, reserved_ball.color.g, reserved_ball.color.b, 255);
@@ -638,7 +703,8 @@ void drawTargeter() {
 
         if (calculateDistance(targeter_point, center_of_shooting_ball) >= 25) {
 
-            filledCircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y),Sint16(targeter_balls_radius),WHITE.r, WHITE.g, WHITE.b, 255);
+            filledCircleRGBA(renderer, Sint16(targeter_point.x), Sint16(targeter_point.y),
+                             Sint16(targeter_balls_radius), WHITE.r, WHITE.g, WHITE.b, 255);
         }
 
         targeter_point.y += dy;
@@ -662,22 +728,23 @@ void ballDraw(int xCom, int yCom, int radius, SDL_Color color) {
     dest.w = 400 * 0.11;
     dest.h = 400 * 0.11;
 
-    if(color.r == RED.r && color.g == RED.g && color.b == RED.b)
+    if (color.r == RED.r && color.g == RED.g && color.b == RED.b)
         SDL_RenderCopy(renderer, redNormalBall, &src, &dest);
-    else if(color.r == CYAN.r && color.g == CYAN.g && color.b == CYAN.b)
+    else if (color.r == CYAN.r && color.g == CYAN.g && color.b == CYAN.b)
         SDL_RenderCopy(renderer, cyanNormalBall, &src, &dest);
-    else if(color.r == BLUE.r && color.g == BLUE.g && color.b == BLUE.b)
+    else if (color.r == BLUE.r && color.g == BLUE.g && color.b == BLUE.b)
         SDL_RenderCopy(renderer, blueNormalBall, &src, &dest);
-    else if(color.r == PURPLE.r && color.g == PURPLE.g && color.b == PURPLE.b)
+    else if (color.r == PURPLE.r && color.g == PURPLE.g && color.b == PURPLE.b)
         SDL_RenderCopy(renderer, purpleNormalBall, &src, &dest);
-    else if(color.r == GREEN.r && color.g == GREEN.g && color.b == GREEN.b)
+    else if (color.r == GREEN.r && color.g == GREEN.g && color.b == GREEN.b)
         SDL_RenderCopy(renderer, greenNormalBall, &src, &dest);
-    else if(color.r == WHEAT.r && color.g == WHEAT.g && color.b == WHEAT.b)
+    else if (color.r == WHEAT.r && color.g == WHEAT.g && color.b == WHEAT.b)
         SDL_RenderCopy(renderer, silverNormalBall, &src, &dest);
-    else if(color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b)
+    else if (color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b)
         SDL_RenderCopy(renderer, yellowNormalBall, &src, &dest);
     else
-        aacircleRGBA(renderer, Sint16(xCom + radius), Sint16(yCom + radius),Sint16(radius), color.r, color.g, color.b, 255);
+        aacircleRGBA(renderer, Sint16(xCom + radius), Sint16(yCom + radius), Sint16(radius), color.r, color.g, color.b,
+                     255);
 
 
 }
@@ -742,6 +809,8 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
 
 void handleBallShooting() {
 
+    if(throw_is_disabled) return;
+
     if (thrown_ball.center.y + dyOfThrownBall <= 0) {
         ball_is_being_thrown = false;
     } else {
@@ -754,7 +823,7 @@ void handleBallShooting() {
     thrown_ball.center.y += dyOfThrownBall;
 
     //aacircleRGBA(renderer, Sint16(thrown_ball.center.x), Sint16(thrown_ball.center.y),Sint16(radius_of_balls), thrown_ball.color.r, thrown_ball.color.g, thrown_ball.color.b, 255);
-    ballDraw(thrown_ball.center.x, thrown_ball.center.y,radius_of_balls, thrown_ball.color);
+    ballDraw(thrown_ball.center.x, thrown_ball.center.y, radius_of_balls, thrown_ball.color);
 
 }
 
@@ -1323,11 +1392,11 @@ void handleWin() {
     SDL_RenderCopy(renderer, win_texture, &win_rect_src, &win_rect);
     SDL_RenderPresent(renderer);
 
-    #ifdef _WIN32
-        Sleep(3000);
-    #else
-        sleep(3);
-    #endif
+#ifdef _WIN32
+    Sleep(3000);
+#else
+    sleep(3);
+#endif
 
     while (fell_balls > 0) {
 
@@ -1336,13 +1405,13 @@ void handleWin() {
 
         score += 15;
         textRender(score_surface, score_texture, score_rect_src, score_rect,
-                   60, 300, 1.0, "Your final score: "+to_string(score));
+                   60, 300, 1.0, "Your final score: " + to_string(score));
         SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
-        #ifdef _WIN32
-                Sleep(30);
-        #else
-                usleep(30000);
-        #endif
+#ifdef _WIN32
+        Sleep(30);
+#else
+        usleep(30000);
+#endif
         fell_balls--;
         SDL_RenderPresent(renderer);
 
@@ -1353,7 +1422,7 @@ void handleWin() {
 }
 
 
-void handleGameOver(){
+void handleGameOver() {
 
     // Blank out the renderer with all black
     SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);

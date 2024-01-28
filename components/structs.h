@@ -13,6 +13,7 @@ typedef struct BALL {
     char type='s';
     SDL_Color color;
     DOUBLE_POINT center;
+    SDL_Color second_color = BLACK;
 } BALL;
 
 typedef struct ELEMENT {
