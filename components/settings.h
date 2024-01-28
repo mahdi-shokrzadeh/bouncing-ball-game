@@ -381,6 +381,19 @@ SDL_Texture *yellowNormalBall = NULL;
 SDL_Surface *silverNormalBallSurface = NULL;
 SDL_Texture *silverNormalBall = NULL;
 
+// two colors variables
+
+// locked colors variables
+
+// multi color ball variables
+
+// game SFX variables
+
+Mix_Chunk *winningSound = NULL;
+
+Mix_Chunk *clickSound = NULL;
+
+Mix_Chunk *losingSound = NULL;
 
 
 #endif //BOUNCING_BALL_GAME_SETTINGS_H

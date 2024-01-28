@@ -21,8 +21,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-//#include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL2/SDL2_gfx.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
+//#include <SDL2/SDL2_gfx.h>
 
 using namespace std;
 
@@ -161,6 +161,7 @@ int main(int argv, char **args) {
 
     initializeButtonsAndBG();
     initializeBallsTexture();
+    initializeSoundSFX();
 
 
     //loop
@@ -183,7 +184,9 @@ int main(int argv, char **args) {
 
     destroyButtonsAndBG();
     destroyBallsTexture();
+    destroySoundSFX();
 
+    Mix_CloseAudio();
     TTF_Quit();
     SDL_Quit();
     return 0;

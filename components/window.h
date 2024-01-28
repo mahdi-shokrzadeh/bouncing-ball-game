@@ -28,6 +28,12 @@ void initializeBallsTexture() {
 
 }
 
+void initializeSoundSFX() {
+    winningSound = Mix_LoadWAV("assets/SFX/win.wav");
+    clickSound = Mix_LoadWAV("assets/SFX/click.wav");
+    losingSound = Mix_LoadWAV("assets/SFX/lose.wav");
+}
+
 void destroyBallsTexture() {
 
     SDL_FreeSurface(redNormalBallSurface);
@@ -53,6 +59,11 @@ void destroyBallsTexture() {
 
 }
 
+void destroySoundSFX() {
+    Mix_FreeChunk(winningSound);
+    Mix_FreeChunk(clickSound);
+    Mix_FreeChunk(losingSound);
+}
 
 // building and destroying
 
@@ -400,6 +411,10 @@ void destroyButtonsAndBG() {
 
 void reInitialingSoundMusic() {
     soundInsideRect.w = soundVolume;
+    Mix_VolumeChunk(winningSound, soundVolume * 128 / 100);
+    Mix_VolumeChunk(losingSound, soundVolume * 128 / 100);
+    Mix_VolumeChunk(clickSound, soundVolume * 128 / 100);
+
     musicInsideRect.w = musicVolume;
     Mix_VolumeMusic(musicVolume * 128 / 100);
 }
