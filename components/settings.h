@@ -400,6 +400,13 @@ SDL_Texture *silverNormalBall = NULL;
 
 // two colors variables
 
+SDL_Surface *blueYellowBallSurface = NULL;
+SDL_Texture *blueYellowBall = NULL;
+SDL_Surface *redBlueBallSurface = NULL;
+SDL_Texture *redBlueBall = NULL;
+SDL_Surface *yellowRedBallSurface = NULL;
+SDL_Texture *yellowRedBall = NULL;
+
 // locked colors variables
 
 SDL_Surface *redLockedBallSurface = NULL;

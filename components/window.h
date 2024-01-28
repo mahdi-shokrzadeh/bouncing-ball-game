@@ -46,6 +46,17 @@ void initializeBallsTexture() {
     cyanLockedBallSurface = IMG_Load("assets/Game/Balls/cyanLock.png");
     cyanLockedBall = SDL_CreateTextureFromSurface(renderer, cyanLockedBallSurface);
 
+    // two colors
+
+    blueYellowBallSurface = IMG_Load("assets/Game/Balls/blueYellow.png");
+    blueYellowBall = SDL_CreateTextureFromSurface(renderer, blueYellowBallSurface);
+
+    redBlueBallSurface = IMG_Load("assets/Game/Balls/blueLredBlueock.png");
+    redBlueBall = SDL_CreateTextureFromSurface(renderer, redBlueBallSurface);
+
+    redBlueBallSurface = IMG_Load("assets/Game/Balls/redBlue.png");
+    redBlueBall = SDL_CreateTextureFromSurface(renderer, redBlueBallSurface);
+
 }
 
 void initializeSoundSFX() {
@@ -97,6 +108,16 @@ void destroyBallsTexture() {
     SDL_FreeSurface(purpleLockedBallSurface);
     SDL_DestroyTexture(purpleLockedBall);
 
+    // two colors
+
+    SDL_FreeSurface(blueYellowBallSurface);
+    SDL_DestroyTexture(blueYellowBall);
+
+    SDL_FreeSurface(redBlueBallSurface);
+    SDL_DestroyTexture(redBlueBall);
+
+    SDL_FreeSurface(yellowRedBallSurface);
+    SDL_DestroyTexture(yellowRedBall);
 
 }
 

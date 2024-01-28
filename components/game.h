@@ -791,6 +791,15 @@ void ballDraw(BALL ball) {
             else if (color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b)
                 SDL_RenderCopy(renderer, yellowNormalBall, &src, &dest);
         }
+        else {
+            SDL_Color secColor = ball.second_color;
+            if ((color.r == RED.r && color.g == RED.g && color.b == RED.b) && (secColor.r == BLUE.r && secColor.g == BLUE.g && secColor.b == BLUE.b))
+                SDL_RenderCopy(renderer, redBlueBall, &src, &dest);
+            else if ((secColor.r == RED.r && secColor.g == RED.g && secColor.b == RED.b) && (color.r == YELLOW.r && color.g == YELLOW.g && color.b == YELLOW.b))
+                SDL_RenderCopy(renderer, yellowRedBall, &src, &dest);
+            else if ((color.r == BLUE.r && color.g == BLUE.g && color.b == BLUE.b) && (secColor.r == YELLOW.r && secColor.g == YELLOW.g && secColor.b == YELLOW.b))
+                SDL_RenderCopy(renderer, blueYellowBall, &src, &dest);
+        }
     }
     else
         aacircleRGBA(renderer, Sint16(xCom + radius), Sint16(yCom + radius), Sint16(radius), color.r, color.g, color.b,255);
