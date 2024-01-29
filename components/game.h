@@ -103,6 +103,7 @@ SDL_Texture *menu_btn_tex;
 // mouse
 bool mouse_click = false;
 int mouse_x = 0, mouse_y = 0;
+int free_mouse_x = 0, free_mouse_y = 0;
 
 // falling balls speed
 double falling_balls_speed = 1.9;
@@ -301,6 +302,8 @@ void handleGameProcess() {
                 mouse_click = false;
             }
         }
+
+        SDL_GetMouseState(&free_mouse_x, &free_mouse_y);
 
         if (game_page_state == "game") {
 
@@ -1471,6 +1474,8 @@ void handleWin() {
 
     Mix_PlayChannel(-1, winningSound, 0);
 
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
     textRender(win_surface, win_texture, win_rect_src, win_rect,
                win_coor.i, win_coor.j, 0.6, "You popped all bubbles!");
     SDL_RenderCopy(renderer, win_texture, &win_rect_src, &win_rect);
@@ -1501,6 +1506,8 @@ void handleGameOver() {
 
     Mix_PlayChannel(-1, losingSound, 0);
 
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
 
     textRender(loose_surface, loose_texture, loose_rect_src, loose_rect,
                loose_coor.i, loose_coor.j, 1.0, "Game Over!");
@@ -1527,6 +1534,8 @@ void showScore(string type) {
         SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
         SDL_RenderClear(renderer);
 
+        SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
         score += 15;
         textRender(score_surface, score_texture, score_rect_src, score_rect,
                    60, 300, 1.0, "Your final score: " + to_string(score));
@@ -1534,7 +1543,7 @@ void showScore(string type) {
         #ifdef _WIN32
                 Sleep(30);
         #else
-                usleep(30000);
+                sleep(30000);
         #endif
         fell_balls--;
         SDL_RenderPresent(renderer);
@@ -1542,18 +1551,66 @@ void showScore(string type) {
     }
 
     // drawing buttons based on loose ore win state
-    if(type == "win"){
 
-    }else{
+    bool con = true;
+    while (con) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                con = false;
+                //game_loop = SDL_FALSE;
+                /*
+                 * inja har kari doost dari bokon
+                 * doost aziz
+                 * */
+                main_loop = SDL_FALSE;
+            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                mouse_click = true;
+                mouse_x = event.button.x;
+                mouse_y = event.button.y;
+            } else if (event.type == SDL_MOUSEBUTTONUP) {
+                mouse_click = false;
+            }
+        }
+        SDL_GetMouseState(&free_mouse_x, &free_mouse_y);
 
-    // while loop for getting events
 
-    //    bool con = true;
-    //    while(con){
-    //
-    //    }
+        SDL_RenderCopy(renderer, bg, NULL, &bgRect);
 
+        textRender(score_surface, score_texture, score_rect_src, score_rect,
+                   60, 300, 1.0, "Your final score: " + to_string(score));
+        SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
 
+        if (!checkInOut(free_mouse_x, free_mouse_y, mainMenuButtonRect))
+            SDL_RenderCopy(renderer, mainMenuButton, &mainMenuButtonRectSrc, &mainMenuButtonRect);
+        else
+            SDL_RenderCopy(renderer, mainMenuHoverButton, &mainMenuHoverButtonRectSrc, &mainMenuHoverButtonRect);
+        SDL_RenderCopy(renderer, mainMenuText, &mainMenuTextRectSrc, &mainMenuTextRect);
+
+        if (type == "win") {
+            textRender(win_surface, win_texture, win_rect_src, win_rect,
+                       loose_coor.i, loose_coor.j - 50, 1, "You won!");
+            SDL_RenderCopy(renderer, win_texture, &win_rect_src, &win_rect);
+        }
+        else {
+            textRender(loose_surface, loose_texture, loose_rect_src, loose_rect,
+                       loose_coor.i, loose_coor.j - 50, 1.0, "You lost!");
+            SDL_RenderCopy(renderer, loose_texture, &loose_rect_src, &loose_rect);
+        }
+
+        if(mouse_click && checkInOut(mouse_x, mouse_y, mainMenuButtonRect)) {
+            saveScore();
+            con = false;
+            //backToMain();
+            /*
+            * inja har kari doost dari bokon
+            * doost aziz
+            * */
+        }
+        if(mouse_click)
+            mouse_click = !mouse_click;
+
+        SDL_RenderPresent(renderer);
+        SDL_Delay(10);
     }
 }
 

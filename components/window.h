@@ -228,6 +228,14 @@ void initializeButtonsAndBG() {
     imageRender(volumeOnButtonSurface, volumeOnButton,volumeOnButtonRectSrc,
                 volumeOnButtonRect, 60, 60, 2, "assets/UiUx/volume_on.svg");
 
+    //mainMenu button
+    imageRender(mainMenuButtonSurface, mainMenuButton,mainMenuButtonRectSrc,
+                mainMenuButtonRect, 300, 500, 0.3, th.button);
+    imageRender(mainMenuHoverButtonSurface, mainMenuHoverButton,mainMenuHoverButtonRectSrc,
+                mainMenuHoverButtonRect, 300, 500, 0.3, th.buttonHover);
+    textRender(mainMenuTextSurface, mainMenuText, mainMenuTextRectSrc,
+               mainMenuTextRect, 363, 564, 0.5, "main menu");
+
     //start button
     imageRender(startButtonSurface, startButton,startButtonRectSrc,
                 startButtonRect, 100, 300, 0.3, th.button);
@@ -408,6 +416,13 @@ void destroyButtonsAndBG() {
 
     SDL_FreeSurface(volumeOffButtonSurface);
     SDL_DestroyTexture(volumeOffButton);
+
+    SDL_FreeSurface(mainMenuButtonSurface);
+    SDL_DestroyTexture(mainMenuButton);
+    SDL_FreeSurface(mainMenuHoverButtonSurface);
+    SDL_DestroyTexture(mainMenuHoverButton);
+    SDL_FreeSurface(mainMenuTextSurface);
+    SDL_DestroyTexture(mainMenuText);
 
     SDL_FreeSurface(startButtonSurface);
     SDL_DestroyTexture(startButton);
