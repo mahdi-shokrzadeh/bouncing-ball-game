@@ -51,11 +51,11 @@ void initializeBallsTexture() {
     blueYellowBallSurface = IMG_Load("assets/Game/Balls/blueYellow.png");
     blueYellowBall = SDL_CreateTextureFromSurface(renderer, blueYellowBallSurface);
 
-    redBlueBallSurface = IMG_Load("assets/Game/Balls/blueLredBlueock.png");
-    redBlueBall = SDL_CreateTextureFromSurface(renderer, redBlueBallSurface);
-
     redBlueBallSurface = IMG_Load("assets/Game/Balls/redBlue.png");
     redBlueBall = SDL_CreateTextureFromSurface(renderer, redBlueBallSurface);
+
+    yellowRedBallSurface = IMG_Load("assets/Game/Balls/yellowRed.png");
+    yellowRedBall = SDL_CreateTextureFromSurface(renderer, redBlueBallSurface);
 
 }
 
