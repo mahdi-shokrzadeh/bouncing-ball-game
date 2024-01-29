@@ -56,6 +56,7 @@ void loop() {
 
     map<string, bool> Locator;
     Locator["main_menu"] = true;
+    Locator["username_getter"] = false;
     Locator["start_menu"] = false;
     Locator["level_selector"] = false;
     Locator["random_mode"] = false;
@@ -77,8 +78,19 @@ void loop() {
                 main_loop = SDL_FALSE;
             } else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
-                    case SDLK_ESCAPE :
-                        main_loop = SDL_FALSE;
+                    case SDLK_BACKSPACE:
+                        if(Locator["username_getter"])
+                            if(inputText == "Enter Your Name") inputText = "";
+                            else inputText = inputText.substr(0, inputText.length() - 1);
+                        inputTextPresent();
+                        break;
+                    case SDLK_RETURN :
+                        if(Locator["username_getter"]) {
+                            inputText = "Enter Your Name";
+                            Locator["start_menu"] = !Locator["start_menu"];
+                            Locator["username_getter"] = !Locator["username_getter"];
+                        }
+                        inputTextPresent();
                         break;
                     default:
                         main_loop = SDL_TRUE;
@@ -94,6 +106,10 @@ void loop() {
                 y_MouseClicked = event.button.y;
             } else if (event.type == SDL_MOUSEBUTTONUP) {
                 MouseClicked = false;
+            } else if (event.type == SDL_TEXTINPUT && Locator["username_getter"]) {
+                if(inputText == "Enter Your Name") inputText = "";
+                inputText += event.text.text;
+                inputTextPresent();
             }
         }
 
@@ -112,6 +128,8 @@ void loop() {
 
         if (Locator["main_menu"])
             Main_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
+        else if(Locator["username_getter"])
+            username_getter(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["start_menu"])
             start_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, normal_or_timed);
         else if (Locator["level_selector"])
@@ -167,6 +185,9 @@ int main(int argv, char **args) {
     initializeBallsTexture();
     initializeSoundSFX();
 
+    SDL_StartTextInput();
+    inputTextPresent();
+
 
     //loop
     loop();
@@ -189,6 +210,8 @@ int main(int argv, char **args) {
     destroyButtonsAndBG();
     destroyBallsTexture();
     destroySoundSFX();
+
+    SDL_StopTextInput();
 
     //Mix_CloseAudio();
     TTF_Quit();

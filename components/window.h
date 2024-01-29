@@ -166,6 +166,21 @@ void textRender(SDL_Surface* &surface, SDL_Texture* &texture,
     dest.h = surface->h * multiplier;
 }
 
+void inputTextPresent() {
+    if (usernameInputBox) {
+        SDL_DestroyTexture(usernameInputBox);
+        usernameInputBox = NULL;
+    }
+    usernameInputBoxSurface = TTF_RenderText_Solid(font, inputText.c_str(), BLACK);
+    if (usernameInputBoxSurface) {
+        usernameInputBox = SDL_CreateTextureFromSurface(renderer, usernameInputBoxSurface);
+        usernameInputBoxRect.w = usernameInputBoxSurface->w;
+        usernameInputBoxRect.h = usernameInputBoxSurface->h;
+        SDL_FreeSurface(usernameInputBoxSurface);
+        usernameInputBoxSurface = NULL;
+    }
+}
+
 void initializeButtonsAndBG() {
 
     bgSurface = IMG_Load(th.bg);
@@ -228,6 +243,28 @@ void initializeButtonsAndBG() {
                 leaderHoverButtonRect, 300, 300, 0.3, th.buttonHover);
     textRender(leaderTextSurface, leaderText, leaderTextRectSrc,
                leaderTextRect, 345, 370, 0.3, "LeaderBoard");
+
+    // login button
+    imageRender(logInButtonSurface, logInButton,logInButtonRectSrc,
+                logInButtonRect, 100, 500, 0.3, th.button);
+    imageRender(logInHoverButtonSurface, logInHoverButton,logInHoverButtonRectSrc,
+                logInHoverButtonRect, 100, 500, 0.3, th.buttonHover);
+    textRender(logInTextSurface, logInText, logInTextRectSrc,
+               logInTextRect, 163, 564, 0.5, "Login");
+
+    //sign in button
+    imageRender(signInButtonSurface, signInButton,signInButtonRectSrc,
+                signInButtonRect, 300, 500, 0.3, th.button);
+    imageRender(signInHoverButtonSurface, signInHoverButton,signInHoverButtonRectSrc,
+                signInHoverButtonRect, 300, 500, 0.3, th.buttonHover);
+    textRender(signInTextSurface, signInText, signInTextRectSrc,
+               signInTextRect, 363, 564, 0.5, "Sign in");
+
+    //log out button
+    imageRender(logOutButtonSurface, logOutButton,logOutButtonRectSrc,
+                logOutButtonRect, 300, 500, 0.3, th.button);
+    textRender(logInTextSurface, logInText, logInTextRectSrc,
+               logOutTextRect, 363, 564, 0.5, "Logout");
 
     //back button
     imageRender(backButtonSurface, backButton,backButtonRectSrc,
@@ -386,6 +423,25 @@ void destroyButtonsAndBG() {
     SDL_FreeSurface(leaderTextSurface);
     SDL_DestroyTexture(leaderText);
 
+    SDL_FreeSurface(logInButtonSurface);
+    SDL_DestroyTexture(logInButton);
+    SDL_FreeSurface(logInHoverButtonSurface);
+    SDL_DestroyTexture(logInHoverButton);
+    SDL_FreeSurface(logInTextSurface);
+    SDL_DestroyTexture(logInText);
+
+    SDL_FreeSurface(signInButtonSurface);
+    SDL_DestroyTexture(signInButton);
+    SDL_FreeSurface(signInHoverButtonSurface);
+    SDL_DestroyTexture(signInHoverButton);
+    SDL_FreeSurface(signInTextSurface);
+    SDL_DestroyTexture(signInText);
+
+    SDL_FreeSurface(logOutButtonSurface);
+    SDL_DestroyTexture(logOutButton);
+    SDL_FreeSurface(logOutTextSurface);
+    SDL_DestroyTexture(logOutText);
+
     SDL_FreeSurface(backButtonSurface);
     SDL_DestroyTexture(backButton);
     SDL_FreeSurface(backHoverButtonSurface);
@@ -514,6 +570,7 @@ void themeChanger(theme newTheme) {
     initializeButtonsAndBG();
     music = Mix_LoadMUS(th.music);
     Mix_PlayMusic(music, -1);
+    inputTextPresent();
 
 }
 
@@ -547,6 +604,25 @@ void Main_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x
         SDL_RenderCopy(renderer, leaderHoverButton, &leaderHoverButtonRectSrc, &leaderHoverButtonRect);
     SDL_RenderCopy(renderer, leaderText, &leaderTextRectSrc, &leaderTextRect);
 
+    // login button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, logInButtonRect))
+        SDL_RenderCopy(renderer, logInButton, &logInButtonRectSrc, &logInButtonRect);
+    else
+        SDL_RenderCopy(renderer, logInHoverButton, &logInHoverButtonRectSrc, &logInHoverButtonRect);
+    SDL_RenderCopy(renderer, logInText, &logInTextRectSrc, &logInTextRect);
+
+    // sign in button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, signInButtonRect))
+        SDL_RenderCopy(renderer, signInButton, &signInButtonRectSrc, &signInButtonRect);
+    else
+        SDL_RenderCopy(renderer, signInHoverButton, &signInHoverButtonRectSrc, &signInHoverButtonRect);
+    SDL_RenderCopy(renderer, signInText, &signInTextRectSrc, &signInTextRect);
+
+//    // logout button
+//    SDL_RenderCopy(renderer, logOutButton, &logOutButtonRectSrc, &logOutButtonRect);
+//    SDL_RenderCopy(renderer, logOutText, &logOutTextRectSrc, &logOutTextRect);
+
+
     // setting button
     SDL_RenderCopy(renderer, settingButton, &settingButtonRectSrc, &settingButtonRect);
 
@@ -557,7 +633,7 @@ void Main_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x
     // mouse click actions
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, startButtonRect)){
-        Locator["start_menu"] = !Locator["start_menu"];
+        Locator["username_getter"] = !Locator["username_getter"];
         Locator["main_menu"] = !Locator["main_menu"];
     }
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, leaderButtonRect)){
@@ -572,6 +648,40 @@ void Main_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x
         Locator["quit_menu"] = !Locator["quit_menu"];
         Locator["main_menu"] = !Locator["main_menu"];
     }
+    if(MouseClicked)
+        MouseClicked = !MouseClicked;
+
+
+}
+
+void username_getter(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
+
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+    //username getter
+    SDL_SetRenderDrawColor(renderer, WHITE.r, WHITE.g, WHITE.b, 255);
+    SDL_Rect temp = {50, 100, 500, 50};
+    SDL_RenderFillRect(renderer, &temp);
+    SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
+    //SDL_RenderDrawRect(renderer, &usernameInputBoxRect);
+    SDL_RenderCopy(renderer, usernameInputBox, NULL, &usernameInputBoxRect);
+
+    // back button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, backButtonRect))
+        SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
+    else
+        SDL_RenderCopy(renderer, backHoverButton, &backHoverButtonRectSrc, &backHoverButtonRect);
+    SDL_RenderCopy(renderer, backText, &backTextRectSrc, &backTextRect);
+
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)) {
+        Locator["username_getter"] = !Locator["username_getter"];
+        Locator["main_menu"] = !Locator["main_menu"];
+        inputText = "Enter Your Name";
+    }
+
     if(MouseClicked)
         MouseClicked = !MouseClicked;
 
