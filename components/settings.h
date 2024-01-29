@@ -197,6 +197,52 @@ SDL_Texture *leaderText;
 SDL_Rect leaderTextRectSrc;
 SDL_Rect leaderTextRect;
 
+SDL_Surface *signInButtonSurface = NULL;
+SDL_Texture *signInButton = NULL;
+SDL_Rect signInButtonRect;
+SDL_Rect signInButtonRectSrc;
+SDL_Surface *signInHoverButtonSurface = NULL;
+SDL_Texture *signInHoverButton = NULL;
+SDL_Rect signInHoverButtonRect;
+SDL_Rect signInHoverButtonRectSrc;
+SDL_Surface *signInTextSurface;
+SDL_Texture *signInText;
+SDL_Rect signInTextRectSrc;
+SDL_Rect signInTextRect;
+
+SDL_Surface *logInButtonSurface = NULL;
+SDL_Texture *logInButton = NULL;
+SDL_Rect logInButtonRect;
+SDL_Rect logInButtonRectSrc;
+SDL_Surface *logInHoverButtonSurface = NULL;
+SDL_Texture *logInHoverButton = NULL;
+SDL_Rect logInHoverButtonRect;
+SDL_Rect logInHoverButtonRectSrc;
+SDL_Surface *logInTextSurface;
+SDL_Texture *logInText;
+SDL_Rect logInTextRectSrc;
+SDL_Rect logInTextRect;
+
+SDL_Surface *logOutButtonSurface = NULL;
+SDL_Texture *logOutButton = NULL;
+SDL_Rect logOutButtonRect;
+SDL_Rect logOutButtonRectSrc;
+SDL_Surface *logOutTextSurface;
+SDL_Texture *logOutText;
+SDL_Rect logOutTextRectSrc;
+SDL_Rect logOutTextRect;
+
+SDL_Surface *userNameTextSurface;
+SDL_Texture *userNameText;
+SDL_Rect userNameTextRectSrc;
+SDL_Rect userNameTextRect;
+
+SDL_Surface *usernameInputBoxSurface = NULL;
+SDL_Texture *usernameInputBox = NULL;
+SDL_Rect usernameInputBoxRect = {50, 100, 200, 50};
+string inputText = "Enter Your Name";
+
+
 SDL_Surface *backButtonSurface = NULL;
 SDL_Texture *backButton = NULL;
 SDL_Rect backButtonRect;
