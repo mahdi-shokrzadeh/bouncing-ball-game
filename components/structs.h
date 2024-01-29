@@ -25,30 +25,30 @@ typedef struct ELEMENT {
 }ELEMENT;
 
 // file structures
-struct user {
+struct USER {
     int id;
     string name;
-    string password;
+    //string password;
 };
 
-struct score {
+struct SCORE {
     int user_id;
     int level_id;
-    int time_created;
+    //int time_created;
     int score;
 };
 
-struct level {
+struct LEVEL {
     string mode;
     int number_of_possible_throwing_balls;
     int difficulty_level;
 };
 
 
-typedef struct GAME_INF {
-    user user;
-    level level;
-} GAME_INF;
+struct GAME_INF {
+    USER user;
+    LEVEL level;
+};
 
 
 #endif //BOUNCING_BALL_GAME_STRUCTS_H
