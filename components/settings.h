@@ -135,6 +135,19 @@ SDL_Rect logoRect;
 
 // Buttons setup for making them global
 
+SDL_Surface *mainMenuButtonSurface = NULL;
+SDL_Texture *mainMenuButton = NULL;
+SDL_Rect mainMenuButtonRect;
+SDL_Rect mainMenuButtonRectSrc;
+SDL_Surface *mainMenuHoverButtonSurface = NULL;
+SDL_Texture *mainMenuHoverButton = NULL;
+SDL_Rect mainMenuHoverButtonRect;
+SDL_Rect mainMenuHoverButtonRectSrc;
+SDL_Surface *mainMenuTextSurface;
+SDL_Texture *mainMenuText;
+SDL_Rect mainMenuTextRectSrc;
+SDL_Rect mainMenuTextRect;
+
 SDL_Surface *settingButtonSurface = NULL;
 SDL_Texture *settingButton = NULL;
 SDL_Rect settingButtonRect;

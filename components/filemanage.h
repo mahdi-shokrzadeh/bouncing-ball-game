@@ -18,6 +18,10 @@ void SetTheme(int whatTheme) {
     }
 }
 
+void saveScore() {
+
+}
+
 int scoresReader(string a[]) {
 
     ifstream scores;
