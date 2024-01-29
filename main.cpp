@@ -22,8 +22,11 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
-//#include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL2/SDL2_gfx.h>
+#ifdef _WIN32
+    #include <SDL2/SDL2_gfx.h>
+#else
+    #include <SDL2/SDL2_gfxPrimitives.h>
+#endif
 
 using namespace std;
 
