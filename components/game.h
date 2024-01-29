@@ -564,7 +564,7 @@ void initializeBalls() {
                     } else if (pattern[i - 1][j] == 3) {
 
                         ball.type = 't';
-                        int k = rand() % 2;
+                        int k = rand() % 3;
                         switch (k) {
                             case 0:
                                 ball.color = BLUE;
