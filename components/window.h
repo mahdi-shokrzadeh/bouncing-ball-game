@@ -61,11 +61,11 @@ void initializeBallsTexture() {
 
 void initializeSoundSFX() {
     //winningSound = Mix_LoadWAV("assets/SFX/win.wav");
-    winningSound = Mix_LoadMUS("assets/SFX/win.wav");
+    winning1Sound = Mix_LoadMUS("assets/SFX/win.wav");
     //clickSound = Mix_LoadWAV("assets/SFX/click.wav");
-    clickSound = Mix_LoadMUS("assets/SFX/click.wav");
+    click1Sound = Mix_LoadMUS("assets/SFX/click.wav");
     //losingSound = Mix_LoadWAV("assets/SFX/lose.wav");
-    losingSound = Mix_LoadMUS("assets/SFX/lose.wav");
+    losing1Sound = Mix_LoadMUS("assets/SFX/lose.wav");
 }
 
 void destroyBallsTexture() {

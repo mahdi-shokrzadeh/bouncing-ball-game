@@ -428,12 +428,12 @@ SDL_Texture *silverLockedBall = NULL;
 
 // game SFX variables
 
-//Mix_Chunk *winningSound = NULL;
-Mix_Music *winningSound = NULL;
-//Mix_Chunk *clickSound = NULL;
-Mix_Music *clickSound = NULL;
-//Mix_Chunk *losingSound = NULL;
-Mix_Music *losingSound = NULL;
+Mix_Chunk *winningSound = NULL;
+Mix_Music *winning1Sound = NULL;
+Mix_Chunk *clickSound = NULL;
+Mix_Music *click1Sound = NULL;
+Mix_Chunk *losingSound = NULL;
+Mix_Music *losing1Sound = NULL;
 
 
 #endif //BOUNCING_BALL_GAME_SETTINGS_H
