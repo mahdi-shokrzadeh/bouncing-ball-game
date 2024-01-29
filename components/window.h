@@ -635,6 +635,8 @@ void Main_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, startButtonRect)){
         Locator["username_getter"] = !Locator["username_getter"];
         Locator["main_menu"] = !Locator["main_menu"];
+        inputText = "Enter Your Name";
+        inputTextPresent();
     }
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, leaderButtonRect)){
         Locator["leaderboard"] = !Locator["leaderboard"];
