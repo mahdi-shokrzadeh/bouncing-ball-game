@@ -55,7 +55,7 @@ void initializeBallsTexture() {
     redBlueBall = SDL_CreateTextureFromSurface(renderer, redBlueBallSurface);
 
     yellowRedBallSurface = IMG_Load("assets/Game/Balls/yellowRed.png");
-    yellowRedBall = SDL_CreateTextureFromSurface(renderer, redBlueBallSurface);
+    yellowRedBall = SDL_CreateTextureFromSurface(renderer, yellowRedBallSurface);
 
 }
 
