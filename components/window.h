@@ -60,12 +60,9 @@ void initializeBallsTexture() {
 }
 
 void initializeSoundSFX() {
-    //winningSound = Mix_LoadWAV("assets/SFX/win.wav");
-    winning1Sound = Mix_LoadMUS("assets/SFX/win.wav");
-    //clickSound = Mix_LoadWAV("assets/SFX/click.wav");
-    click1Sound = Mix_LoadMUS("assets/SFX/click.wav");
-    //losingSound = Mix_LoadWAV("assets/SFX/lose.wav");
-    losing1Sound = Mix_LoadMUS("assets/SFX/lose.wav");
+    winningSound = Mix_LoadWAV("assets/SFX/win.wav");
+    clickSound = Mix_LoadWAV("assets/SFX/click.wav");
+    losingSound = Mix_LoadWAV("assets/SFX/lose.wav");
 }
 
 void destroyBallsTexture() {
@@ -125,9 +122,9 @@ void destroyBallsTexture() {
 }
 
 void destroySoundSFX() {
-    //Mix_FreeChunk(winningSound);
-    //Mix_FreeChunk(clickSound);
-    //Mix_FreeChunk(losingSound);
+    Mix_FreeChunk(winningSound);
+    Mix_FreeChunk(clickSound);
+    Mix_FreeChunk(losingSound);
 }
 
 // building and destroying
@@ -492,9 +489,13 @@ void destroyButtonsAndBG() {
 
 void reInitialingSoundMusic() {
     soundInsideRect.w = soundVolume;
-    //Mix_VolumeChunk(winningSound, soundVolume * 128 / 100);
-    //Mix_VolumeChunk(losingSound, soundVolume * 128 / 100);
-    //Mix_VolumeChunk(clickSound, soundVolume * 128 / 100);
+    #ifdef _WIN32
+        Mix_Volume(-1, soundVolume * 128 / 100);
+    #else
+        Mix_VolumeChunk(winningSound, soundVolume * 128 / 100);
+        Mix_VolumeChunk(losingSound, soundVolume * 128 / 100);
+        Mix_VolumeChunk(clickSound, soundVolume * 128 / 100);
+    #endif
 
 
     musicInsideRect.w = musicVolume;

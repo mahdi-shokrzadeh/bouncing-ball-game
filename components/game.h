@@ -839,8 +839,7 @@ bool checkCollTargeterAndBalls(DOUBLE_POINT targeter_point) {
 
 void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
 
-    //Mix_PlayChannel(-1, clickSound, 0);
-    Mix_PlayMusic(click1Sound, 1);
+    Mix_PlayChannel(-1, clickSound, 0);
 
 
     if (!ball_is_being_thrown) {
@@ -1470,8 +1469,7 @@ void handleWin() {
     // drawing some parts
 //    drawSomeSections();
 
-    //Mix_PlayChannel(-1, winningSound, 0);
-    Mix_PlayMusic(winning1Sound, 1);
+    Mix_PlayChannel(-1, winningSound, 0);
 
     textRender(win_surface, win_texture, win_rect_src, win_rect,
                win_coor.i, win_coor.j, 0.6, "You popped all bubbles!");
@@ -1501,8 +1499,7 @@ void handleGameOver() {
     // drawing some parts
 //    drawSomeSections();
 
-    //Mix_PlayChannel(-1, losingSound, 0);
-    Mix_PlayMusic(losing1Sound, 1);
+    Mix_PlayChannel(-1, losingSound, 0);
 
     textRender(loose_surface, loose_texture, loose_rect_src, loose_rect,
                loose_coor.i, loose_coor.j, 1.0, "Game Over!");
