@@ -1559,7 +1559,7 @@ void handleGameOver() {
 #ifdef _WIN32
     Sleep(3000);
 #else
-    sleep(3);
+//    sleep(3);
 #endif
 
     showScore("loose");
@@ -1583,7 +1583,7 @@ void showScore(string type) {
 #ifdef _WIN32
         Sleep(30);
 #else
-        sleep(30000);
+//        sleep(30000);
 #endif
         fell_balls--;
         SDL_RenderPresent(renderer);
