@@ -186,6 +186,7 @@ string game_state = "running";
 string game_mode = "time";
 int time_to_wait = 9;
 bool throw_is_disabled = false;
+bool game_loop;
 
 // Timer mode
 auto start_time = std::chrono::high_resolution_clock::now();
@@ -290,7 +291,7 @@ void handleGameProcess() {
     BALL reserved_ball;
     initializeShootingBalls(shooter_ball, reserved_ball);
 
-    bool game_loop = SDL_TRUE;
+    game_loop = SDL_TRUE;
 
 
     while (game_loop) {
@@ -1330,12 +1331,24 @@ void destroyIt(SDL_Surface *&g_button, SDL_Texture *&g_button_tex) {
 void handleCheckMenuClicks() {
 
     if (!mouse_click) return;
-    bool menuIsClicked = checkInOut(mouse_x, mouse_y, menu_btn_rect);
-    if (game_page_state == "game" && menuIsClicked) {
-        game_page_state = "pause_menu";
-    } else if (game_page_state == "pause_menu" && menuIsClicked) {
-        game_page_state = "game";
+    if (game_page_state == "game") {
+        bool menu_is_clicked = checkInOut(mouse_x, mouse_y, menu_btn_rect);
+        if (menu_is_clicked) game_page_state = "pause_menu";
+    } else if (game_page_state == "pause_menu") {
+        bool menu_is_clicked = checkInOut(mouse_x, mouse_y, menu_btn_rect);
+        if (menu_is_clicked) game_page_state = "game";
+    } else if (game_page_state == "over") {
+        bool main_menu_is_clicked = checkInOut(mouse_x, mouse_y, main_menu_btn_rect);
+        bool play_again_is_clicked = checkInOut(mouse_x, mouse_y, play_again_btn_rect);
+        if (main_menu_is_clicked) {
+            cout << "Main is clicked!!" << endl;
+        } else if (play_again_is_clicked) {
+            cout << "Play again is clicked!!" << endl;
+        }
+    } else if (game_page_state == "win") {
+
     }
+
     mouse_click = false;
 }
 
@@ -1490,12 +1503,14 @@ void drawSomeSections() {
 
 void handleWin() {
 
+    static bool run = false;
+    if (run) return;
     // Blank out the renderer with all black
     SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
     SDL_RenderClear(renderer);
 
     // drawing some parts
-//    drawSomeSections();
+    // drawSomeSections();
 
     Mix_PlayChannel(-1, winningSound, 0);
 
@@ -1515,19 +1530,21 @@ void handleWin() {
 
     showScore("win");
 
-    game_page_state = "out";
 
+    run = true;
 }
 
 
 void handleGameOver() {
 
+    static bool run = false;
+    if (run) return;
     // Blank out the renderer with all black
     SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
     SDL_RenderClear(renderer);
 
     // drawing some parts
-//    drawSomeSections();
+    // drawSomeSections();
 
     Mix_PlayChannel(-1, losingSound, 0);
 
@@ -1547,8 +1564,7 @@ void handleGameOver() {
 
     showScore("loose");
 
-    game_page_state = "out";
-
+    run = true;
 }
 
 
@@ -1577,20 +1593,16 @@ void showScore(string type) {
 
     // drawing buttons based on loose ore win state
 
-    bool con = true;
 
     if (type == "win") {
         gameRenderImage(main_menu_btn_tex, main_menu_btn_rect_win);
-        while (con) {
-
-        }
-
 
     } else {
         gameRenderImage(main_menu_btn_tex, main_menu_btn_rect);
         gameRenderImage(play_again_btn_tex, play_again_btn_rect);
 
     }
+
 
     SDL_RenderPresent(renderer);
 
