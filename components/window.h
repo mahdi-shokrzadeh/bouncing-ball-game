@@ -705,7 +705,7 @@ void username_getter(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked,
 
 }
 
-void start_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, bool &normal_or_timed) {
+void start_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, GAME_INF &gameInfo) {
 
     // initialing and Drawing background
 
@@ -753,25 +753,25 @@ void start_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, normalModeButtonRect)) {
         Locator["start_menu"] = !Locator["start_menu"];
         Locator["level_selector"] = !Locator["level_selector"];
-        normal_or_timed = true;
+        gameInfo.mode = "normal";
     }
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, timedModeButtonRect)) {
         Locator["start_menu"] = !Locator["start_menu"];
         Locator["level_selector"] = !Locator["level_selector"];
-        normal_or_timed = false;
+        gameInfo.mode = "timed";
     }
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, randomModeButtonRect)) {
         Locator["start_menu"] = !Locator["start_menu"];
-        //Locator["random_mode"] = !Locator["random_mode"];
-        Locator["main_menu"] = !Locator["main_menu"];
+        Locator["game"] = !Locator["game"];
+        gameInfo.mode = "random";
     }
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, infiniteModeButtonRect)) {
         Locator["start_menu"] = !Locator["start_menu"];
-        //Locator["infinite_mode"] = !Locator["infinite_mode"];
-        Locator["main_menu"] = !Locator["main_menu"];
+        Locator["game"] = !Locator["game"];
+        gameInfo.mode = "infinite";
     }
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)) {
@@ -785,7 +785,7 @@ void start_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int 
 
 }
 
-void level_selector(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, int &levelNum) {
+void level_selector(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, GAME_INF &gameInfo) {
 
     // initialing and Drawing background
 
@@ -841,27 +841,32 @@ void level_selector(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, 
 
     if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level1ButtonRect)) {
         Locator["level_selector"] = !Locator["level_selector"];
-        levelNum = 1;
+        Locator["game"] = !Locator["game"];
+        gameInfo.level = 1;
     }
 
     if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level2ButtonRect)) {
         Locator["level_selector"] = !Locator["level_selector"];
-        levelNum = 2;
+        Locator["game"] = !Locator["game"];
+        gameInfo.level = 2;
     }
 
     if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level3ButtonRect)) {
         Locator["level_selector"] = !Locator["level_selector"];
-        levelNum = 3;
+        Locator["game"] = !Locator["game"];
+        gameInfo.level = 3;
     }
 
     if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level4ButtonRect)) {
         Locator["level_selector"] = !Locator["level_selector"];
-        levelNum = 4;
+        Locator["game"] = !Locator["game"];
+        gameInfo.level = 4;
     }
 
     if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level5ButtonRect)) {
         Locator["level_selector"] = !Locator["level_selector"];
-        levelNum = 5;
+        Locator["game"] = !Locator["game"];
+        gameInfo.level = 5;
     }
 
     if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)) {

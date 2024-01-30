@@ -48,7 +48,7 @@ struct LEVEL {
 typedef struct GAME_INF {
     string mode;
     USER user;
-    LEVEL level;
+    int level;
 } GAME_INF;
 
 

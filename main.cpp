@@ -24,11 +24,9 @@
 #include <SDL2/SDL_mixer.h>
 
 #ifdef _WIN32
-
-#include <SDL2/SDL2_gfx.h>
-
+    #include <SDL2/SDL2_gfx.h>
 #else
-#include <SDL2/SDL2_gfxPrimitives.h>
+    #include <SDL2/SDL2_gfxPrimitives.h>
 #endif
 
 using namespace std;
@@ -66,10 +64,11 @@ void loop() {
     Locator["leaderboard"] = false;
     Locator["setting_menu"] = false;
     Locator["quit_menu"] = false;
-//    Locator["game"] = false;
+    Locator["game"] = false;
 
-    bool normal_or_timed = true;// true == normal, false == timed
-    int levelNum = 0;
+    //bool normal_or_timed = true;// true == normal, false == timed
+    //int levelNum = 0;
+    GAME_INF gameInfo = {"", {1, "sina"}, 0};
 
 
     while (main_loop) {
@@ -133,18 +132,17 @@ void loop() {
         else if (Locator["username_getter"])
             username_getter(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["start_menu"])
-            start_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator,
-                       normal_or_timed);
+            start_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, gameInfo);
         else if (Locator["level_selector"])
-            level_selector(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, levelNum);
+            level_selector(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, gameInfo);
         else if (Locator["leaderboard"])
             leaderboard(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["setting_menu"])
             settingMenu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["quit_menu"])
             quitMenu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
-        else if (normal_or_timed && levelNum == 1)
-            handleGameProcess();
+        else if (Locator["game"])
+            handleGameProcess(gameInfo);
 
 
         // //Present to renderer
