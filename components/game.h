@@ -245,7 +245,7 @@ void initializeMenuButtons();
 
 void gameInitialImage(SDL_Surface *&g_button, SDL_Texture *&g_button_tex, char *src);
 
-void handleCheckMenuClicks();
+void handleCheckBtnsClicks();
 
 void gameRenderImage(SDL_Texture *&g_button_tex, SDL_Rect dstRect);
 
@@ -355,7 +355,7 @@ void handleGameProcess() {
 
 
         // checking clicks
-        handleCheckMenuClicks();
+        handleCheckBtnsClicks();
 
 
         //  Delay and update window
@@ -1328,7 +1328,7 @@ void destroyIt(SDL_Surface *&g_button, SDL_Texture *&g_button_tex) {
 }
 
 
-void handleCheckMenuClicks() {
+void handleCheckBtnsClicks() {
 
     if (!mouse_click) return;
     if (game_page_state == "game") {

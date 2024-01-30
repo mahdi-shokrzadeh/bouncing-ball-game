@@ -104,6 +104,8 @@ int level_1[20][12] = {
 };
 
 
+// locator
+map<string, bool> Locator;
 
 
 // Timer

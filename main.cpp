@@ -54,7 +54,7 @@ void loop() {
     int y_MouseWhere = 0;
 
 
-    map<string, bool> Locator;
+
     Locator["main_menu"] = true;
     Locator["username_getter"] = false;
     Locator["start_menu"] = false;
@@ -64,7 +64,7 @@ void loop() {
     Locator["leaderboard"] = false;
     Locator["setting_menu"] = false;
     Locator["quit_menu"] = false;
-    //Locator["game"] = false;
+//    Locator["game"] = false;
 
     bool normal_or_timed = true;// true == normal, false == timed
     int levelNum = 0;
