@@ -45,10 +45,11 @@ struct LEVEL {
 };
 
 
-struct GAME_INF {
+typedef struct GAME_INF {
+    string mode;
     USER user;
     LEVEL level;
-};
+} GAME_INF;
 
 
 #endif //BOUNCING_BALL_GAME_STRUCTS_H

@@ -203,7 +203,7 @@ ELEMENT timer_coor = {
 };
 
 
-void handleGameProcess();
+void handleGameProcess(GAME_INF game_inf);
 
 void setRandomColor(SDL_Color &color);
 
@@ -275,7 +275,7 @@ void showScore(string type);
 // ---------------------------------------------------
 
 
-void handleGameProcess() {
+void handleGameProcess(GAME_INF game_inf) {
 
     game_page_state = "game";
 
