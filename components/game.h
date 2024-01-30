@@ -99,6 +99,35 @@ SDL_Rect menu_btn_rect = {
 SDL_Surface *menu_btn_sur;
 SDL_Texture *menu_btn_tex;
 
+SDL_Rect main_menu_btn_rect = {
+        .x = 80,
+        .y = 380,
+        .w = 210,
+        .h = 210,
+};
+SDL_Rect main_menu_btn_rect_win = {
+        .x = 110,
+        .y = 380,
+        .w = 220,
+        .h = 220,
+};
+
+
+SDL_Surface *main_menu_btn_sur;
+SDL_Texture *main_menu_btn_tex;
+
+
+SDL_Rect play_again_btn_rect = {
+        .x = 300,
+        .y = 380,
+        .w = 220,
+        .h = 220,
+};
+
+
+SDL_Surface *play_again_btn_sur;
+SDL_Texture *play_again_btn_tex;
+
 
 // mouse
 bool mouse_click = false;
@@ -249,6 +278,9 @@ void handleGameProcess() {
 
     game_page_state = "game";
 
+    // Loading all needed buttons
+    initializeMenuButtons();
+
     // time init
     start_time = chrono::high_resolution_clock::now();
 
@@ -260,8 +292,6 @@ void handleGameProcess() {
 
     bool game_loop = SDL_TRUE;
 
-    // buttons
-    initializeMenuButtons();
 
     while (game_loop) {
         while (SDL_PollEvent(&event)) {
@@ -317,7 +347,6 @@ void handleGameProcess() {
 
 
         } else if (game_page_state == "over") {
-
             handleGameOver();
         } else if (game_page_state == "win") {
             handleWin();
@@ -341,6 +370,8 @@ void handleGameProcess() {
             destroyIt(win_surface, win_texture);
             destroyIt(loose_surface, loose_texture);
             destroyIt(timer_surface, timer_texture);
+            destroyIt(play_again_btn_sur, play_again_btn_tex);
+            destroyIt(main_menu_btn_sur, main_menu_btn_tex);
 
         }
 
@@ -685,20 +716,12 @@ void initializeShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
 
 void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
     swap(shooter_ball.color, reserved_ball.color);
-//    cout << shooter_ball.color.r << " " ;
 }
 
 
 void drawShootingBalls(BALL shooter_ball, BALL reserved_ball) {
-
-    //aacircleRGBA(renderer, Sint16(shooter_ball.center.x),Sint16(shooter_ball.center.y),radius_of_balls, shooter_ball.color.r,shooter_ball.color.g, shooter_ball.color.b, 255);
     ballDraw(shooter_ball);
-
-
-    //aacircleRGBA(renderer, Sint16(reserved_ball.center.x), Sint16(reserved_ball.center.y), radius_of_balls,reserved_ball.color.r, reserved_ball.color.g, reserved_ball.color.b, 255);
     ballDraw(reserved_ball);
-
-    //    SDL_RenderPresent(renderer);
 }
 
 
@@ -1288,6 +1311,8 @@ void gameInitialImage(SDL_Surface *&g_button, SDL_Texture *&g_button_tex, char *
 
 void initializeMenuButtons() {
     gameInitialImage(menu_btn_sur, menu_btn_tex, "assets/Game/menu2.png");
+    gameInitialImage(main_menu_btn_sur, main_menu_btn_tex, "assets/Game/others/main_menu.png");
+    gameInitialImage(play_again_btn_sur, play_again_btn_tex, "assets/Game/others/play_again.png");
 }
 
 
@@ -1481,11 +1506,11 @@ void handleWin() {
     SDL_RenderCopy(renderer, win_texture, &win_rect_src, &win_rect);
     SDL_RenderPresent(renderer);
 
-    #ifdef _WIN32
-        Sleep(3000);
-    #else
-        sleep(3);
-    #endif
+#ifdef _WIN32
+    Sleep(3000);
+#else
+    sleep(3);
+#endif
 
 
     showScore("win");
@@ -1514,11 +1539,11 @@ void handleGameOver() {
     SDL_RenderCopy(renderer, loose_texture, &loose_rect_src, &loose_rect);
     SDL_RenderPresent(renderer);
 
-    #ifdef _WIN32
-        Sleep(3000);
-    #else
-        sleep(3);
-    #endif
+#ifdef _WIN32
+    Sleep(3000);
+#else
+    sleep(3);
+#endif
 
     showScore("loose");
 
@@ -1530,7 +1555,6 @@ void handleGameOver() {
 void showScore(string type) {
 
     while (fell_balls > 0) {
-
         SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
         SDL_RenderClear(renderer);
 
@@ -1540,78 +1564,36 @@ void showScore(string type) {
         textRender(score_surface, score_texture, score_rect_src, score_rect,
                    60, 300, 1.0, "Your final score: " + to_string(score));
         SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
-        #ifdef _WIN32
-                Sleep(30);
-        #else
-                sleep(30000);
-        #endif
+#ifdef _WIN32
+        Sleep(30);
+#else
+        sleep(30000);
+#endif
         fell_balls--;
         SDL_RenderPresent(renderer);
 
     }
 
+
     // drawing buttons based on loose ore win state
 
     bool con = true;
-    while (con) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                con = false;
-                //game_loop = SDL_FALSE;
-                /*
-                 * inja har kari doost dari bokon
-                 * doost aziz
-                 * */
-                main_loop = SDL_FALSE;
-            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-                mouse_click = true;
-                mouse_x = event.button.x;
-                mouse_y = event.button.y;
-            } else if (event.type == SDL_MOUSEBUTTONUP) {
-                mouse_click = false;
-            }
-        }
-        SDL_GetMouseState(&free_mouse_x, &free_mouse_y);
 
+    if (type == "win") {
+        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect_win);
+        while (con) {
 
-        SDL_RenderCopy(renderer, bg, NULL, &bgRect);
-
-        textRender(score_surface, score_texture, score_rect_src, score_rect,
-                   60, 300, 1.0, "Your final score: " + to_string(score));
-        SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
-
-        if (!checkInOut(free_mouse_x, free_mouse_y, mainMenuButtonRect))
-            SDL_RenderCopy(renderer, mainMenuButton, &mainMenuButtonRectSrc, &mainMenuButtonRect);
-        else
-            SDL_RenderCopy(renderer, mainMenuHoverButton, &mainMenuHoverButtonRectSrc, &mainMenuHoverButtonRect);
-        SDL_RenderCopy(renderer, mainMenuText, &mainMenuTextRectSrc, &mainMenuTextRect);
-
-        if (type == "win") {
-            textRender(win_surface, win_texture, win_rect_src, win_rect,
-                       loose_coor.i, loose_coor.j - 50, 1, "You won!");
-            SDL_RenderCopy(renderer, win_texture, &win_rect_src, &win_rect);
-        }
-        else {
-            textRender(loose_surface, loose_texture, loose_rect_src, loose_rect,
-                       loose_coor.i, loose_coor.j - 50, 1.0, "You lost!");
-            SDL_RenderCopy(renderer, loose_texture, &loose_rect_src, &loose_rect);
         }
 
-        if(mouse_click && checkInOut(mouse_x, mouse_y, mainMenuButtonRect)) {
-            saveScore();
-            con = false;
-            //backToMain();
-            /*
-            * inja har kari doost dari bokon
-            * doost aziz
-            * */
-        }
-        if(mouse_click)
-            mouse_click = !mouse_click;
 
-        SDL_RenderPresent(renderer);
-        SDL_Delay(10);
+    } else {
+        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect);
+        gameRenderImage(play_again_btn_tex, play_again_btn_rect);
+
     }
+
+    SDL_RenderPresent(renderer);
+
 }
 
 
