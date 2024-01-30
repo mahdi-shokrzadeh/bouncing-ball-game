@@ -1594,17 +1594,17 @@ void showScore(string type) {
     // drawing buttons based on loose ore win state
 
 
-    if (type == "win") {
-        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect_win);
-
-    } else {
-        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect);
-        gameRenderImage(play_again_btn_tex, play_again_btn_rect);
-
-    }
-
-
-    SDL_RenderPresent(renderer);
+//    if (type == "win") {
+//        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect_win);
+//
+//    } else {
+//        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect);
+//        gameRenderImage(play_again_btn_tex, play_again_btn_rect);
+//
+//    }
+//
+//
+//    SDL_RenderPresent(renderer);
 
 }
 
