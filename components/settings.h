@@ -250,11 +250,11 @@ SDL_Texture *exitButton = NULL;
 SDL_Rect exitButtonRect;
 SDL_Rect exitButtonRectSrc;
 
-SDL_Rect settingBox = {50, 50, 500, 500};
-SDL_Rect soundOutsideRect = {108, 60, 100, 48};
-SDL_Rect soundInsideRect = {108, 60, soundVolume, 48};
-SDL_Rect musicOutsideRect = {108, 120, 100, 48};
-SDL_Rect musicInsideRect = {108, 120, musicVolume, 48};
+SDL_Rect settingBox = {180, 50, 240, 530};
+SDL_Rect soundOutsideRect = {248, 60, 150, 48};
+SDL_Rect soundInsideRect = {248, 60, soundVolume, 48};
+SDL_Rect musicOutsideRect = {248, 120, 150, 48};
+SDL_Rect musicInsideRect = {248, 120, musicVolume, 48};
 
 SDL_Surface *musicOnButtonSurface = NULL;
 SDL_Texture *musicOnButton = NULL;
