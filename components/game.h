@@ -579,9 +579,23 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 void initializeBalls() {
 
     if (inf.mode == "normal") {
-        setPattern(level_1);
+        switch (inf.level) {
+            case 1:
+                setPattern(level_1);
+                break;
+            case 2:
+                setPattern(level_2);
+                break;
+            case 3:
+                setPattern(level_3);
+                break;
+            case 4:
+                setPattern(level_4);
+                break;
+            default:
+                setPattern(level_5);
+        }
     } else if (inf.mode == "random") {
-        cout << "YREEEE";
         int ar[20][12] = {0};
         initializeRandomPattern(ar);
         setPattern(ar);
