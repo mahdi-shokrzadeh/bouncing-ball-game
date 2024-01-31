@@ -145,7 +145,6 @@ int scoresReader(GAME_INF game,string name[], string score[]) {
 
 void scoresWriter(GAME_INF game) {
 
-    cout << "yooo" << endl;
 
     int n;
     string name[MAX_ARRAY_SIZE], score[MAX_ARRAY_SIZE];
