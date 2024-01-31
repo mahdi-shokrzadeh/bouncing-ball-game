@@ -164,6 +164,8 @@ void textRender(SDL_Surface* &surface, SDL_Texture* &texture,
     dest.y = y;
     dest.w = surface->w * multiplier;
     dest.h = surface->h * multiplier;
+
+    //cout << text << " w: " << src.w << " h: " << src.h << endl;
 }
 
 void inputTextPresent() {
@@ -199,195 +201,195 @@ void initializeButtonsAndBG() {
     logoRectSrc.w = logoSurface->w;
     logoRectSrc.h = logoSurface->h;
 
-    logoRect.x = 0;
+    logoRect.x = 108;
     logoRect.y = 0;
-    logoRect.w = logoSurface->w * 0.7;
-    logoRect.h = logoSurface->h * 0.7;
+    logoRect.w = logoSurface->w * 0.75;
+    logoRect.h = logoSurface->h * 0.75;
 
     //setting button
     imageRender(settingButtonSurface, settingButton,settingButtonRectSrc,
-                settingButtonRect, 10, 660, 2, "assets/UiUx/setting.svg");
+                settingButtonRect, 10, 638, 3, "assets/UiUx/setting.svg");
 
     //exit button
     imageRender(exitButtonSurface, exitButton,exitButtonRectSrc,
-                exitButtonRect, 550, 660, 2, "assets/UiUx/exit.svg");
+                exitButtonRect, 518, 638, 3, "assets/UiUx/exit.svg");
 
     //music off button
     imageRender(musicOffButtonSurface, musicOffButton,musicOffButtonRectSrc,
-                musicOffButtonRect, 60, 120, 2, "assets/UiUx/music_off.svg");
+                musicOffButtonRect, settingBox.x+10, 120, 2, "assets/UiUx/music_off.svg");
 
     //music on button
     imageRender(musicOnButtonSurface, musicOnButton,musicOnButtonRectSrc,
-                musicOnButtonRect, 60, 120, 2, "assets/UiUx/music_on.svg");
+                musicOnButtonRect, settingBox.x+10, 120, 2, "assets/UiUx/music_on.svg");
 
     //volume off button
     imageRender(volumeOffButtonSurface, volumeOffButton,volumeOffButtonRectSrc,
-                volumeOffButtonRect, 60, 60, 2, "assets/UiUx/volume_off.svg");
+                volumeOffButtonRect, settingBox.x+10, 60, 2, "assets/UiUx/volume_off.svg");
 
     //volume on button
     imageRender(volumeOnButtonSurface, volumeOnButton,volumeOnButtonRectSrc,
-                volumeOnButtonRect, 60, 60, 2, "assets/UiUx/volume_on.svg");
+                volumeOnButtonRect, settingBox.x+10, 60, 2, "assets/UiUx/volume_on.svg");
 
     //mainMenu button
     imageRender(mainMenuButtonSurface, mainMenuButton,mainMenuButtonRectSrc,
-                mainMenuButtonRect, 300, 500, 0.3, th.button);
+                mainMenuButtonRect, 300, 500, th.sizeMultiplier, th.button);
     imageRender(mainMenuHoverButtonSurface, mainMenuHoverButton,mainMenuHoverButtonRectSrc,
-                mainMenuHoverButtonRect, 300, 500, 0.3, th.buttonHover);
+                mainMenuHoverButtonRect, 300, 500, th.sizeMultiplier, th.buttonHover);
     textRender(mainMenuTextSurface, mainMenuText, mainMenuTextRectSrc,
                mainMenuTextRect, 363, 564, 0.5, "main menu");
 
     //start button
     imageRender(startButtonSurface, startButton,startButtonRectSrc,
-                startButtonRect, 100, 300, 0.3, th.button);
+                startButtonRect, th.loc[0], th.loc[1], th.sizeMultiplier, th.button);
     imageRender(startHoverButtonSurface, startHoverButton,startHoverButtonRectSrc,
-                startHoverButtonRect, 100, 300, 0.3, th.buttonHover);
+                startHoverButtonRect, th.loc[0], th.loc[1], th.sizeMultiplier, th.buttonHover);
     textRender(startTextSurface, startText, startTextRectSrc,
-               startTextRect, 163, 364, 0.5, "Start");
+               startTextRect, th.loc[2], th.loc[3], 1, "Start");
 
     //leader button
     imageRender(leaderButtonSurface, leaderButton,leaderButtonRectSrc,
-                leaderButtonRect, 300, 300, 0.3, th.button);
+                leaderButtonRect, th.loc[4], th.loc[5], th.sizeMultiplier, th.button);
     imageRender(leaderHoverButtonSurface, leaderHoverButton,leaderHoverButtonRectSrc,
-                leaderHoverButtonRect, 300, 300, 0.3, th.buttonHover);
+                leaderHoverButtonRect, th.loc[4], th.loc[5], th.sizeMultiplier, th.buttonHover);
     textRender(leaderTextSurface, leaderText, leaderTextRectSrc,
-               leaderTextRect, 345, 370, 0.3, "LeaderBoard");
+               leaderTextRect, th.loc[6], th.loc[7], 0.5, "LeaderBoard");
 
     // login button
     imageRender(logInButtonSurface, logInButton,logInButtonRectSrc,
-                logInButtonRect, 100, 500, 0.3, th.button);
+                logInButtonRect, 100, 500, th.sizeMultiplier, th.button);
     imageRender(logInHoverButtonSurface, logInHoverButton,logInHoverButtonRectSrc,
-                logInHoverButtonRect, 100, 500, 0.3, th.buttonHover);
+                logInHoverButtonRect, 100, 500, th.sizeMultiplier, th.buttonHover);
     textRender(logInTextSurface, logInText, logInTextRectSrc,
                logInTextRect, 163, 564, 0.5, "Login");
 
     //sign in button
     imageRender(signInButtonSurface, signInButton,signInButtonRectSrc,
-                signInButtonRect, 300, 500, 0.3, th.button);
+                signInButtonRect, 300, 500, th.sizeMultiplier, th.button);
     imageRender(signInHoverButtonSurface, signInHoverButton,signInHoverButtonRectSrc,
-                signInHoverButtonRect, 300, 500, 0.3, th.buttonHover);
+                signInHoverButtonRect, 300, 500, th.sizeMultiplier, th.buttonHover);
     textRender(signInTextSurface, signInText, signInTextRectSrc,
                signInTextRect, 363, 564, 0.5, "Sign in");
 
     //log out button
     imageRender(logOutButtonSurface, logOutButton,logOutButtonRectSrc,
-                logOutButtonRect, 300, 500, 0.3, th.button);
+                logOutButtonRect, 300, 500, th.sizeMultiplier, th.button);
     textRender(logInTextSurface, logInText, logInTextRectSrc,
                logOutTextRect, 363, 564, 0.5, "Logout");
 
     //back button
     imageRender(backButtonSurface, backButton,backButtonRectSrc,
-                backButtonRect, 200, 580, 0.3, th.button);
+                backButtonRect, th.loc[8], th.loc[9], th.sizeMultiplier, th.button);
     imageRender(backHoverButtonSurface, backHoverButton,backHoverButtonRectSrc,
-                backHoverButtonRect, 200, 580, 0.3, th.buttonHover);
+                backHoverButtonRect, th.loc[8], th.loc[9], th.sizeMultiplier, th.buttonHover);
     textRender(backTextSurface, backText, backTextRectSrc,
-               backTextRect, 260, 645, 0.5, "Back");
+               backTextRect, th.loc[10], th.loc[11], 1, "Back");
 
     //quit menu
     textRender(DoYouWantToQuitTextSurface, DoYouWantToQuitText, DoYouWantToQuitTextRectSrc,
                DoYouWantToQuitTextRect, 70, 240, 0.5, "Do you Really want to quit the Game? :(");
     imageRender(iWantQuitButtonSurface, iWantQuitButton,iWantQuitButtonRectSrc,
-                iWantQuitButtonRect, 200, 260, 0.3, th.buttonQuit);
+                iWantQuitButtonRect, th.loc[8], th.loc[9]-300, th.sizeMultiplier, th.buttonQuit);
     textRender(iWantQuitTextSurface, iWantQuitText, iWantQuitTextRectSrc,
-               iWantQuitTextRect, 240, 305, 1, "Yes!");
+               iWantQuitTextRect, th.loc[12], th.loc[13], 1, "Yes!");
 
     //normal mode menu
     imageRender(normalModeButtonSurface, normalModeButton,normalModeButtonRectSrc,
-                normalModeButtonRect, 100, 200, 0.3, th.button);
+                normalModeButtonRect, th.loc[0], th.loc[1] - 200, th.sizeMultiplier, th.button);
     imageRender(normalModeHoverButtonSurface, normalModeHoverButton,normalModeHoverButtonRectSrc,
-                normalModeHoverButtonRect, 100, 200, 0.3, th.buttonHover);
+                normalModeHoverButtonRect, th.loc[0], th.loc[1] - 200, th.sizeMultiplier, th.buttonHover);
     textRender(normalModeTextSurface, normalModeText, normalModeTextRectSrc,
-               normalModeTextRect, 163, 270, 0.5, "Normal");
+               normalModeTextRect, th.loc[14], th.loc[15], 0.8, " Normal");
 
     //timed mode menu
     imageRender(timedModeButtonSurface, timedModeButton,timedModeButtonRectSrc,
-                timedModeButtonRect, 300, 200, 0.3, th.button);
+                timedModeButtonRect, th.loc[4], th.loc[5] - 200, th.sizeMultiplier, th.button);
     imageRender(timedModeHoverButtonSurface, timedModeHoverButton,timedModeHoverButtonRectSrc,
-                timedModeHoverButtonRect, 300, 200, 0.3, th.buttonHover);
+                timedModeHoverButtonRect, th.loc[4], th.loc[5] - 200, th.sizeMultiplier, th.buttonHover);
     textRender(timedModeTextSurface, timedModeText, timedModeTextRectSrc,
-               timedModeTextRect, 345, 270, 0.5, "Timed");
+               timedModeTextRect, th.loc[16], th.loc[17], 0.8, "Timed");
 
     //random mode menu
     imageRender(randomModeButtonSurface, randomModeButton,randomModeButtonRectSrc,
-                randomModeButtonRect, 100, 400, 0.3, th.button);
+                randomModeButtonRect, th.loc[0], th.loc[1], th.sizeMultiplier, th.button);
     imageRender(randomModeHoverButtonSurface, randomModeHoverButton, randomModeHoverButtonRectSrc,
-                randomModeHoverButtonRect, 100, 400, 0.3, th.buttonHover);
+                randomModeHoverButtonRect, th.loc[0], th.loc[1], th.sizeMultiplier, th.buttonHover);
     textRender(randomModeTextSurface, randomModeText, randomModeTextRectSrc,
-               randomModeTextRect, 163, 470, 0.5, "Random");
+               randomModeTextRect, th.loc[14], th.loc[15] + 200, 0.8, "Random");
 
     //infinite mode menu
     imageRender(infiniteModeButtonSurface, infiniteModeButton,infiniteModeButtonRectSrc,
-                infiniteModeButtonRect, 300, 400, 0.3, th.button);
+                infiniteModeButtonRect, th.loc[4], th.loc[5], th.sizeMultiplier, th.button);
     imageRender(infiniteModeHoverButtonSurface, infiniteModeHoverButton,infiniteModeHoverButtonRectSrc,
-                infiniteModeHoverButtonRect, 300, 400, 0.3, th.buttonHover);
+                infiniteModeHoverButtonRect, th.loc[4], th.loc[5], th.sizeMultiplier, th.buttonHover);
     textRender(infiniteModeTextSurface, infiniteModeText, infiniteModeTextRectSrc,
-               infiniteModeTextRect, 345, 470, 0.5, "Infinite");
+               infiniteModeTextRect, th.loc[16], th.loc[17]+200, 0.8, "Infinite");
 
     //level 1 button
     imageRender(level1ButtonSurface, level1Button,level1ButtonRectSrc,
-                level1ButtonRect, 200, 80, 0.3, th.button);
+                level1ButtonRect, th.loc[0], th.loc[1]-300, th.sizeMultiplier, th.button);
     imageRender(level1HoverButtonSurface, level1HoverButton,level1HoverButtonRectSrc,
-                level1HoverButtonRect, 200, 80, 0.3, th.buttonHover);
+                level1HoverButtonRect, th.loc[0], th.loc[1]-300, th.sizeMultiplier, th.buttonHover);
     textRender(level1TextSurface, level1Text, level1TextRectSrc,
-               level1TextRect, 260, 145, 0.5, "level 1");
+               level1TextRect, th.loc[18], th.loc[19], 0.9, "level 1");
 
     //level 2 button
     imageRender(level2ButtonSurface, level2Button,level2ButtonRectSrc,
-                level2ButtonRect, 200, 180, 0.3, th.button);
+                level2ButtonRect, th.loc[4], th.loc[5]-300, th.sizeMultiplier, th.button);
     imageRender(level2HoverButtonSurface, level2HoverButton,level2HoverButtonRectSrc,
-                level2HoverButtonRect, 200, 180, 0.3, th.buttonHover);
+                level2HoverButtonRect, th.loc[4], th.loc[5]-300, th.sizeMultiplier, th.buttonHover);
     textRender(level2TextSurface, level2Text, level2TextRectSrc,
-               level2TextRect, 260, 245, 0.5, "level 2");
+               level2TextRect, th.loc[18]+300, th.loc[19], 0.9, "level 2");
 
     //level 3 button
     imageRender(level3ButtonSurface, level3Button,level3ButtonRectSrc,
-                level3ButtonRect, 200, 280, 0.3, th.button);
+                level3ButtonRect, th.loc[0], th.loc[1]-100, th.sizeMultiplier, th.button);
     imageRender(level3HoverButtonSurface, level3HoverButton,level3HoverButtonRectSrc,
-                level3HoverButtonRect, 200, 280, 0.3, th.buttonHover);
+                level3HoverButtonRect, th.loc[0], th.loc[1]-100, th.sizeMultiplier, th.buttonHover);
     textRender(level3TextSurface, level3Text, level3TextRectSrc,
-               level3TextRect, 260, 345, 0.5, "level 3");
+               level3TextRect, th.loc[18], th.loc[19]+200, 0.9, "level 3");
 
     //level 4 button
     imageRender(level4ButtonSurface, level4Button,level4ButtonRectSrc,
-                level4ButtonRect, 200, 380, 0.3, th.button);
+                level4ButtonRect, th.loc[4], th.loc[5]-100, th.sizeMultiplier, th.button);
     imageRender(level4HoverButtonSurface, level4HoverButton,level4HoverButtonRectSrc,
-                level4HoverButtonRect, 200, 380, 0.3, th.buttonHover);
+                level4HoverButtonRect, th.loc[4], th.loc[5]-100, th.sizeMultiplier, th.buttonHover);
     textRender(level4TextSurface, level4Text, level4TextRectSrc,
-               level4TextRect, 260, 445, 0.5, "level 4");
+               level4TextRect, th.loc[18]+300, th.loc[19]+200, 0.9, "level 4");
 
     //level 5 button
     imageRender(level5ButtonSurface, level5Button,level5ButtonRectSrc,
-                level5ButtonRect, 200, 480, 0.3, th.button);
+                level5ButtonRect, (th.loc[0]+th.loc[4])/2, th.loc[9]-130, th.sizeMultiplier, th.button);
     imageRender(level5HoverButtonSurface, level5HoverButton,level5HoverButtonRectSrc,
-                level5HoverButtonRect, 200, 480, 0.3, th.buttonHover);
+                level5HoverButtonRect, (th.loc[0]+th.loc[4])/2, th.loc[9]-130, th.sizeMultiplier, th.buttonHover);
     textRender(level5TextSurface, level5Text, level5TextRectSrc,
-               level5TextRect, 260, 545, 0.5, "level 5");
+               level5TextRect, th.loc[18]+150, th.loc[19]+350, 0.9, "level 5");
 
     //Jungle theme button
     theme temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Jungle;
     imageRender(jungleThemeButtonSurface, jungleThemeButton,jungleThemeButtonRectSrc,
-                jungleThemeButtonRect, 200, 280, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
+                jungleThemeButtonRect, 219, 185, 0.33, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
     imageRender(jungleThemeHoverButtonSurface, jungleThemeHoverButton,jungleThemeHoverButtonRectSrc,
-                jungleThemeHoverButtonRect, 200, 280, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
+                jungleThemeHoverButtonRect, 219, 185, 0.33, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
     textRender(jungleThemeTextSurface, jungleThemeText, jungleThemeTextRectSrc,
-               jungleThemeTextRect, 260, 345, 0.5, "Jungle");
+               jungleThemeTextRect, 230, 215, 0.8, " Jungle");
 
     //Ocean theme button
     temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Ocean;
     imageRender(oceanThemeButtonSurface, oceanThemeButton,oceanThemeButtonRectSrc,
-                oceanThemeButtonRect, 200, 380, 0.2, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
+                oceanThemeButtonRect, 226, 305, 0.2, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
     imageRender(oceanThemeHoverButtonSurface, oceanThemeHoverButton,oceanThemeHoverButtonRectSrc,
-                oceanThemeHoverButtonRect, 200, 380, 0.2, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
+                oceanThemeHoverButtonRect, 226, 305, 0.2, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
     textRender(oceanThemeTextSurface, oceanThemeText, oceanThemeTextRectSrc,
-               oceanThemeTextRect, 260, 445, 0.5, "Ocean");
+               oceanThemeTextRect, 230, 345, 0.8, " Ocean");
 
     //Space theme button
     temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Space;
     imageRender(spaceThemeButtonSurface, spaceThemeButton,spaceThemeButtonRectSrc,
-                spaceThemeButtonRect, 200, 480, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
+                spaceThemeButtonRect, 236, 440, 0.33, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.button);
     imageRender(spaceThemeHoverButtonSurface, spaceThemeHoverButton,spaceThemeHoverButtonRectSrc,
-                spaceThemeHoverButtonRect, 200, 480, 0.3, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
+                spaceThemeHoverButtonRect, 236, 440, 0.33, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
     textRender(spaceThemeTextSurface, spaceThemeText, spaceThemeTextRectSrc,
-               spaceThemeTextRect, 260, 545, 0.5, "Space");
+               spaceThemeTextRect, 235, 480, 0.8, " Space");
 
 }
 
@@ -562,17 +564,17 @@ void destroyButtonsAndBG() {
 void reInitialingSoundMusic() {
     soundInsideRect.w = soundVolume;
     #ifdef _WIN32
-        Mix_Volume(-1, soundVolume * 128 / 100);
+        Mix_Volume(-1, soundVolume * 128 / soundOutsideRect.w);
     #else
-        Mix_VolumeChunk(winningSound, soundVolume * 128 / 100);
-        Mix_VolumeChunk(losingSound, soundVolume * 128 / 100);
-        Mix_VolumeChunk(clickSound, soundVolume * 128 / 100);
+        Mix_VolumeChunk(winningSound, soundVolume * 128 / soundOutsideRect.w);
+        Mix_VolumeChunk(losingSound, soundVolume * 128 / soundOutsideRect.w);
+        Mix_VolumeChunk(clickSound, soundVolume * 128 / soundOutsideRect.w);
     #endif
 
 
 
     musicInsideRect.w = musicVolume;
-    Mix_VolumeMusic(musicVolume * 128 / 100);
+    Mix_VolumeMusic(musicVolume * 128 / soundOutsideRect.w);
 }
 
 void themeChanger(theme newTheme) {
@@ -600,10 +602,12 @@ void leaderTextConfig(int n, SDL_Surface *surface[MAX_ARRAY_SIZE], SDL_Texture *
 
     //leaderTextDestroy(n, surface, text);
 
+    SDL_SetRenderDrawColor(renderer, WHITE.r, WHITE.g, WHITE.b, WHITE.a);
 
     for(int i = 0;i < n;i++) {
         textRender(surface[i], text[i], rectSrc[i],rect[i], pos, 60 + i * 50, 0.5, list[i]);
         SDL_RenderCopy(renderer, text[i], &rectSrc[i], &rect[i]);
+        SDL_RenderDrawLine(renderer, 50, (i+2) * 50, 550, (i+2) * 50);
     }
 
 }
@@ -638,19 +642,19 @@ void Main_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x
         SDL_RenderCopy(renderer, leaderHoverButton, &leaderHoverButtonRectSrc, &leaderHoverButtonRect);
     SDL_RenderCopy(renderer, leaderText, &leaderTextRectSrc, &leaderTextRect);
 
-    // login button
-    if(!checkInOut(x_MouseWhere, y_MouseWhere, logInButtonRect))
-        SDL_RenderCopy(renderer, logInButton, &logInButtonRectSrc, &logInButtonRect);
-    else
-        SDL_RenderCopy(renderer, logInHoverButton, &logInHoverButtonRectSrc, &logInHoverButtonRect);
-    SDL_RenderCopy(renderer, logInText, &logInTextRectSrc, &logInTextRect);
-
-    // sign in button
-    if(!checkInOut(x_MouseWhere, y_MouseWhere, signInButtonRect))
-        SDL_RenderCopy(renderer, signInButton, &signInButtonRectSrc, &signInButtonRect);
-    else
-        SDL_RenderCopy(renderer, signInHoverButton, &signInHoverButtonRectSrc, &signInHoverButtonRect);
-    SDL_RenderCopy(renderer, signInText, &signInTextRectSrc, &signInTextRect);
+//    // login button
+//    if(!checkInOut(x_MouseWhere, y_MouseWhere, logInButtonRect))
+//        SDL_RenderCopy(renderer, logInButton, &logInButtonRectSrc, &logInButtonRect);
+//    else
+//        SDL_RenderCopy(renderer, logInHoverButton, &logInHoverButtonRectSrc, &logInHoverButtonRect);
+//    SDL_RenderCopy(renderer, logInText, &logInTextRectSrc, &logInTextRect);
+//
+//    // sign in button
+//    if(!checkInOut(x_MouseWhere, y_MouseWhere, signInButtonRect))
+//        SDL_RenderCopy(renderer, signInButton, &signInButtonRectSrc, &signInButtonRect);
+//    else
+//        SDL_RenderCopy(renderer, signInHoverButton, &signInHoverButtonRectSrc, &signInHoverButtonRect);
+//    SDL_RenderCopy(renderer, signInText, &signInTextRectSrc, &signInTextRect);
 
 //    // logout button
 //    SDL_RenderCopy(renderer, logOutButton, &logOutButtonRectSrc, &logOutButtonRect);
@@ -1185,13 +1189,13 @@ void settingMenu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, volumeOnButtonRect)){
         if(soundVolume) soundVolume = 0;
-        else soundVolume = 100;
+        else soundVolume = soundOutsideRect.w;
         reInitialingSoundMusic();
     }
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, musicOnButtonRect)){
         if(musicVolume) musicVolume = 0;
-        else musicVolume = 100;
+        else musicVolume = soundOutsideRect.w;
         reInitialingSoundMusic();
     }
 
