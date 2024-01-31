@@ -65,10 +65,6 @@ string locateFile(string mode, int level) {
     }
 }
 
-void saveScore() {
-
-}
-
 void mergeSort(int a[], int low, int high) {
     if(high-low<1)
         return;
@@ -96,6 +92,20 @@ void mergeSort(int a[], int low, int high) {
     for(k=0;k<high-low+1;k++)
         a[low+k]=b[k];
     delete[] b;
+}
+
+void sinaSort(int n, string name[], string score[], string newName, int newScore) {
+    int i;
+    for(i = 0;i < n;i++) {
+        if(stoi(score[i]) < newScore)
+            break;
+    }
+    for(int j = n;j >= i;j--) {
+        name[j+1] = name[j];
+        score[j+1] = score[j];
+    }
+    name[i] = newName;
+    score[i] = to_string(newScore);
 }
 
 int scoresReader(GAME_INF game,string name[], string score[]) {
@@ -133,24 +143,36 @@ int scoresReader(GAME_INF game,string name[], string score[]) {
     return n;
 }
 
-void scoresWriter(string name, int score) {
+void scoresWriter(GAME_INF game) {
+
+    cout << "yooo" << endl;
 
     int n;
-    string a[100];
-    n = 0;//scoresReader(a);
+    string name[MAX_ARRAY_SIZE], score[MAX_ARRAY_SIZE];
+    n = scoresReader(game, name, score);
 
+    sinaSort(n, name, score, game.user, game.score);
+    n++;
+
+    string address = locateFile(game.mode, game.level);
     ofstream scores;
-    scores.open("./database/scores.txt");
+    scores.open(address);
 
     if (!scores.good()) {
         cout << "error opening scores file...";
         return;
     }
 
+    scores << n << endl;
+
     for (int i = 0; i < n; i++) {
-        scores << a[i] << endl;
+        scores << score[i] << " ";
     }
-    scores << score << " " << name;
+    cout << endl;
+    for (int i = 0; i < n; i++) {
+        scores << name[i] << " ";
+    }
+
     scores.close();
 }
 
