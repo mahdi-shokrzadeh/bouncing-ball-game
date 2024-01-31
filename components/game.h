@@ -135,7 +135,7 @@ int mouse_x = 0, mouse_y = 0;
 int free_mouse_x = 0, free_mouse_y = 0;
 
 // falling balls speed
-double falling_balls_speed = 1.9;
+double falling_balls_speed = 2.4;
 double falling_ball_acc = 0.011;
 
 // score
@@ -428,9 +428,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                     BALL &ball = balls[i][j];
                     ball.center.y += vertical_speed;
                     if (ball.center.y <= SCREEN_HEIGHT + 30 && ball.center.y >= -40) {
-                        //aacircleRGBA(renderer, Sint16(ball.center.x), Sint16(ball.center.y), radius_of_balls,ball.color.r, ball.color.g, ball.color.b, 255);
                         ballDraw(ball);
-
                     }
 
 
@@ -444,8 +442,11 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
                     // falling balls
                     if (ball.type == 'f') {
+                        if(ball.dx == 0){
+                            ball.dx =rand()%2 == 0 ?  (rand()%10)/10.0 + 1.0 :   -1*(rand()%10)/10.0 + 1.0  ;
+                        }
+                        ball.center.x += ball.dx;
 
-                        i % 2 == 0 ? ball.center.x += 0.09 : ball.center.x -= 0.03;
                         ball.center.y += falling_balls_speed * (1000 + 150 - i) / 1000.0;
                         falling_balls_speed += falling_ball_acc;
                         ball_is_falling = true;
@@ -1356,7 +1357,7 @@ void handleFallingBalls() {
     }
 
     // removing the other balls
-    falling_balls_speed = 1.9;
+    falling_balls_speed = 2.4;
     for (int i = 0; i < element.i; i++) {
         for (int j = 0; j < 12; j++) {
             if (balls[i][j].type != 's' && balls[i][j].center.y >= -20 && !vectorContainsElement(visited, {i, j})) {

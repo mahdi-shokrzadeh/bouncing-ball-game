@@ -16,6 +16,7 @@ typedef struct BALL {
     DOUBLE_POINT center{};
     SDL_Color second_color = BLACK;
     int level = 0;
+    double dx = 0.0;
 
 } BALL;
 
