@@ -287,6 +287,7 @@ unsigned int checkBallsAreConnected(int arr[20][12]);
 
 vector<ELEMENT> findRandomNeighbors(ELEMENT el, int arr[20][12]);
 
+void setRandomColorForLocks(SDL_Color &color);
 
 // ---------------------------------------------------
 
@@ -485,7 +486,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         if (end_pointer_ball.center.y >= -50) {
             SDL_Rect r;
             r.x = 5;
-            r.y = int(end_pointer_ball.center.y - 85);
+            r.y = int(end_pointer_ball.center.y - 35);
             r.w = SCREEN_WIDTH - 10;
             r.h = 50;
             SDL_SetRenderDrawColor(renderer, PLUM.r, PLUM.g, PLUM.b, 255);
@@ -619,7 +620,7 @@ void initializeBalls() {
                             },
                             .center = {
                                     .x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left),
-                                    .y = double(-(i - 5) * (width_of_ball_box)),
+                                    .y = double(-(i - BALLS_INITIAL_HEIGHT) * (width_of_ball_box)),
                             },
                     };
 
@@ -630,9 +631,10 @@ void initializeBalls() {
                         // lock
                         if (pattern[i - 1][j] == 2) {
                             ball.level = 1;
+                            setRandomColorForLocks(ball.color);
+                        }else{
+                            setRandomColor(ball.color);
                         }
-
-                        setRandomColor(ball.color);
                         if (i == FINAL_ROWS) {
                             while (colorsAreTheSame(ball.color, WHEAT)) setRandomColor(ball.color);
                         }
@@ -681,7 +683,7 @@ void initializeBalls() {
         ball.type = 'e';
         // color of end balls must be unique
         ball.color = DARK_ORANGE;
-        ball.center.y = double(-(FINAL_ROWS - 4) * (width_of_ball_box));
+        ball.center.y = double(-1*(FINAL_ROWS + 1 - BALLS_INITIAL_HEIGHT) *(width_of_ball_box));
         ball.center.x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left);
         if ((FINAL_ROWS + 1) % 2 == 0) {
             balls[FINAL_ROWS][j] = ball;
@@ -690,7 +692,7 @@ void initializeBalls() {
             balls[FINAL_ROWS][j] = ball;
         }
     }
-    end_pointer_ball.center.y = double(-(FINAL_ROWS - 5) * (width_of_ball_box));
+    end_pointer_ball.center.y = double(-1*(FINAL_ROWS + 1 - BALLS_INITIAL_HEIGHT) *(width_of_ball_box));
 }
 
 
@@ -702,6 +704,28 @@ void setPattern(int arr[DIMENTION_OF_LEVELS][12]) {
     }
 }
 
+void setRandomColorForLocks(SDL_Color &color) {
+    int i = rand() % 5;
+    switch (i) {
+        case (0):
+            color = RED;
+            break;
+        case (1):
+            color = CYAN;
+            break;
+        case (2) :
+            color = BLUE;
+            break;
+        case (3) :
+            color = PURPLE;
+            break;
+        case (4) :
+            color = GREEN;
+            break;
+        default :
+            color = YELLOW;
+    }
+}
 
 void setRandomColor(SDL_Color &color) {
 
@@ -867,6 +891,10 @@ void ballDraw(BALL ball) {
         else if (colorsAreTheSame(ball.color, BLUE) && colorsAreTheSame(ball.second_color, YELLOW))
             SDL_RenderCopy(renderer, blueYellowBall, &src, &dest);
     }
+//    else if(ball.type == 'e'){
+//        SDL_RenderCopy(renderer, redBlueBall, &src, &dest);
+//
+//    }
 
 
 }
@@ -1229,6 +1257,8 @@ void filterByColor(vector<ELEMENT> &elements, BALL ball) {
             } else {
                 ++it;
             }
+        }else if (balls[it->i][it->j].type == 'e'){
+            elements.erase(it);
         }
 
     }
