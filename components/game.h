@@ -365,6 +365,7 @@ void handleGameProcess(GAME_INF game_inf) {
 
         } else if (game_page_state == "quit_menu") {
 
+
         } else if (game_page_state == "over") {
 
             handleGameOver();
@@ -381,9 +382,11 @@ void handleGameProcess(GAME_INF game_inf) {
 
 
         //  Delay and update window
-        SDL_RenderPresent(renderer);
-        SDL_Delay(DELAY);
+        if (game_page_state != "win" && game_page_state != "over" && game_page_state != "pause_menu") {
+            SDL_RenderPresent(renderer);
+        }
 
+        SDL_Delay(DELAY);
 
         if (!game_loop) {
 
@@ -442,8 +445,8 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
                     // falling balls
                     if (ball.type == 'f') {
-                        if(ball.dx == 0){
-                            ball.dx =rand()%2 == 0 ?  (rand()%10)/10.0 + 1.0 :   -1*(rand()%10)/10.0 + 1.0  ;
+                        if (ball.dx == 0) {
+                            ball.dx = rand() % 2 == 0 ? (rand() % 10) / 10.0 + 1.0 : -1 * (rand() % 10) / 10.0 + 1.0;
                         }
                         ball.center.x += ball.dx;
 
