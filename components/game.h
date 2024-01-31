@@ -277,6 +277,17 @@ void showScore(string type);
 
 void initializeRandomPattern(int (&arr)[20][12]);
 
+void initializeRandomPattern(int (&arr)[20][12]);
+
+bool checkBallCanConnect(ELEMENT el, int arr[20][12]);
+
+int randomBallType();
+
+unsigned int checkBallsAreConnected(int arr[20][12]);
+
+vector<ELEMENT> findRandomNeighbors(ELEMENT el, int arr[20][12]);
+
+
 // ---------------------------------------------------
 
 
