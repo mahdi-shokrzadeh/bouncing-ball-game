@@ -68,7 +68,7 @@ void loop() {
 
     //bool normal_or_timed = true;// true == normal, false == timed
     //int levelNum = 0;
-    GAME_INF gameInfo = {"", {1, "sina"}, 0};
+    GAME_INF gameInfo = {"", {1, "sina"}, 1};
 
 
     while (main_loop) {

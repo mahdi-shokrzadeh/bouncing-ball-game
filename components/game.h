@@ -183,10 +183,12 @@ SDL_Rect shooter_section = {10, 550, 580, 160};
 // Game
 
 string game_state = "running";
-string game_mode = "time";
 int time_to_wait = 9;
 bool throw_is_disabled = false;
 bool game_loop;
+
+GAME_INF inf;
+
 
 // Timer mode
 auto start_time = std::chrono::high_resolution_clock::now();
@@ -272,6 +274,9 @@ void drawSomeSections();
 void handleGameOver();
 
 void showScore(string type);
+
+void initializeRandomPattern(int (&arr)[20][12]);
+
 // ---------------------------------------------------
 
 
@@ -285,8 +290,10 @@ void handleGameProcess(GAME_INF game_inf) {
     // time init
     start_time = chrono::high_resolution_clock::now();
 
+    inf = game_inf;
 
     initializeBalls();
+
     BALL shooter_ball;
     BALL reserved_ball;
     initializeShootingBalls(shooter_ball, reserved_ball);
@@ -346,11 +353,14 @@ void handleGameProcess(GAME_INF game_inf) {
 
         } else if (game_page_state == "quit_menu") {
 
-
         } else if (game_page_state == "over") {
+
             handleGameOver();
+
         } else if (game_page_state == "win") {
+
             handleWin();
+
         }
 
 
@@ -383,7 +393,8 @@ void handleGameProcess(GAME_INF game_inf) {
 
 void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
-    if (game_mode == "normal" || game_mode == "time") {
+
+    if (inf.mode == "normal" || inf.mode == "timed" || inf.mode == "random") {
 
         bool ball_is_falling = false;
         // Blank out the renderer with all black
@@ -500,7 +511,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         number_of_balls = calculateBalls();
 
         // Game Over for timer mode
-        if (game_mode == "time") {
+        if (inf.mode == "timed") {
 
             // draw timer
 
@@ -545,10 +556,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
             time_to_wait--;
         }
 
-    } else if (game_mode == "random") {
-
-
-    } else {
+    } else if (inf.mode == "infinite") {
 
 
     }
@@ -559,7 +567,15 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
 void initializeBalls() {
 
-    setPattern(level_1);
+    if (inf.mode == "normal") {
+        setPattern(level_1);
+    } else if (inf.mode == "random") {
+        cout << "YREEEE";
+        int ar[20][12] = {0};
+        initializeRandomPattern(ar);
+        setPattern(ar);
+    }
+
 
     for (int i = 1; i <= FINAL_ROWS; i++) {
         for (int j = 0; j < SCREEN_WIDTH / width_of_ball_box - 1; j++) {
@@ -1594,17 +1610,170 @@ void showScore(string type) {
     // drawing buttons based on loose ore win state
 
 
-//    if (type == "win") {
-//        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect_win);
+    if (type == "win") {
+        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect_win);
+
+    } else {
+        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect);
+        gameRenderImage(play_again_btn_tex, play_again_btn_rect);
+
+    }
+
+
+    SDL_RenderPresent(renderer);
+
+}
+
+
+vector<ELEMENT> findRandomNeighbors(ELEMENT el, int arr[20][12]) {
+    vector<ELEMENT> elements;
+    int i = el.i;
+    int j = el.j;
+
+    if (i % 2 == 0) {
+//        if (i + 1 <= 19) {
+//            if (j + 1 <= 11) {
+//                if (arr[i + 1][j + 1] != 0) elements.push_back({i + 1, j + 1});
+//            }
+//            if (arr[i + 1][j] != 0) elements.push_back({i + 1, j});
 //
-//    } else {
-//        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect);
-//        gameRenderImage(play_again_btn_tex, play_again_btn_rect);
+//        }
+        if (i - 1 >= 0) {
+            if (j + 1 <= 11) {
+                if (arr[i - 1][j + 1] != 0) elements.push_back({i - 1, j + 1});
+            }
+            if (arr[i - 1][j] != 0) elements.push_back({i - 1, j});
+        }
+        if (j - 1 >= 0) {
+            if (arr[i][j - 1] != 0) elements.push_back({i, j - 1});
+        }
+        if (j + 1 <= 11) {
+            if (arr[i][j + 1] != 0) elements.push_back({i, j + 1});
+        }
+
+    } else {
+//        if (i + 1 <= 19) {
+//            if (j - 1 >= 0) {
+//                if (arr[i + 1][j - 1] != 0) elements.push_back({i + 1, j - 1});
+//            }
+//            if (arr[i + 1][j] != 0) elements.push_back({i + 1, j});
 //
-//    }
-//
-//
-//    SDL_RenderPresent(renderer);
+//        }
+        if (i - 1 >= 0) {
+            if (j - 1 >= 0) {
+                if (arr[i - 1][j - 1] != 0) elements.push_back({i - 1, j - 1});
+            }
+            if (arr[i - 1][j] != 0) elements.push_back({i - 1, j});
+        }
+        if (j - 1 >= 0) {
+            if (arr[i][j - 1] != 0) elements.push_back({i, j - 1});
+        }
+        if (j + 1 <= 11) {
+            if (arr[i][j + 1] != 0) elements.push_back({i, j + 1});
+        }
+    }
+
+    return elements;
+}
+
+
+unsigned int checkBallsAreConnected(int arr[20][12]) {
+
+    vector<ELEMENT> visited;
+    vector<ELEMENT> queue;
+
+    for (int i = 0; i < 12; i++) {
+        queue.push_back({19, i});
+    }
+//    queue.push_back({0 , 7});
+    while (!queue.empty()) {
+
+        ELEMENT el = queue[0];
+        vector<ELEMENT> vec = findRandomNeighbors(el, arr);
+
+        visited.push_back(el);
+        for (ELEMENT el2: vec) {
+            if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
+        }
+
+        queue.erase(queue.begin());
+    }
+
+    cout << "DOnE" << endl;
+    return visited.size();
+
+}
+
+
+int randomBallType() {
+    int r = rand() % 10;
+    if (r < 2) {
+        return 2;
+    } else if (r < 6) {
+        return 1;
+    } else {
+        return 3;
+    }
+}
+
+
+bool checkBallCanConnect(ELEMENT el, int arr[20][12]) {
+    int i = el.i;
+    int j = el.j;
+
+    if (i % 2 == 0) {
+        if (i + 1 <= 19) {
+            if (j + 1 <= 11) {
+                if (arr[i + 1][j + 1] != 0) return true;
+            }
+            if (arr[i + 1][j] != 0) return true;
+        }
+
+        if (j - 1 >= 0) {
+            if (arr[i][j - 1] != 0) return true;
+        }
+        if (j + 1 <= 11) {
+            if (arr[i][j + 1] != 0) return true;
+        }
+
+    } else {
+        if (i + 1 <= 19) {
+            if (j - 1 >= 0) {
+                if (arr[i + 1][j - 1] != 0) return true;
+            }
+            if (arr[i + 1][j] != 0) return true;
+
+        }
+
+        if (j - 1 >= 0) {
+            if (arr[i][j - 1] != 0) return true;
+        }
+        if (j + 1 <= 11) {
+            if (arr[i][j + 1] != 0) return true;
+        }
+    }
+
+    return false;
+}
+
+
+void initializeRandomPattern(int (&arr)[20][12]) {
+    for (int j = 0; j < 12; j++) {
+        arr[19][j] = randomBallType();
+    }
+
+    for (int i = 18; i >= 0; i--) {
+        cout << i << endl;
+        int r = (rand() % 4)+1;
+        while (r > 0) {
+            int m = rand() % 12;
+            if (checkBallCanConnect({i, m}, arr)) {
+                r--;
+                arr[i][m] = randomBallType();
+            }
+        }
+    }
+
 
 }
 
