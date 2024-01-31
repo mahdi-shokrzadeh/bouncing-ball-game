@@ -61,6 +61,8 @@ void loop() {
     Locator["level_selector"] = false;
     Locator["random_mode"] = false;
     Locator["infinite_mode"] = false;
+    Locator["leaderStart"] = false;
+    Locator["leaderLevel"] = false;
     Locator["leaderboard"] = false;
     Locator["setting_menu"] = false;
     Locator["quit_menu"] = false;
@@ -68,7 +70,7 @@ void loop() {
 
     //bool normal_or_timed = true;// true == normal, false == timed
     //int levelNum = 0;
-    GAME_INF gameInfo = {"", {1, "sina"}, 1};
+    GAME_INF gameInfo = {"", "", 0};
 
 
     while (main_loop) {
@@ -87,6 +89,7 @@ void loop() {
                         break;
                     case SDLK_RETURN :
                         if (Locator["username_getter"]) {
+                            gameInfo.user = inputText;
                             inputText = "Enter Your Name";
                             Locator["start_menu"] = !Locator["start_menu"];
                             Locator["username_getter"] = !Locator["username_getter"];
@@ -135,8 +138,12 @@ void loop() {
             start_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, gameInfo);
         else if (Locator["level_selector"])
             level_selector(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, gameInfo);
+        else if (Locator["leaderStart"])
+            leader_start_Menu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, gameInfo);
+        else if (Locator["leaderLevel"])
+            leader_level_selector(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, gameInfo);
         else if (Locator["leaderboard"])
-            leaderboard(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
+            leaderboard(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator, gameInfo);
         else if (Locator["setting_menu"])
             settingMenu(MouseClicked, x_MouseClicked, y_MouseClicked, x_MouseWhere, y_MouseWhere, Locator);
         else if (Locator["quit_menu"])

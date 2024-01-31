@@ -26,29 +26,30 @@ typedef struct ELEMENT {
 
 // file structures
 struct USER {
-    int id;
+    //int id;
     string name;
     //string password;
 };
 
-struct SCORE {
-    int user_id;
-    int level_id;
-    //int time_created;
-    int score;
-};
-
-struct LEVEL {
-    string mode;
-    int number_of_possible_throwing_balls;
-    int difficulty_level;
-};
+//struct SCORE {
+//    // int user_id;
+//    int level_id;
+//    //int time_created;
+//    int score;
+//};
+//
+//struct LEVEL {
+//    string mode;
+//    int number_of_possible_throwing_balls;
+//    int difficulty_level;
+//};
 
 
 typedef struct GAME_INF {
+    string user;
     string mode;
-    USER user;
     int level;
+    int score;
 } GAME_INF;
 
 

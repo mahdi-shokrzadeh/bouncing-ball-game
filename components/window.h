@@ -589,6 +589,25 @@ void themeChanger(theme newTheme) {
 
 }
 
+void leaderTextDestroy(int n, SDL_Surface *surface[MAX_ARRAY_SIZE], SDL_Texture *text[MAX_ARRAY_SIZE]) {
+    for(int i = 0;i< n;i++) {
+        SDL_FreeSurface(surface[i]);
+        SDL_DestroyTexture(text[i]);
+    }
+}
+
+void leaderTextConfig(int n, SDL_Surface *surface[MAX_ARRAY_SIZE], SDL_Texture *text[MAX_ARRAY_SIZE], SDL_Rect rectSrc[MAX_ARRAY_SIZE], SDL_Rect rect[MAX_ARRAY_SIZE], string list[MAX_ARRAY_SIZE], int pos) {
+
+    //leaderTextDestroy(n, surface, text);
+
+
+    for(int i = 0;i < n;i++) {
+        textRender(surface[i], text[i], rectSrc[i],rect[i], pos, 60 + i * 50, 0.5, list[i]);
+        SDL_RenderCopy(renderer, text[i], &rectSrc[i], &rect[i]);
+    }
+
+}
+
 // Menus
 
 void Main_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
@@ -654,7 +673,7 @@ void Main_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x
         inputTextPresent();
     }
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, leaderButtonRect)){
-        Locator["leaderboard"] = !Locator["leaderboard"];
+        Locator["leaderStart"] = !Locator["leaderStart"];
         Locator["main_menu"] = !Locator["main_menu"];
     }
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, settingButtonRect)){
@@ -879,7 +898,181 @@ void level_selector(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, 
 
 }
 
-void leaderboard(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator) {
+void leader_start_Menu(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, GAME_INF &gameInfo) {
+
+    // initialing and Drawing background
+
+    SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+    // normal mode button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, normalModeButtonRect))
+        SDL_RenderCopy(renderer, normalModeButton, &normalModeButtonRectSrc, &normalModeButtonRect);
+    else
+        SDL_RenderCopy(renderer, normalModeHoverButton, &normalModeHoverButtonRectSrc, &normalModeHoverButtonRect);
+    SDL_RenderCopy(renderer, normalModeText, &normalModeTextRectSrc, &normalModeTextRect);
+
+    // timed mode button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, timedModeButtonRect))
+        SDL_RenderCopy(renderer, timedModeButton, &timedModeButtonRectSrc, &timedModeButtonRect);
+    else
+        SDL_RenderCopy(renderer, timedModeHoverButton, &timedModeHoverButtonRectSrc, &timedModeHoverButtonRect);
+    SDL_RenderCopy(renderer, timedModeText, &timedModeTextRectSrc, &timedModeTextRect);
+
+    // random mode button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, randomModeButtonRect))
+        SDL_RenderCopy(renderer, randomModeButton, &randomModeButtonRectSrc, &randomModeButtonRect);
+    else
+        SDL_RenderCopy(renderer, randomModeHoverButton, &randomModeHoverButtonRectSrc, &randomModeHoverButtonRect);
+    SDL_RenderCopy(renderer, randomModeText, &randomModeTextRectSrc, &randomModeTextRect);
+
+    // infinite mode button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, infiniteModeButtonRect))
+        SDL_RenderCopy(renderer, infiniteModeButton, &infiniteModeButtonRectSrc, &infiniteModeButtonRect);
+    else
+        SDL_RenderCopy(renderer, infiniteModeHoverButton, &infiniteModeHoverButtonRectSrc, &infiniteModeHoverButtonRect);
+    SDL_RenderCopy(renderer, infiniteModeText, &infiniteModeTextRectSrc, &infiniteModeTextRect);
+
+    // back button
+    if(!checkInOut(x_MouseWhere, y_MouseWhere, backButtonRect))
+        SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
+    else
+        SDL_RenderCopy(renderer, backHoverButton, &backHoverButtonRectSrc, &backHoverButtonRect);
+    SDL_RenderCopy(renderer, backText, &backTextRectSrc, &backTextRect);
+
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, normalModeButtonRect)) {
+        Locator["leaderStart"] = !Locator["leaderStart"];
+        Locator["leaderLevel"] = !Locator["leaderLevel"];
+        gameInfo.mode = "normal";
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, timedModeButtonRect)) {
+        Locator["leaderStart"] = !Locator["leaderStart"];
+        Locator["leaderLevel"] = !Locator["leaderLevel"];
+        gameInfo.mode = "timed";
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, randomModeButtonRect)) {
+        Locator["leaderStart"] = !Locator["leaderStart"];
+        Locator["leaderboard"] = !Locator["leaderboard"];
+        gameInfo.mode = "random";
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, infiniteModeButtonRect)) {
+        Locator["leaderStart"] = !Locator["leaderStart"];
+        Locator["leaderboard"] = !Locator["leaderboard"];
+        gameInfo.mode = "infinite";
+    }
+
+    if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)) {
+        Locator["leaderStart"] = !Locator["leaderStart"];
+        Locator["main_menu"] = !Locator["main_menu"];
+    }
+
+    if(MouseClicked)
+        MouseClicked = !MouseClicked;
+
+
+}
+
+void leader_level_selector(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, GAME_INF &gameInfo) {
+
+    // initialing and Drawing background
+
+    SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+
+    // level1 button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, level1ButtonRect))
+        SDL_RenderCopy(renderer, level1Button, &level1ButtonRectSrc, &level1ButtonRect);
+    else
+        SDL_RenderCopy(renderer, level1HoverButton, &level1HoverButtonRectSrc, &level1HoverButtonRect);
+    SDL_RenderCopy(renderer, level1Text, &level1TextRectSrc, &level1TextRect);
+
+    // level2 button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, level2ButtonRect))
+        SDL_RenderCopy(renderer, level2Button, &level2ButtonRectSrc, &level2ButtonRect);
+    else
+        SDL_RenderCopy(renderer, level2HoverButton, &level2HoverButtonRectSrc, &level2HoverButtonRect);
+    SDL_RenderCopy(renderer, level2Text, &level2TextRectSrc, &level2TextRect);
+
+    // level3 button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, level3ButtonRect))
+        SDL_RenderCopy(renderer, level3Button, &level3ButtonRectSrc, &level3ButtonRect);
+    else
+        SDL_RenderCopy(renderer, level3HoverButton, &level3HoverButtonRectSrc, &level3HoverButtonRect);
+    SDL_RenderCopy(renderer, level3Text, &level3TextRectSrc, &level3TextRect);
+
+    // level4 button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, level4ButtonRect))
+        SDL_RenderCopy(renderer, level4Button, &level4ButtonRectSrc, &level4ButtonRect);
+    else
+        SDL_RenderCopy(renderer, level4HoverButton, &level4HoverButtonRectSrc, &level4HoverButtonRect);
+    SDL_RenderCopy(renderer, level4Text, &level4TextRectSrc, &level4TextRect);
+
+    // level5 button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, level5ButtonRect))
+        SDL_RenderCopy(renderer, level5Button, &level5ButtonRectSrc, &level5ButtonRect);
+    else
+        SDL_RenderCopy(renderer, level5HoverButton, &level5HoverButtonRectSrc, &level5HoverButtonRect);
+    SDL_RenderCopy(renderer, level5Text, &level5TextRectSrc, &level5TextRect);
+
+
+    // back button
+    if (!checkInOut(x_MouseWhere, y_MouseWhere, backButtonRect))
+        SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
+    else
+        SDL_RenderCopy(renderer, backHoverButton, &backHoverButtonRectSrc, &backHoverButtonRect);
+    SDL_RenderCopy(renderer, backText, &backTextRectSrc, &backTextRect);
+
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level1ButtonRect)) {
+        Locator["leaderLevel"] = !Locator["leaderLevel"];
+        Locator["leaderboard"] = !Locator["leaderboard"];
+        gameInfo.level = 1;
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level2ButtonRect)) {
+        Locator["leaderLevel"] = !Locator["leaderLevel"];
+        Locator["leaderboard"] = !Locator["leaderboard"];
+        gameInfo.level = 2;
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level3ButtonRect)) {
+        Locator["leaderLevel"] = !Locator["leaderLevel"];
+        Locator["leaderboard"] = !Locator["leaderboard"];
+        gameInfo.level = 3;
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level4ButtonRect)) {
+        Locator["leaderLevel"] = !Locator["leaderLevel"];
+        Locator["leaderboard"] = !Locator["leaderboard"];
+        gameInfo.level = 4;
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, level5ButtonRect)) {
+        Locator["leaderLevel"] = !Locator["leaderLevel"];
+        Locator["leaderboard"] = !Locator["leaderboard"];
+        gameInfo.level = 5;
+    }
+
+    if (MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)) {
+        Locator["leaderStart"] = !Locator["leaderStart"];
+        Locator["leaderLevel"] = !Locator["leaderLevel"];
+    }
+
+    if(MouseClicked)
+        MouseClicked = !MouseClicked;
+
+}
+
+void leaderboard(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int x_MouseWhere, int y_MouseWhere, map<string, bool>& Locator, GAME_INF gameInfo) {
 
     // initialing and Drawing background
 
@@ -892,6 +1085,24 @@ void leaderboard(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int
     SDL_Rect fillRect = {50, 50, 500, 500};
     SDL_RenderFillRect(renderer, &fillRect);
 
+    // info variables
+    string scores[MAX_ARRAY_SIZE];
+    string names[MAX_ARRAY_SIZE];
+    int n = scoresReader(gameInfo, names, scores);
+
+    SDL_Surface *namesTextSurface[n];
+    SDL_Texture *namesText[n];
+    SDL_Rect namesTextRectSrc[n];
+    SDL_Rect namesTextRect[n];
+    SDL_Surface *scoresTextSurface[n];
+    SDL_Texture *scoresText[n];
+    SDL_Rect scoresTextRectSrc[n];
+    SDL_Rect scoresTextRect[n];
+
+    leaderTextConfig(n, namesTextSurface, namesText, namesTextRectSrc, namesTextRect, names, 60);
+    leaderTextConfig(n, scoresTextSurface, scoresText, scoresTextRectSrc, scoresTextRect, scores, 480);
+
+
     // back button
     if(!checkInOut(x_MouseWhere, y_MouseWhere, backButtonRect))
         SDL_RenderCopy(renderer, backButton, &backButtonRectSrc, &backButtonRect);
@@ -901,7 +1112,7 @@ void leaderboard(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int
 
     if(MouseClicked && checkInOut(x_MouseClicked, y_MouseClicked, backButtonRect)){
         Locator["leaderboard"] = !Locator["leaderboard"];
-        Locator["main_menu"] = !Locator["main_menu"];
+        Locator["leaderStart"] = !Locator["leaderStart"];
     }
 
     if(MouseClicked)
