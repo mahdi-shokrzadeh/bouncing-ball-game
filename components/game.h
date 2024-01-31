@@ -632,7 +632,7 @@ void initializeBalls() {
                         if (pattern[i - 1][j] == 2) {
                             ball.level = 1;
                             setRandomColorForLocks(ball.color);
-                        }else{
+                        } else {
                             setRandomColor(ball.color);
                         }
                         if (i == FINAL_ROWS) {
@@ -683,7 +683,7 @@ void initializeBalls() {
         ball.type = 'e';
         // color of end balls must be unique
         ball.color = DARK_ORANGE;
-        ball.center.y = double(-1*(FINAL_ROWS + 1 - BALLS_INITIAL_HEIGHT) *(width_of_ball_box));
+        ball.center.y = double(-1 * (FINAL_ROWS + 1 - BALLS_INITIAL_HEIGHT) * (width_of_ball_box));
         ball.center.x = double(j * (width_of_ball_box) + radius_of_balls + dist_from_left);
         if ((FINAL_ROWS + 1) % 2 == 0) {
             balls[FINAL_ROWS][j] = ball;
@@ -692,7 +692,7 @@ void initializeBalls() {
             balls[FINAL_ROWS][j] = ball;
         }
     }
-    end_pointer_ball.center.y = double(-1*(FINAL_ROWS + 1 - BALLS_INITIAL_HEIGHT) *(width_of_ball_box));
+    end_pointer_ball.center.y = double(-1 * (FINAL_ROWS + 1 - BALLS_INITIAL_HEIGHT) * (width_of_ball_box));
 }
 
 
@@ -1244,7 +1244,6 @@ vector<ELEMENT> findNeighbors(int i, int j, string type) {
 void filterByColor(vector<ELEMENT> &elements, BALL ball) {
     for (auto it = elements.begin(); it != elements.end();) {
         if (balls[it->i][it->j].type == 't') {
-            cout << it->i << " " << it->j << endl;
             if (!colorsAreTheSame(balls[it->i][it->j].color, ball.color) &&
                 !colorsAreTheSame(balls[it->i][it->j].second_color, ball.color)) {
                 elements.erase(it);
@@ -1257,7 +1256,7 @@ void filterByColor(vector<ELEMENT> &elements, BALL ball) {
             } else {
                 ++it;
             }
-        }else if (balls[it->i][it->j].type == 'e'){
+        } else if (balls[it->i][it->j].type == 'e') {
             elements.erase(it);
         }
 
@@ -1265,8 +1264,8 @@ void filterByColor(vector<ELEMENT> &elements, BALL ball) {
 }
 
 
-bool vectorContainsElement(const vector<ELEMENT> &elements, ELEMENT el) {
-    for (ELEMENT e: elements) {
+bool vectorContainsElement(const vector<ELEMENT> &elements, const ELEMENT &el) {
+    for (const auto &e: elements) {
         if (e.i == el.i && e.j == el.j) return true;
     }
     return false;
@@ -1274,7 +1273,6 @@ bool vectorContainsElement(const vector<ELEMENT> &elements, ELEMENT el) {
 
 
 void handleGraphCheck(int i, int j, BALL in_ball) {
-
     vector<ELEMENT> visited;
     vector<ELEMENT> queue;
 
@@ -1287,9 +1285,11 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
     while (!queue.empty()) {
         ELEMENT el = queue[0];
         vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
+
         filterByColor(vec, in_ball);
 
-        visited.push_back(el);
+        if (!vectorContainsElement(visited, el)) visited.push_back(el);
+
         for (ELEMENT el2: vec) {
             if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
         }
@@ -1299,8 +1299,10 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
 
 
     if (visited.size() > LEAST_BALLS_NUMBER) {
+
         // clearing balls
         for (ELEMENT el: visited) {
+            cout << "j : " << el.j << " " << el.i << endl;
             // important condition!
             if (balls[el.i][el.j].center.y >= -20) {
                 // checking if ball has lock or no
@@ -1819,7 +1821,7 @@ void initializeRandomPattern(int (&arr)[20][12]) {
 
     for (int i = 18; i >= 0; i--) {
         cout << i << endl;
-        int r = (rand() % 4)+1;
+        int r = (rand() % 4) + 1;
         while (r > 0) {
             int m = rand() % 12;
             if (checkBallCanConnect({i, m}, arr)) {
