@@ -188,11 +188,12 @@ bool throw_is_disabled = false;
 bool game_loop;
 
 GAME_INF inf;
-
+int run_times = 0;
 
 // Timer mode
 auto start_time = std::chrono::high_resolution_clock::now();
-int timer = TIMER;
+long long int timer;
+long long int whole_time = 0;
 
 
 // timer
@@ -289,6 +290,8 @@ vector<ELEMENT> findRandomNeighbors(ELEMENT el, int arr[20][12]);
 
 void setRandomColorForLocks(SDL_Color &color);
 
+void initialVarsForTimed();
+
 // ---------------------------------------------------
 
 
@@ -303,6 +306,9 @@ void handleGameProcess(GAME_INF game_inf) {
     start_time = chrono::high_resolution_clock::now();
 
     inf = game_inf;
+
+    // time vars for timed mode
+    initialVarsForTimed();
 
     initializeBalls();
 
@@ -407,7 +413,6 @@ void handleGameProcess(GAME_INF game_inf) {
 
 
 void Game(BALL &shooter_ball, BALL &reserved_ball) {
-
 
     if (inf.mode == "normal" || inf.mode == "timed" || inf.mode == "random") {
 
@@ -528,7 +533,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
         // Game Over for timer mode
         if (inf.mode == "timed") {
-
+            run_times ++;
             // draw timer
 
             textRender(timer_surface, timer_texture, timer_rect_src, timer_rect,
@@ -542,11 +547,15 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
             }
 
             // updating timer
-            auto end = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start_time);
-            if (TIMER - duration.count() != timer) {
-                timer = TIMER - duration.count();
+            if(run_times % 60 == 0){
+                run_times = 0;
+                auto end = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start_time);
+                if (whole_time - duration.count() != timer) {
+                    timer = whole_time - duration.count();
+                }
             }
+
 
         }
 
@@ -583,7 +592,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
 void initializeBalls() {
 
-    if (inf.mode == "normal") {
+    if (inf.mode == "normal" || inf.mode == "timed") {
         switch (inf.level) {
             case 1:
                 setPattern(level_1);
@@ -1306,7 +1315,6 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
 
         // clearing balls
         for (ELEMENT el: visited) {
-            cout << "j : " << el.j << " " << el.i << endl;
             // important condition!
             if (balls[el.i][el.j].center.y >= -20) {
                 // checking if ball has lock or no
@@ -1838,5 +1846,33 @@ void initializeRandomPattern(int (&arr)[20][12]) {
 
 }
 
+void initialVarsForTimed() {
+    switch (inf.level) {
+        case 1 :
+            timer = level_1_time;
+            whole_time = level_1_time;
+            break;
+        case 2 :
+            timer = level_2_time;
+            whole_time = level_2_time;
+
+            break;
+        case 3 :
+            timer = level_3_time;
+            whole_time = level_3_time;
+
+            break;
+        case 4 :
+            timer = level_4_time;
+            whole_time = level_4_time;
+
+            break;
+
+        default :
+            timer = level_5_time;
+            whole_time = level_5_time;
+
+    }
+}
 
 #endif //BOUNCING_BALL_GAME_GAME_H

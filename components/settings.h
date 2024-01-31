@@ -201,6 +201,13 @@ map<string, bool> Locator;
 // Timer
 #define TIMER  50
 
+const int level_1_time = 55;
+const int level_2_time = 60;
+const int level_3_time = 65;
+const int level_4_time = 70;
+const int level_5_time = 80;
+
+
 
 // SDL setup
 TTF_Font *font = NULL;
