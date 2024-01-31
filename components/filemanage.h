@@ -18,38 +18,126 @@ void SetTheme(int whatTheme) {
     }
 }
 
+string locateFile(string mode, int level) {
+    if(mode == "normal") {
+        switch (level) {
+            case 1:
+                return "database/scores/normal/lvl1.txt";
+                break;
+            case 2:
+                return "database/scores/normal/lvl2.txt";
+                break;
+            case 3:
+                return "database/scores/normal/lvl3.txt";
+                break;
+            case 4:
+                return "database/scores/normal/lvl4.txt";
+                break;
+            case 5:
+                return "database/scores/normal/lvl5.txt";
+                break;
+        }
+    }
+    else if(mode == "timed") {
+        switch (level) {
+            case 1:
+                return "database/scores/timed/lvl1.txt";
+                break;
+            case 2:
+                return "database/scores/timed/lvl2.txt";
+                break;
+            case 3:
+                return "database/scores/timed/lvl3.txt";
+                break;
+            case 4:
+                return "database/scores/timed/lvl4.txt";
+                break;
+            case 5:
+                return "database/scores/timed/lvl5.txt";
+                break;
+        }
+    }
+    else if(mode == "random") {
+        return "database/scores/random.txt";
+    }
+    else if(mode == "infinite") {
+        return "database/scores/inf.txt";
+    }
+}
+
 void saveScore() {
 
 }
 
-int scoresReader(string a[]) {
+void mergeSort(int a[], int low, int high) {
+    if(high-low<1)
+        return;
+    int mid=(high+low)/2;
+    mergeSort(a,low,mid);
+    mergeSort(a,mid+1,high);
+    int *b=new int[high-low+1];
+    int k=0, i=low, j=mid+1;
+    while((i<=mid)&&(j<=high))
+    {
+        if(a[i]<a[j])
+        {
+            b[k++]=a[i++];
+        }
+        else
+        {
+            b[k++]=a[j++];
+        }
+    }
+    while(i<=mid)
+        b[k++]=a[i++];
+    while(j<=high)
+        b[k++]=a[j++];
+    //copy to main array
+    for(k=0;k<high-low+1;k++)
+        a[low+k]=b[k];
+    delete[] b;
+}
+
+int scoresReader(GAME_INF game,string name[], string score[]) {
+
+    string address = locateFile(game.mode, game.level);
 
     ifstream scores;
-    scores.open("./database/scores.txt");
+    scores.open(address);
 
-    int i = 0;
     if (!scores.good()) {
         cout << "error opening scores file...";
         return 0;
     }
 
-    while(!scores.eof())
-    {
-        getline(scores, a[i]);
-        if(scores.good())
-            i++;
+    int n = 0;
+
+    scores >> n;
+
+    for(int i = 0;i < n;i++) {
+        scores >> score[i];
     }
+    for(int i = 0;i < n;i++) {
+        scores >> name[i];
+    }
+
+//    while(!scores.eof())
+//    {
+//        getline(scores, a[i]);
+//        if(scores.good())
+//            i++;
+//    }
 
     scores.close();
 
-    return i + 1;
+    return n;
 }
 
 void scoresWriter(string name, int score) {
 
     int n;
     string a[100];
-    n = scoresReader(a);
+    n = 0;//scoresReader(a);
 
     ofstream scores;
     scores.open("./database/scores.txt");

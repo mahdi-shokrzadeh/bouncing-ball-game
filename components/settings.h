@@ -35,6 +35,8 @@
 #define LEAST_BALLS_NUMBER 2
 
 
+#define MAX_ARRAY_SIZE 1000
+
 // SDL Window
 SDL_Window *window;
 
