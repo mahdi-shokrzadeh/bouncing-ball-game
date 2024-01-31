@@ -1783,8 +1783,8 @@ bool checkBallCanConnect(ELEMENT el, int arr[20][12]) {
 
 
 void initializeRandomPattern(int (&arr)[20][12]) {
-    for (int j = 0; j < 12; j++) {
-        arr[19][j] = randomBallType();
+    for (int j = 2; j < 8; j++) {
+        arr[19][j] = 1;
     }
 
     for (int i = 18; i >= 0; i--) {
