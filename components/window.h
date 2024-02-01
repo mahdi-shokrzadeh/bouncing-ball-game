@@ -371,7 +371,7 @@ void initializeButtonsAndBG() {
     imageRender(jungleThemeHoverButtonSurface, jungleThemeHoverButton,jungleThemeHoverButtonRectSrc,
                 jungleThemeHoverButtonRect, 219, 185, 0.33, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
     textRender(jungleThemeTextSurface, jungleThemeText, jungleThemeTextRectSrc,
-               jungleThemeTextRect, 230, 215, 0.8, " Jungle");
+               jungleThemeTextRect, 230+th.loc[22], 215, 0.8, " Jungle");
 
     //Ocean theme button
     temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Ocean;
@@ -380,7 +380,7 @@ void initializeButtonsAndBG() {
     imageRender(oceanThemeHoverButtonSurface, oceanThemeHoverButton,oceanThemeHoverButtonRectSrc,
                 oceanThemeHoverButtonRect, 226, 305, 0.2, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
     textRender(oceanThemeTextSurface, oceanThemeText, oceanThemeTextRectSrc,
-               oceanThemeTextRect, 230, 345, 0.8, " Ocean");
+               oceanThemeTextRect, 230+th.loc[22], 345, 0.8, " Ocean");
 
     //Space theme button
     temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Space;
@@ -389,7 +389,7 @@ void initializeButtonsAndBG() {
     imageRender(spaceThemeHoverButtonSurface, spaceThemeHoverButton,spaceThemeHoverButtonRectSrc,
                 spaceThemeHoverButtonRect, 236, 440, 0.33, temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess.buttonHover);
     textRender(spaceThemeTextSurface, spaceThemeText, spaceThemeTextRectSrc,
-               spaceThemeTextRect, 235, 480, 0.8, " Space");
+               spaceThemeTextRect, 235+th.loc[22], 480, 0.8, " Space");
 
 }
 
