@@ -183,6 +183,9 @@ bool game_loop;
 
 GAME_INF inf;
 int run_times = 0;
+bool game_over_run = false;
+bool win_run = false;
+
 
 // Timer mode
 auto start_time = std::chrono::high_resolution_clock::now();
@@ -1604,8 +1607,7 @@ void drawSomeSections() {
 
 void handleWin() {
 
-    static bool run = false;
-    if (run) return;
+    if (win_run) return;
     // Blank out the renderer with all black
     SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
     SDL_RenderClear(renderer);
@@ -1632,14 +1634,13 @@ void handleWin() {
     showScore("win");
 
 
-    run = true;
+    win_run = true;
 }
 
 
 void handleGameOver() {
 
-    static bool run = false;
-    if (run) return;
+    if (game_over_run) return;
     // Blank out the renderer with all black
     SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
     SDL_RenderClear(renderer);
@@ -1665,7 +1666,7 @@ void handleGameOver() {
 
     showScore("loose");
 
-    run = true;
+    game_over_run = true;
 }
 
 
@@ -1921,7 +1922,7 @@ void resetVars() {
     for (int i = 0; i <= FINAL_ROWS + 1; i++) {
         for (int j = 0; j < 12; j++) {
             balls[i][j] = {0};
-            pattern[i][j]={0};
+            pattern[i][j] = {0};
         }
     }
     mouse_click = false;
@@ -1948,6 +1949,8 @@ void resetVars() {
             },
     };
 
+    game_over_run = false;
+    win_run = false;
 
 }
 
