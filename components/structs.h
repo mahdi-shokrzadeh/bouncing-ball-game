@@ -11,19 +11,21 @@ typedef struct DOUBLE_POINT {
 
 typedef struct BALL {
 
-    char type='s';
+    char type = 's';
     SDL_Color color{};
     DOUBLE_POINT center{};
     SDL_Color second_color = BLACK;
     int level = 0;
     double dx = 0.0;
+    bool ice_effect = false;
 
 } BALL;
 
+
 typedef struct ELEMENT {
-   int i;
-   int j;
-}ELEMENT;
+    int i;
+    int j;
+} ELEMENT;
 
 // file structures
 struct USER {

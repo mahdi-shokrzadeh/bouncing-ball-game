@@ -187,6 +187,14 @@ bool game_over_run = false;
 bool win_run = false;
 
 
+// Time effects
+
+int number_of_x_balls = 3;
+int number_of_ice_balls = 4;
+bool time_effect_is_active = false;
+int time_counter = TIME_EFFECT_COUNTER;
+
+
 // Timer mode
 auto start_time = std::chrono::high_resolution_clock::now();
 long long int timer = 0;
@@ -434,7 +442,13 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
             for (int j = 0; j < 12; j++) {
                 if (balls[i][j].type != 's') {
                     BALL &ball = balls[i][j];
-                    ball.center.y += vertical_speed;
+                    if (time_effect_is_active) {
+                        time_counter--;
+                        ball.center.y += vertical_speed/4.0;
+                    } else {
+                        ball.center.y += vertical_speed;
+                    }
+
                     if (ball.center.y <= SCREEN_HEIGHT + 30 && ball.center.y >= -40) {
                         ballDraw(ball);
                     }
@@ -442,7 +456,6 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
                     // updating the flags
                     if (ball.center.y >= -70 && ball.center.y <= -40 && flag.i != i) {
-
                         flag.i = i;
                         flag.j = j;
                     }
@@ -480,11 +493,27 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         for (int j = 0; j < 12; j++) {
             if (balls[FINAL_ROWS][j].type != 's') {
                 BALL &ball = balls[FINAL_ROWS][j];
-                ball.center.y += vertical_speed;
+                if(time_effect_is_active){
+                    ball.center.y += vertical_speed/4.0;
+
+                }else{
+                    ball.center.y += vertical_speed;
+
+                }
             }
         }
-        end_pointer_ball.center.y += vertical_speed;
 
+        if(time_effect_is_active){
+            end_pointer_ball.center.y += vertical_speed/4.0;
+        }else{
+            end_pointer_ball.center.y += vertical_speed;
+        }
+
+        // time effect
+        if (time_counter <= 0) {
+            time_effect_is_active = false;
+            time_counter = TIME_EFFECT_COUNTER;
+        }
 
         // shooter
         SDL_RenderDrawRect(renderer, &shooter_section);
@@ -967,10 +996,33 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
         shooting_ball.center = center_of_shooting_ball;
         reserved_ball.center = center_of_reserved_ball;
         shooting_ball.type = 'c';
-        reserved_ball.type = 'c';
+        int m = rand() % 5;
+        switch (m) {
+            case -1:
+                if (number_of_x_balls > 0) {
+                    reserved_ball.type = 'x';
+                    number_of_x_balls--;
+                    cout << "X" << endl;
+                    break;
+                }
+            case -2:
+                if (number_of_ice_balls > 0) {
+                    reserved_ball.type = 'c';
+                    reserved_ball.ice_effect = true;
+                    setRandomColorForShootingBall(reserved_ball.color);
+                    number_of_ice_balls--;
+                    cout << "ICE" << endl;
+
+                    break;
+                }
+            default:
+                reserved_ball.color = thrown_ball.color;
+                reserved_ball.type = 'c';
+                setRandomColorForShootingBall(reserved_ball.color);
+        }
 //        setRandomColor(reserved_ball.color);
 //        while (reserved_ball.color.r == shooting_ball.color.r) setRandomColor(reserved_ball.color);
-        setRandomColorForShootingBall(reserved_ball.color);
+
         dxOfThrownBall = sin(degree * M_PI / 180.0) * SPEED_OF_THROWN_BALL;
         dyOfThrownBall = cos(degree * M_PI / 180.0) * SPEED_OF_THROWN_BALL;
         drawShootingBalls(shooting_ball, reserved_ball);
@@ -1016,7 +1068,9 @@ void checkCollShooterAndBalls() {
 
 
 void handleCollShooterAndBalls(BALL &ball, int i, int j) {
+
     if (!ball_is_being_thrown)return;
+    if (ball.ice_effect) time_effect_is_active = true;
 
     ELEMENT el;
 
@@ -1964,7 +2018,10 @@ void resetVars() {
 
     game_over_run = false;
     win_run = false;
-
+    number_of_x_balls = 3;
+    number_of_ice_balls = 4;
+    time_effect_is_active = false;
+    time_counter = TIME_EFFECT_COUNTER;
 }
 
 

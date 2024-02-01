@@ -49,6 +49,10 @@ SDL_Renderer *renderer;
 SDL_bool main_loop = SDL_TRUE;
 
 
+// Time effect
+#define TIME_EFFECT_COUNTER 130
+
+
 // patterns
 #define DIMENTION_OF_LEVELS 20
 
