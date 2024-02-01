@@ -606,7 +606,7 @@ void leaderTextDestroy(int n, SDL_Surface *surface[MAX_ARRAY_SIZE], SDL_Texture 
     }
 }
 
-void leaderTextConfig(int n, SDL_Surface *surface[MAX_ARRAY_SIZE], SDL_Texture *text[MAX_ARRAY_SIZE], SDL_Rect rectSrc[MAX_ARRAY_SIZE], SDL_Rect rect[MAX_ARRAY_SIZE], string list[MAX_ARRAY_SIZE], int pos) {
+void leaderTextConfig(int n, SDL_Surface *surface[MAX_ARRAY_SIZE], SDL_Texture *text[MAX_ARRAY_SIZE], SDL_Rect rectSrc[MAX_ARRAY_SIZE], SDL_Rect rect[MAX_ARRAY_SIZE], string list[MAX_ARRAY_SIZE], int pos, bool flag) {
 
     //leaderTextDestroy(n, surface, text);
 
@@ -614,8 +614,9 @@ void leaderTextConfig(int n, SDL_Surface *surface[MAX_ARRAY_SIZE], SDL_Texture *
 
     for(int i = 0;i < n;i++) {
         string txt = list[i];
-        while(txt.size() < 7)
-            txt = ' ' + txt;
+        if(flag)
+            while(txt.size() < 7)
+                txt = ' ' + txt;
         textRender(surface[i], text[i], rectSrc[i],rect[i], pos, 60 + i * 50, 0.5, txt);
         SDL_RenderCopy(renderer, text[i], &rectSrc[i], &rect[i]);
         SDL_RenderDrawLine(renderer, 50, (i+2) * 50, 550, (i+2) * 50);
@@ -1114,8 +1115,8 @@ void leaderboard(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int
     SDL_Rect scoresTextRectSrc[n];
     SDL_Rect scoresTextRect[n];
 
-    leaderTextConfig(n, namesTextSurface, namesText, namesTextRectSrc, namesTextRect, names, 60);
-    leaderTextConfig(n, scoresTextSurface, scoresText, scoresTextRectSrc, scoresTextRect, scores, 460);
+    leaderTextConfig(n, namesTextSurface, namesText, namesTextRectSrc, namesTextRect, names, 60, false);
+    leaderTextConfig(n, scoresTextSurface, scoresText, scoresTextRectSrc, scoresTextRect, scores, 460, true);
 
 
     // back button
