@@ -1427,18 +1427,24 @@ void handleCheckBtnsClicks() {
         bool play_again_is_clicked = checkInOut(mouse_x, mouse_y, play_again_btn_rect);
         if (main_menu_is_clicked) {
             cout << "Main is clicked!!" << endl;
+            Locator["main_menu"] = !Locator["main_menu"];
+            Locator["game"] = !Locator["game"];
+            game_loop = false;
         } else if (play_again_is_clicked) {
             inf.score = 0;
-            handleGameProcess(inf);
+            //handleGameProcess(inf);
         }
     } else if (game_page_state == "win") {
         bool main_menu_is_clicked = checkInOut(mouse_x, mouse_y, main_menu_btn_rect);
         bool play_again_is_clicked = checkInOut(mouse_x, mouse_y, play_again_btn_rect);
         if (main_menu_is_clicked) {
             cout << "Main is clicked!!" << endl;
+            Locator["main_menu"] = !Locator["main_menu"];
+            Locator["game"] = !Locator["game"];
+            game_loop = false;
         } else if (play_again_is_clicked) {
             inf.score = 0;
-            handleGameProcess(inf);
+            //handleGameProcess(inf);
         }
     }
 
