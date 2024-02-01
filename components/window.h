@@ -125,6 +125,9 @@ void destroyBallsTexture() {
     SDL_FreeSurface(yellowRedBallSurface);
     SDL_DestroyTexture(yellowRedBall);
 
+    SDL_FreeSurface(multiColorBallSurface);
+    SDL_DestroyTexture(multiColorBall);
+
 }
 
 void destroySoundSFX() {
@@ -291,7 +294,7 @@ void initializeButtonsAndBG() {
 
     //quit menu
     textRender(DoYouWantToQuitTextSurface, DoYouWantToQuitText, DoYouWantToQuitTextRectSrc,
-               DoYouWantToQuitTextRect, 70, 220, 0.5, "Do you Really want to quit the Game? :(");
+               DoYouWantToQuitTextRect, 70+th.loc[23], 220, 0.5, "Do you Really want to quit the Game? :(");
     imageRender(iWantQuitButtonSurface, iWantQuitButton,iWantQuitButtonRectSrc,
                 iWantQuitButtonRect, th.loc[8], th.loc[9]-330, th.sizeMultiplier, th.buttonQuit);
     textRender(iWantQuitTextSurface, iWantQuitText, iWantQuitTextRectSrc,
