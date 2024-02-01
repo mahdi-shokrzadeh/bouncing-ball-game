@@ -286,9 +286,9 @@ void initializeButtonsAndBG() {
 
     //quit menu
     textRender(DoYouWantToQuitTextSurface, DoYouWantToQuitText, DoYouWantToQuitTextRectSrc,
-               DoYouWantToQuitTextRect, 70, 240, 0.5, "Do you Really want to quit the Game? :(");
+               DoYouWantToQuitTextRect, 70, 220, 0.5, "Do you Really want to quit the Game? :(");
     imageRender(iWantQuitButtonSurface, iWantQuitButton,iWantQuitButtonRectSrc,
-                iWantQuitButtonRect, th.loc[8], th.loc[9]-300, th.sizeMultiplier, th.buttonQuit);
+                iWantQuitButtonRect, th.loc[8], th.loc[9]-330, th.sizeMultiplier, th.buttonQuit);
     textRender(iWantQuitTextSurface, iWantQuitText, iWantQuitTextRectSrc,
                iWantQuitTextRect, th.loc[12], th.loc[13], 1, "Yes!");
 
@@ -314,7 +314,7 @@ void initializeButtonsAndBG() {
     imageRender(randomModeHoverButtonSurface, randomModeHoverButton, randomModeHoverButtonRectSrc,
                 randomModeHoverButtonRect, th.loc[0], th.loc[1], th.sizeMultiplier, th.buttonHover);
     textRender(randomModeTextSurface, randomModeText, randomModeTextRectSrc,
-               randomModeTextRect, th.loc[14], th.loc[15] + 200, 0.8, "Random");
+               randomModeTextRect, th.loc[14]-th.loc[20], th.loc[15] + 200, 0.8, "Random");
 
     //infinite mode menu
     imageRender(infiniteModeButtonSurface, infiniteModeButton,infiniteModeButtonRectSrc,
@@ -322,7 +322,7 @@ void initializeButtonsAndBG() {
     imageRender(infiniteModeHoverButtonSurface, infiniteModeHoverButton,infiniteModeHoverButtonRectSrc,
                 infiniteModeHoverButtonRect, th.loc[4], th.loc[5], th.sizeMultiplier, th.buttonHover);
     textRender(infiniteModeTextSurface, infiniteModeText, infiniteModeTextRectSrc,
-               infiniteModeTextRect, th.loc[16], th.loc[17]+200, 0.8, "Infinite");
+               infiniteModeTextRect, th.loc[16]+th.loc[20], th.loc[17]+200, 0.8, "Infinite");
 
     //level 1 button
     imageRender(level1ButtonSurface, level1Button,level1ButtonRectSrc,
@@ -330,7 +330,7 @@ void initializeButtonsAndBG() {
     imageRender(level1HoverButtonSurface, level1HoverButton,level1HoverButtonRectSrc,
                 level1HoverButtonRect, th.loc[0], th.loc[1]-300, th.sizeMultiplier, th.buttonHover);
     textRender(level1TextSurface, level1Text, level1TextRectSrc,
-               level1TextRect, th.loc[18], th.loc[19], 0.9, "level 1");
+               level1TextRect, th.loc[18], th.loc[19]+th.loc[21], 0.9, "level 1");
 
     //level 2 button
     imageRender(level2ButtonSurface, level2Button,level2ButtonRectSrc,
@@ -338,7 +338,7 @@ void initializeButtonsAndBG() {
     imageRender(level2HoverButtonSurface, level2HoverButton,level2HoverButtonRectSrc,
                 level2HoverButtonRect, th.loc[4], th.loc[5]-300, th.sizeMultiplier, th.buttonHover);
     textRender(level2TextSurface, level2Text, level2TextRectSrc,
-               level2TextRect, th.loc[18]+300, th.loc[19], 0.9, "level 2");
+               level2TextRect, th.loc[18]+300, th.loc[19]+th.loc[21], 0.9, "level 2");
 
     //level 3 button
     imageRender(level3ButtonSurface, level3Button,level3ButtonRectSrc,
@@ -346,7 +346,7 @@ void initializeButtonsAndBG() {
     imageRender(level3HoverButtonSurface, level3HoverButton,level3HoverButtonRectSrc,
                 level3HoverButtonRect, th.loc[0], th.loc[1]-100, th.sizeMultiplier, th.buttonHover);
     textRender(level3TextSurface, level3Text, level3TextRectSrc,
-               level3TextRect, th.loc[18], th.loc[19]+200, 0.9, "level 3");
+               level3TextRect, th.loc[18], th.loc[19]+200+th.loc[21], 0.9, "level 3");
 
     //level 4 button
     imageRender(level4ButtonSurface, level4Button,level4ButtonRectSrc,
@@ -354,15 +354,15 @@ void initializeButtonsAndBG() {
     imageRender(level4HoverButtonSurface, level4HoverButton,level4HoverButtonRectSrc,
                 level4HoverButtonRect, th.loc[4], th.loc[5]-100, th.sizeMultiplier, th.buttonHover);
     textRender(level4TextSurface, level4Text, level4TextRectSrc,
-               level4TextRect, th.loc[18]+300, th.loc[19]+200, 0.9, "level 4");
+               level4TextRect, th.loc[18]+300, th.loc[19]+200+th.loc[21], 0.9, "level 4");
 
     //level 5 button
     imageRender(level5ButtonSurface, level5Button,level5ButtonRectSrc,
-                level5ButtonRect, (th.loc[0]+th.loc[4])/2, th.loc[9]-130, th.sizeMultiplier, th.button);
+                level5ButtonRect, (th.loc[0]+th.loc[4])/2, th.loc[9]-150, th.sizeMultiplier, th.button);
     imageRender(level5HoverButtonSurface, level5HoverButton,level5HoverButtonRectSrc,
-                level5HoverButtonRect, (th.loc[0]+th.loc[4])/2, th.loc[9]-130, th.sizeMultiplier, th.buttonHover);
+                level5HoverButtonRect, (th.loc[0]+th.loc[4])/2, th.loc[9]-150, th.sizeMultiplier, th.buttonHover);
     textRender(level5TextSurface, level5Text, level5TextRectSrc,
-               level5TextRect, th.loc[18]+150, th.loc[19]+365, 0.9, "level 5");
+               level5TextRect, th.loc[18]+150, th.loc[19]+345, 0.9, "level 5");
 
     //Jungle theme button
     theme temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Jungle;
