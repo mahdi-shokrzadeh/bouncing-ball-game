@@ -106,7 +106,7 @@ SDL_Rect main_menu_btn_rect = {
         .h = 210,
 };
 SDL_Rect main_menu_btn_rect_win = {
-        .x = 110,
+        .x = 180,
         .y = 380,
         .w = 220,
         .h = 220,
@@ -1353,7 +1353,6 @@ void handleFallingBalls() {
     for (int j = 0; j <= 11; j++) {
         queue.push_back({element.i, j});
     }
-//    cout << element.i << endl;
 
     while (!queue.empty()) {
 
