@@ -584,6 +584,9 @@ SDL_Texture *silverLockedBall = NULL;
 
 // multi color ball variables
 
+SDL_Surface *multiColorBallSurface = NULL;
+SDL_Texture *multiColorBall = NULL;
+
 // game SFX variables
 
 Mix_Chunk *winningSound = NULL;

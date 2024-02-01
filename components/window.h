@@ -57,6 +57,11 @@ void initializeBallsTexture() {
     yellowRedBallSurface = IMG_Load("assets/Game/Balls/yellowRed.png");
     yellowRedBall = SDL_CreateTextureFromSurface(renderer, yellowRedBallSurface);
 
+    // multi color
+
+    multiColorBallSurface = IMG_Load("assets/Game/Balls/multiColor.png");
+    multiColorBall = SDL_CreateTextureFromSurface(renderer, multiColorBallSurface);
+
 }
 
 void initializeSoundSFX() {
