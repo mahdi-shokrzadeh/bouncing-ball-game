@@ -878,21 +878,29 @@ void ballDraw(BALL ball) {
                 SDL_RenderCopy(renderer, yellowLockedBall, &src, &dest);
 
         } else if (ball.level == 0) {
-
-            if (colorsAreTheSame(color, RED))
-                SDL_RenderCopy(renderer, redNormalBall, &src, &dest);
-            else if (colorsAreTheSame(color, CYAN))
-                SDL_RenderCopy(renderer, cyanNormalBall, &src, &dest);
-            else if (colorsAreTheSame(color, BLUE))
-                SDL_RenderCopy(renderer, blueNormalBall, &src, &dest);
-            else if (colorsAreTheSame(color, PURPLE))
-                SDL_RenderCopy(renderer, purpleNormalBall, &src, &dest);
-            else if (colorsAreTheSame(color, GREEN))
-                SDL_RenderCopy(renderer, greenNormalBall, &src, &dest);
-            else if (colorsAreTheSame(color, WHEAT))
-                SDL_RenderCopy(renderer, silverNormalBall, &src, &dest);
-            else if (colorsAreTheSame(color, YELLOW))
-                SDL_RenderCopy(renderer, yellowNormalBall, &src, &dest);
+            if (!colorsAreTheSame(BLACK, ball.second_color)) {
+                if (colorsAreTheSame(color, RED))
+                    SDL_RenderCopy(renderer, redNormalBall, &src, &dest);
+                else if (colorsAreTheSame(color, CYAN))
+                    SDL_RenderCopy(renderer, cyanNormalBall, &src, &dest);
+                else if (colorsAreTheSame(color, BLUE))
+                    SDL_RenderCopy(renderer, blueNormalBall, &src, &dest);
+                else if (colorsAreTheSame(color, PURPLE))
+                    SDL_RenderCopy(renderer, purpleNormalBall, &src, &dest);
+                else if (colorsAreTheSame(color, GREEN))
+                    SDL_RenderCopy(renderer, greenNormalBall, &src, &dest);
+                else if (colorsAreTheSame(color, WHEAT))
+                    SDL_RenderCopy(renderer, silverNormalBall, &src, &dest);
+                else if (colorsAreTheSame(color, YELLOW))
+                    SDL_RenderCopy(renderer, yellowNormalBall, &src, &dest);
+            } else {
+                if (colorsAreTheSame(ball.color, RED) && colorsAreTheSame(ball.second_color, BLUE))
+                    SDL_RenderCopy(renderer, redBlueBall, &src, &dest);
+                else if (colorsAreTheSame(ball.color, YELLOW) && colorsAreTheSame(ball.second_color, RED))
+                    SDL_RenderCopy(renderer, yellowRedBall, &src, &dest);
+                else if (colorsAreTheSame(ball.color, BLUE) && colorsAreTheSame(ball.second_color, YELLOW))
+                    SDL_RenderCopy(renderer, blueYellowBall, &src, &dest);
+            }
 
         }
 
