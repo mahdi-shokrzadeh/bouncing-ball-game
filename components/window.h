@@ -362,7 +362,7 @@ void initializeButtonsAndBG() {
     imageRender(level5HoverButtonSurface, level5HoverButton,level5HoverButtonRectSrc,
                 level5HoverButtonRect, (th.loc[0]+th.loc[4])/2, th.loc[9]-130, th.sizeMultiplier, th.buttonHover);
     textRender(level5TextSurface, level5Text, level5TextRectSrc,
-               level5TextRect, th.loc[18]+150, th.loc[19]+350, 0.9, "level 5");
+               level5TextRect, th.loc[18]+150, th.loc[19]+365, 0.9, "level 5");
 
     //Jungle theme button
     theme temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Jungle;
