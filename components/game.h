@@ -1717,7 +1717,7 @@ void showScore(string type) {
 
     inf.score = score;
 
-//    scoresWriter(inf);
+    scoresWriter(inf);
 
 }
 
