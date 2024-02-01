@@ -336,7 +336,7 @@ void handleGameProcess(GAME_INF game_inf) {
                 if (game_page_state == "game") {
                     switch (event.key.keysym.sym) {
                         case SDLK_SPACE:
-                            swapShootingBalls(shooter_ball, reserved_ball);
+                            swapShootingBalls(shooter_ball , reserved_ball);
                             drawShootingBalls(shooter_ball, reserved_ball);
                             break;
 
@@ -821,7 +821,11 @@ void initializeShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
 
 
 void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
-    swap(shooter_ball.color, reserved_ball.color);
+
+    swap(shooter_ball, reserved_ball);
+    shooter_ball.center = center_of_reserved_ball;
+    reserved_ball.center = center_of_shooting_ball;
+
 }
 
 
@@ -1016,9 +1020,15 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
                     break;
                 }
             default:
-                reserved_ball.color = thrown_ball.color;
-                reserved_ball.type = 'c';
-                setRandomColorForShootingBall(reserved_ball.color);
+//                reserved_ball.color = thrown_ball.color;
+//                reserved_ball.type = 'c';
+//                setRandomColorForShootingBall(reserved_ball.color);
+                if (number_of_x_balls > 0) {
+                    reserved_ball.type = 'x';
+                    number_of_x_balls--;
+                    cout << "X" << endl;
+                    break;
+                }
         }
 //        setRandomColor(reserved_ball.color);
 //        while (reserved_ball.color.r == shooting_ball.color.r) setRandomColor(reserved_ball.color);
