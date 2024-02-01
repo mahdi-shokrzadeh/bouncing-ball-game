@@ -108,21 +108,29 @@ void sinaSort(int n, string name[], string score[], string newName, int newScore
     score[i] = to_string(newScore);
 }
 
+void doTrim(int n, char flag, string source, string list[]) {
+    for(int i = 0;i < n;i++) {
+    }
+}
+
 int scoresReader(GAME_INF game,string name[], string score[]) {
 
+    int n = 0;
+    string tempNames = "", tempScores = "";
     string address = locateFile(game.mode, game.level);
 
     ifstream scores;
     scores.open(address);
-
     if (!scores.good()) {
         cout << "error opening scores file...";
         return 0;
     }
 
-    int n = 0;
-
     scores >> n;
+//    getline(scores, tempScores);
+//    getline(scores, tempNames);
+//    doTrim(n, ',', tempScores, score);
+//    doTrim(n, ',', tempNames, name);
 
     for(int i = 0;i < n;i++) {
         scores >> score[i];
@@ -164,11 +172,11 @@ void scoresWriter(GAME_INF game) {
 
     scores << n << endl;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n && i < 10; i++) {
         scores << score[i] << " ";
     }
-    cout << endl;
-    for (int i = 0; i < n; i++) {
+    scores << endl;
+    for (int i = 0; i < n && i < 10; i++) {
         scores << name[i] << " ";
     }
 

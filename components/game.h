@@ -1426,11 +1426,25 @@ void handleCheckBtnsClicks() {
         bool play_again_is_clicked = checkInOut(mouse_x, mouse_y, play_again_btn_rect);
         if (main_menu_is_clicked) {
             cout << "Main is clicked!!" << endl;
+            Locator["main_menu"] = !Locator["main_menu"];
+            Locator["game"] = !Locator["game"];
+            game_loop = false;
         } else if (play_again_is_clicked) {
-            cout << "Play again is clicked!!" << endl;
+            inf.score = 0;
+            //handleGameProcess(inf);
         }
     } else if (game_page_state == "win") {
-
+        bool main_menu_is_clicked = checkInOut(mouse_x, mouse_y, main_menu_btn_rect);
+        bool play_again_is_clicked = checkInOut(mouse_x, mouse_y, play_again_btn_rect);
+        if (main_menu_is_clicked) {
+            cout << "Main is clicked!!" << endl;
+            Locator["main_menu"] = !Locator["main_menu"];
+            Locator["game"] = !Locator["game"];
+            game_loop = false;
+        } else if (play_again_is_clicked) {
+            inf.score = 0;
+            //handleGameProcess(inf);
+        }
     }
 
     mouse_click = false;
@@ -1677,18 +1691,32 @@ void showScore(string type) {
 
     // drawing buttons based on loose ore win state
 
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+    SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
+
+
 
     if (type == "win") {
-        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect_win);
-
-    } else {
-        gameRenderImage(main_menu_btn_tex, main_menu_btn_rect);
-        gameRenderImage(play_again_btn_tex, play_again_btn_rect);
-
+        textRender(score_surface, score_texture, score_rect_src, score_rect,60, 100, 1.0, "You won!");
+        SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
+    }
+    else {
+        textRender(score_surface, score_texture, score_rect_src, score_rect,60, 100, 1.0, "You lost!");
+        SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
     }
 
 
+    gameRenderImage(main_menu_btn_tex, main_menu_btn_rect);
+    gameRenderImage(play_again_btn_tex, play_again_btn_rect);
+
     SDL_RenderPresent(renderer);
+
+    inf.score = score;
+
+    scoresWriter(inf);
 
 }
 
