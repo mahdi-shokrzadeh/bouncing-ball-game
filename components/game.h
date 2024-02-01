@@ -447,7 +447,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                     BALL &ball = balls[i][j];
                     if (time_effect_is_active) {
                         time_counter--;
-                        ball.center.y += vertical_speed / 4.0;
+                        ball.center.y += VERTICAL_TIME_SPEED;
                     } else {
                         ball.center.y += vertical_speed;
                     }
@@ -497,7 +497,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
             if (balls[FINAL_ROWS][j].type != 's') {
                 BALL &ball = balls[FINAL_ROWS][j];
                 if (time_effect_is_active) {
-                    ball.center.y += vertical_speed / 4.0;
+                    ball.center.y += VERTICAL_TIME_SPEED;
 
                 } else {
                     ball.center.y += vertical_speed;
@@ -507,7 +507,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         }
 
         if (time_effect_is_active) {
-            end_pointer_ball.center.y += vertical_speed / 4.0;
+            end_pointer_ball.center.y += VERTICAL_TIME_SPEED;
         } else {
             end_pointer_ball.center.y += vertical_speed;
         }
@@ -1014,22 +1014,21 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
                     number_of_x_balls--;
                     break;
                 }
-            case -2:
+            case 1:
                 if (number_of_ice_balls > 0) {
                     reserved_ball.type = 'c';
                     reserved_ball.ice_effect = true;
                     setRandomColorForShootingBall(reserved_ball.color);
                     number_of_ice_balls--;
-                    cout << "ICE" << endl;
 
                     break;
                 }
             default:
-//                reserved_ball.color = thrown_ball.color;
-//                reserved_ball.type = 'c';
-//                setRandomColorForShootingBall(reserved_ball.color);
-                reserved_ball.type = 'x';
-                number_of_x_balls--;
+
+                reserved_ball.color = thrown_ball.color;
+                reserved_ball.type = 'c';
+                setRandomColorForShootingBall(reserved_ball.color);
+
                 break;
 
         }
@@ -1083,7 +1082,8 @@ void checkCollShooterAndBalls() {
 void handleCollShooterAndBalls(BALL &ball, int i, int j) {
 
     if (!ball_is_being_thrown)return;
-    if (ball.ice_effect) time_effect_is_active = true;
+    cout << thrown_ball.ice_effect << endl;
+    if (thrown_ball.ice_effect) time_effect_is_active = true;
 
     ELEMENT el;
 
@@ -1405,7 +1405,6 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
 
 
     if (visited.size() > LEAST_BALLS_NUMBER) {
-        cout << "VISITED" << endl;
         // clearing balls
         for (ELEMENT el: visited) {
             // important condition!
