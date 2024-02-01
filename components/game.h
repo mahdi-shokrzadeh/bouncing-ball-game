@@ -186,7 +186,7 @@ int run_times = 0;
 
 // Timer mode
 auto start_time = std::chrono::high_resolution_clock::now();
-long long int timer;
+long long int timer = 0;
 long long int whole_time = 0;
 
 
@@ -286,6 +286,8 @@ void setRandomColorForLocks(SDL_Color &color);
 
 void initialVarsForTimed();
 
+void resetVars();
+
 // ---------------------------------------------------
 
 
@@ -318,6 +320,7 @@ void handleGameProcess(GAME_INF game_inf) {
             if (event.type == SDL_QUIT) {
                 game_loop = SDL_FALSE;
                 main_loop = SDL_FALSE;
+                return;
             } else if (event.type == SDL_KEYDOWN) {
                 if (game_page_state == "game") {
                     switch (event.key.keysym.sym) {
@@ -527,7 +530,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
 
         // Game Over for timer mode
         if (inf.mode == "timed") {
-            run_times ++;
+            run_times++;
             // draw timer
 
             textRender(timer_surface, timer_texture, timer_rect_src, timer_rect,
@@ -541,7 +544,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
             }
 
             // updating timer
-            if(run_times % 60 == 0){
+            if (run_times % 60 == 0) {
                 run_times = 0;
                 auto end = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start_time);
@@ -1422,10 +1425,13 @@ void handleCheckBtnsClicks() {
             cout << "Main is clicked!!" << endl;
             Locator["main_menu"] = !Locator["main_menu"];
             Locator["game"] = !Locator["game"];
+            // Reset vars
+            resetVars();
             game_loop = false;
         } else if (play_again_is_clicked) {
-            inf.score = 0;
-            //handleGameProcess(inf);
+            resetVars();
+            game_page_state = "game";
+            handleGameProcess(inf);
         }
     } else if (game_page_state == "win") {
         bool main_menu_is_clicked = checkInOut(mouse_x, mouse_y, main_menu_btn_rect);
@@ -1434,10 +1440,13 @@ void handleCheckBtnsClicks() {
             cout << "Main is clicked!!" << endl;
             Locator["main_menu"] = !Locator["main_menu"];
             Locator["game"] = !Locator["game"];
+            // Reset vars
+            resetVars();
             game_loop = false;
         } else if (play_again_is_clicked) {
-            inf.score = 0;
-            //handleGameProcess(inf);
+            resetVars();
+            game_page_state = "game";
+            handleGameProcess(inf);
         }
     }
 
@@ -1692,13 +1701,11 @@ void showScore(string type) {
     SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
 
 
-
     if (type == "win") {
-        textRender(score_surface, score_texture, score_rect_src, score_rect,200, 200, 1.0, "You won!");
+        textRender(score_surface, score_texture, score_rect_src, score_rect, 200, 200, 1.0, "You won!");
         SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
-    }
-    else {
-        textRender(score_surface, score_texture, score_rect_src, score_rect,200, 200, 1.0, "You lost!");
+    } else {
+        textRender(score_surface, score_texture, score_rect_src, score_rect, 200, 200, 1.0, "You lost!");
         SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
     }
 
@@ -1710,7 +1717,7 @@ void showScore(string type) {
 
     inf.score = score;
 
-    scoresWriter(inf);
+//    scoresWriter(inf);
 
 }
 
@@ -1867,6 +1874,7 @@ void initializeRandomPattern(int (&arr)[20][12]) {
 
 }
 
+
 void initialVarsForTimed() {
     switch (inf.level) {
         case 1 :
@@ -1895,5 +1903,53 @@ void initialVarsForTimed() {
 
     }
 }
+
+
+void resetVars() {
+
+    score = 0;
+    fell_balls = 0;
+    ball_is_being_thrown = false;
+    temp_fell_balls = 0;
+    number_of_balls = 0;
+    degree = 180.0;
+    flag = {ESCAPE_FOR_BALLS_ARRAY + 2, 0};
+    throw_is_disabled = false;
+    run_times = 0;
+    timer = 0;
+    whole_time = 0;
+    for (int i = 0; i <= FINAL_ROWS + 1; i++) {
+        for (int j = 0; j < 12; j++) {
+            balls[i][j] = {0};
+            pattern[i][j]={0};
+        }
+    }
+    mouse_click = false;
+    balls_recent_color = {1};
+    time_to_wait = 9;
+    game_state = "running";
+    inf.score = 0;
+    gone_ball = {
+
+            .type ='s',
+            .color = PINK,
+            .center = {
+                    .x = 10000,
+                    .y = 20000,
+            },
+
+    };
+    end_pointer_ball = {
+            .type = 'e',
+            .color = RED,
+            .center = {
+                    .x = 0.0,
+                    .y = -1000.0,
+            },
+    };
+
+
+}
+
 
 #endif //BOUNCING_BALL_GAME_GAME_H
