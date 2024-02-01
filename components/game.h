@@ -2030,6 +2030,7 @@ void resetVars() {
 
 void handlePauseMenu() {
 
+    SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
     SDL_RenderFillRect(renderer, &settingBox);
 
     // main menu button
@@ -2052,6 +2053,8 @@ void handlePauseMenu() {
     else
         SDL_RenderCopy(renderer, settingMenuHoverButton, &settingMenuHoverButtonRectSrc, &settingMenuHoverButtonRect);
     SDL_RenderCopy(renderer, settingMenuText, &settingMenuTextRectSrc, &settingMenuTextRect);
+
+    SDL_RenderPresent(renderer);
 
 }
 
