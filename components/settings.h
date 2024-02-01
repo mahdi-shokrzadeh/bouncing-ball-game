@@ -591,6 +591,11 @@ SDL_Texture *silverLockedBall = NULL;
 SDL_Surface *multiColorBallSurface = NULL;
 SDL_Texture *multiColorBall = NULL;
 
+// ice ball variables
+
+SDL_Surface *iceBallSurface = NULL;
+SDL_Texture *iceBall = NULL;
+
 // game SFX variables
 
 Mix_Chunk *winningSound = NULL;

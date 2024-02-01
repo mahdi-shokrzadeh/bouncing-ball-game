@@ -945,6 +945,7 @@ void ballDraw(BALL ball) {
 //        SDL_RenderCopy(renderer, redBlueBall, &src, &dest);
 //
 //    }
+    //SDL_RenderCopy(renderer, iceBall, &src, &dest);
 
 
 }

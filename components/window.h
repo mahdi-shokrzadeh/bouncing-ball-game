@@ -62,6 +62,11 @@ void initializeBallsTexture() {
     multiColorBallSurface = IMG_Load("assets/Game/Balls/multiColor.png");
     multiColorBall = SDL_CreateTextureFromSurface(renderer, multiColorBallSurface);
 
+    // ice ball
+
+    iceBallSurface = IMG_Load("assets/Game/Balls/ice.png");
+    iceBall = SDL_CreateTextureFromSurface(renderer, iceBallSurface);
+
 }
 
 void initializeSoundSFX() {
@@ -127,6 +132,9 @@ void destroyBallsTexture() {
 
     SDL_FreeSurface(multiColorBallSurface);
     SDL_DestroyTexture(multiColorBall);
+
+    SDL_FreeSurface(iceBallSurface);
+    SDL_DestroyTexture(iceBall);
 
 }
 
