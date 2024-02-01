@@ -238,19 +238,6 @@ SDL_Rect logoRect;
 
 // Buttons setup for making them global
 
-SDL_Surface *mainMenuButtonSurface = NULL;
-SDL_Texture *mainMenuButton = NULL;
-SDL_Rect mainMenuButtonRect;
-SDL_Rect mainMenuButtonRectSrc;
-SDL_Surface *mainMenuHoverButtonSurface = NULL;
-SDL_Texture *mainMenuHoverButton = NULL;
-SDL_Rect mainMenuHoverButtonRect;
-SDL_Rect mainMenuHoverButtonRectSrc;
-SDL_Surface *mainMenuTextSurface;
-SDL_Texture *mainMenuText;
-SDL_Rect mainMenuTextRectSrc;
-SDL_Rect mainMenuTextRect;
-
 SDL_Surface *settingButtonSurface = NULL;
 SDL_Texture *settingButton = NULL;
 SDL_Rect settingButtonRect;
@@ -543,6 +530,46 @@ SDL_Texture *level5Text;
 SDL_Rect level5TextRectSrc;
 SDL_Rect level5TextRect;
 
+
+SDL_Surface *resumeButtonSurface = NULL;
+SDL_Texture *resumeButton = NULL;
+SDL_Rect resumeButtonRect;
+SDL_Rect resumeButtonRectSrc;
+SDL_Surface *resumeHoverButtonSurface = NULL;
+SDL_Texture *resumeHoverButton = NULL;
+SDL_Rect resumeHoverButtonRect;
+SDL_Rect resumeHoverButtonRectSrc;
+SDL_Surface *resumeTextSurface;
+SDL_Texture *resumeText;
+SDL_Rect resumeTextRectSrc;
+SDL_Rect resumeTextRect;
+
+SDL_Surface *mainMenuButtonSurface = NULL;
+SDL_Texture *mainMenuButton = NULL;
+SDL_Rect mainMenuButtonRect;
+SDL_Rect mainMenuButtonRectSrc;
+SDL_Surface *mainMenuHoverButtonSurface = NULL;
+SDL_Texture *mainMenuHoverButton = NULL;
+SDL_Rect mainMenuHoverButtonRect;
+SDL_Rect mainMenuHoverButtonRectSrc;
+SDL_Surface *mainMenuTextSurface;
+SDL_Texture *mainMenuText;
+SDL_Rect mainMenuTextRectSrc;
+SDL_Rect mainMenuTextRect;
+
+SDL_Surface *settingMenuButtonSurface = NULL;
+SDL_Texture *settingMenuButton = NULL;
+SDL_Rect settingMenuButtonRect;
+SDL_Rect settingMenuButtonRectSrc;
+SDL_Surface *settingMenuHoverButtonSurface = NULL;
+SDL_Texture *settingMenuHoverButton = NULL;
+SDL_Rect settingMenuHoverButtonRect;
+SDL_Rect settingMenuHoverButtonRectSrc;
+SDL_Surface *settingMenuTextSurface;
+SDL_Texture *settingMenuText;
+SDL_Rect settingMenuTextRectSrc;
+SDL_Rect settingMenuTextRect;
+
 // balls variables
 
 SDL_Surface *redNormalBallSurface = NULL;
@@ -590,6 +617,11 @@ SDL_Texture *silverLockedBall = NULL;
 
 SDL_Surface *multiColorBallSurface = NULL;
 SDL_Texture *multiColorBall = NULL;
+
+// ice ball variables
+
+SDL_Surface *iceBallSurface = NULL;
+SDL_Texture *iceBall = NULL;
 
 // game SFX variables
 

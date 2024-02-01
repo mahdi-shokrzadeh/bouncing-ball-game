@@ -62,6 +62,11 @@ void initializeBallsTexture() {
     multiColorBallSurface = IMG_Load("assets/Game/Balls/multiColor.png");
     multiColorBall = SDL_CreateTextureFromSurface(renderer, multiColorBallSurface);
 
+    // ice ball
+
+    iceBallSurface = IMG_Load("assets/Game/Balls/ice.png");
+    iceBall = SDL_CreateTextureFromSurface(renderer, iceBallSurface);
+
 }
 
 void initializeSoundSFX() {
@@ -127,6 +132,9 @@ void destroyBallsTexture() {
 
     SDL_FreeSurface(multiColorBallSurface);
     SDL_DestroyTexture(multiColorBall);
+
+    SDL_FreeSurface(iceBallSurface);
+    SDL_DestroyTexture(iceBall);
 
 }
 
@@ -237,14 +245,6 @@ void initializeButtonsAndBG() {
     //volume on button
     imageRender(volumeOnButtonSurface, volumeOnButton,volumeOnButtonRectSrc,
                 volumeOnButtonRect, settingBox.x+10, 60, 2, "assets/UiUx/volume_on.svg");
-
-    //mainMenu button
-    imageRender(mainMenuButtonSurface, mainMenuButton,mainMenuButtonRectSrc,
-                mainMenuButtonRect, 300, 500, th.sizeMultiplier, th.button);
-    imageRender(mainMenuHoverButtonSurface, mainMenuHoverButton,mainMenuHoverButtonRectSrc,
-                mainMenuHoverButtonRect, 300, 500, th.sizeMultiplier, th.buttonHover);
-    textRender(mainMenuTextSurface, mainMenuText, mainMenuTextRectSrc,
-               mainMenuTextRect, 363, 564, 0.5, "main menu");
 
     //start button
     imageRender(startButtonSurface, startButton,startButtonRectSrc,
@@ -372,6 +372,32 @@ void initializeButtonsAndBG() {
     textRender(level5TextSurface, level5Text, level5TextRectSrc,
                level5TextRect, th.loc[18]+150, th.loc[19]+345, 0.9, "level 5");
 
+    //resume button
+    imageRender(resumeButtonSurface, resumeButton,resumeButtonRectSrc,
+                resumeButtonRect, th.loc[8], th.loc[9]-520, th.sizeMultiplier, th.button);
+    imageRender(resumeHoverButtonSurface, resumeHoverButton,resumeHoverButtonRectSrc,
+                resumeHoverButtonRect, th.loc[8], th.loc[9]-520, th.sizeMultiplier, th.buttonHover);
+    textRender(resumeTextSurface, resumeText, resumeTextRectSrc,
+               resumeTextRect, th.loc[10]-13, th.loc[11]-520+th.loc[24], 0.8, "Resume");
+
+    //setting button
+    imageRender(settingMenuButtonSurface, settingMenuButton,settingMenuButtonRectSrc,
+                settingMenuButtonRect, th.loc[8], th.loc[9]-330, th.sizeMultiplier, th.button);
+    imageRender(settingMenuHoverButtonSurface, settingMenuHoverButton,settingMenuHoverButtonRectSrc,
+                settingMenuHoverButtonRect, th.loc[8], th.loc[9]-330, th.sizeMultiplier, th.buttonHover);
+    textRender(settingMenuTextSurface, settingMenuText, settingMenuTextRectSrc,
+               settingMenuTextRect, th.loc[10]-5, th.loc[11]-330+th.loc[24], 0.8, "Setting");
+
+    //mainMenu button
+    imageRender(mainMenuButtonSurface, mainMenuButton,mainMenuButtonRectSrc,
+                mainMenuButtonRect, th.loc[8], th.loc[9]-145, th.sizeMultiplier, th.button);
+    imageRender(mainMenuHoverButtonSurface, mainMenuHoverButton,mainMenuHoverButtonRectSrc,
+                mainMenuHoverButtonRect, th.loc[8], th.loc[9]-145, th.sizeMultiplier, th.buttonHover);
+    textRender(mainMenuTextSurface, mainMenuText, mainMenuTextRectSrc,
+               mainMenuTextRect, th.loc[10]-3, th.loc[11]-140+th.loc[24], 0.5, "Main Menu");
+
+
+
     //Jungle theme button
     theme temporaryVariableJustBecauseCppIsStupidInMemoryManagementIGuess = Jungle;
     imageRender(jungleThemeButtonSurface, jungleThemeButton,jungleThemeButtonRectSrc,
@@ -426,13 +452,6 @@ void destroyButtonsAndBG() {
 
     SDL_FreeSurface(volumeOffButtonSurface);
     SDL_DestroyTexture(volumeOffButton);
-
-    SDL_FreeSurface(mainMenuButtonSurface);
-    SDL_DestroyTexture(mainMenuButton);
-    SDL_FreeSurface(mainMenuHoverButtonSurface);
-    SDL_DestroyTexture(mainMenuHoverButton);
-    SDL_FreeSurface(mainMenuTextSurface);
-    SDL_DestroyTexture(mainMenuText);
 
     SDL_FreeSurface(startButtonSurface);
     SDL_DestroyTexture(startButton);
@@ -565,6 +584,28 @@ void destroyButtonsAndBG() {
     SDL_DestroyTexture(spaceThemeHoverButton);
     SDL_FreeSurface(spaceThemeTextSurface);
     SDL_DestroyTexture(spaceThemeText);
+
+
+    SDL_FreeSurface(mainMenuButtonSurface);
+    SDL_DestroyTexture(mainMenuButton);
+    SDL_FreeSurface(mainMenuHoverButtonSurface);
+    SDL_DestroyTexture(mainMenuHoverButton);
+    SDL_FreeSurface(mainMenuTextSurface);
+    SDL_DestroyTexture(mainMenuText);
+
+    SDL_FreeSurface(resumeButtonSurface);
+    SDL_DestroyTexture(resumeButton);
+    SDL_FreeSurface(resumeHoverButtonSurface);
+    SDL_DestroyTexture(resumeHoverButton);
+    SDL_FreeSurface(resumeTextSurface);
+    SDL_DestroyTexture(resumeText);
+
+    SDL_FreeSurface(settingMenuButtonSurface);
+    SDL_DestroyTexture(settingMenuButton);
+    SDL_FreeSurface(settingMenuHoverButtonSurface);
+    SDL_DestroyTexture(settingMenuHoverButton);
+    SDL_FreeSurface(settingMenuTextSurface);
+    SDL_DestroyTexture(settingMenuText);
 
 
 }
