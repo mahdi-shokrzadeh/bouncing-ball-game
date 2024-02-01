@@ -1428,7 +1428,8 @@ void handleCheckBtnsClicks() {
         if (main_menu_is_clicked) {
             cout << "Main is clicked!!" << endl;
         } else if (play_again_is_clicked) {
-            //handleGameProcess(inf);
+            inf.score = 0;
+            handleGameProcess(inf);
         }
     } else if (game_page_state == "win") {
         bool main_menu_is_clicked = checkInOut(mouse_x, mouse_y, main_menu_btn_rect);
@@ -1436,7 +1437,8 @@ void handleCheckBtnsClicks() {
         if (main_menu_is_clicked) {
             cout << "Main is clicked!!" << endl;
         } else if (play_again_is_clicked) {
-            //handleGameProcess(inf);
+            inf.score = 0;
+            handleGameProcess(inf);
         }
     }
 
