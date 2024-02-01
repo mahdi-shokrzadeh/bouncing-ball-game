@@ -105,12 +105,6 @@ SDL_Rect main_menu_btn_rect = {
         .w = 210,
         .h = 210,
 };
-SDL_Rect main_menu_btn_rect_win = {
-        .x = 180,
-        .y = 380,
-        .w = 220,
-        .h = 220,
-};
 
 
 SDL_Surface *main_menu_btn_sur;
@@ -451,7 +445,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                     // falling balls
                     if (ball.type == 'f') {
                         if (ball.dx == 0) {
-                            ball.dx = rand() % 2 == 0 ? (rand() % 10) / 10.0 + 1.0 : -1 * (rand() % 10) / 10.0 + 1.0;
+                            ball.dx = rand() % 2 == 0 ? (rand() % 10) / 10.0 + 1.0 : -1 * (rand() % 10) / 10.0 - 1.0;
                         }
                         ball.center.x += ball.dx;
 
@@ -1700,11 +1694,11 @@ void showScore(string type) {
 
 
     if (type == "win") {
-        textRender(score_surface, score_texture, score_rect_src, score_rect,60, 100, 1.0, "You won!");
+        textRender(score_surface, score_texture, score_rect_src, score_rect,200, 200, 1.0, "You won!");
         SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
     }
     else {
-        textRender(score_surface, score_texture, score_rect_src, score_rect,60, 100, 1.0, "You lost!");
+        textRender(score_surface, score_texture, score_rect_src, score_rect,200, 200, 1.0, "You lost!");
         SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
     }
 
