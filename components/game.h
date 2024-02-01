@@ -299,6 +299,8 @@ void initialVarsForTimed();
 
 void resetVars();
 
+void handlePauseMenu();
+
 // ---------------------------------------------------
 
 
@@ -375,7 +377,7 @@ void handleGameProcess(GAME_INF game_inf) {
 
         } else if (game_page_state == "pause_menu") {
 
-//            SDL_RenderPresent(renderer);
+            handlePauseMenu();
 
         } else if (game_page_state == "quit_menu") {
 
@@ -1484,6 +1486,7 @@ void handleCheckBtnsClicks() {
     } else if (game_page_state == "pause_menu") {
         bool menu_is_clicked = checkInOut(mouse_x, mouse_y, menu_btn_rect);
         if (menu_is_clicked) game_page_state = "game";
+
     } else if (game_page_state == "over") {
         bool main_menu_is_clicked = checkInOut(mouse_x, mouse_y, main_menu_btn_rect);
         bool play_again_is_clicked = checkInOut(mouse_x, mouse_y, play_again_btn_rect);
@@ -2025,5 +2028,31 @@ void resetVars() {
     time_counter = TIME_EFFECT_COUNTER;
 }
 
+void handlePauseMenu() {
+
+    SDL_RenderFillRect(renderer, &settingBox);
+
+    // main menu button
+    if(!checkInOut(free_mouse_x, free_mouse_y, mainMenuButtonRect))
+        SDL_RenderCopy(renderer, mainMenuButton, &mainMenuButtonRectSrc, &mainMenuButtonRect);
+    else
+        SDL_RenderCopy(renderer, mainMenuHoverButton, &mainMenuHoverButtonRectSrc, &mainMenuHoverButtonRect);
+    SDL_RenderCopy(renderer, mainMenuText, &mainMenuTextRectSrc, &mainMenuTextRect);
+
+    // resume button
+    if(!checkInOut(free_mouse_x, free_mouse_y, resumeButtonRect))
+        SDL_RenderCopy(renderer, resumeButton, &resumeButtonRectSrc, &resumeButtonRect);
+    else
+        SDL_RenderCopy(renderer, resumeHoverButton, &resumeHoverButtonRectSrc, &resumeHoverButtonRect);
+    SDL_RenderCopy(renderer, resumeText, &resumeTextRectSrc, &resumeTextRect);
+
+    // setting menu button
+    if(!checkInOut(free_mouse_x, free_mouse_y, settingMenuButtonRect))
+        SDL_RenderCopy(renderer, settingMenuButton, &settingMenuButtonRectSrc, &settingMenuButtonRect);
+    else
+        SDL_RenderCopy(renderer, settingMenuHoverButton, &settingMenuHoverButtonRectSrc, &settingMenuHoverButtonRect);
+    SDL_RenderCopy(renderer, settingMenuText, &settingMenuTextRectSrc, &settingMenuTextRect);
+
+}
 
 #endif //BOUNCING_BALL_GAME_GAME_H
