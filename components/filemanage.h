@@ -167,7 +167,7 @@ void scoresWriter(GAME_INF game) {
     for (int i = 0; i < n && i < 10; i++) {
         scores << score[i] << " ";
     }
-    cout << endl;
+    scores << endl;
     for (int i = 0; i < n && i < 10; i++) {
         scores << name[i] << " ";
     }
