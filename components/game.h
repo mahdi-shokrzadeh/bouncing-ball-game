@@ -1718,7 +1718,13 @@ void showScore(string type) {
 
     inf.score = score;
 
-    scoresWriter(inf);
+    try {
+        scoresWriter(inf);
+    } catch (const exception &e) {
+        cout << "An exception occurred: " << e.what() << endl;
+    } catch (...) {
+        cout << "An unknown exception occurred." << endl;
+    }
 
 }
 
@@ -1797,7 +1803,6 @@ unsigned int checkBallsAreConnected(int arr[20][12]) {
         queue.erase(queue.begin());
     }
 
-    cout << "DOnE" << endl;
     return visited.size();
 
 }
