@@ -445,7 +445,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
                     // falling balls
                     if (ball.type == 'f') {
                         if (ball.dx == 0) {
-                            ball.dx = rand() % 2 == 0 ? (rand() % 10) / 10.0 + 1.0 : -1 * (rand() % 10) / 10.0 - 1.0;
+                            ball.dx = rand() % 2 == 0 ? (rand() % 10) / 10.0 + 0.5 : -1 * (rand() % 10) / 10.0 - 0.5;
                         }
                         ball.center.x += ball.dx;
 
