@@ -952,8 +952,9 @@ void ballDraw(BALL ball) {
 //        SDL_RenderCopy(renderer, redBlueBall, &src, &dest);
 //
 //    }
-    //SDL_RenderCopy(renderer, iceBall, &src, &dest);
-
+    if(ball.ice_effect) {
+        SDL_RenderCopy(renderer, iceBall, &src, &dest);
+    }
 
 }
 
