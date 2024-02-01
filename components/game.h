@@ -437,7 +437,6 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         // drawing balls
 
         for (int i = 0; i < FINAL_ROWS; i++) {
-            int p = rand() % 2;
             for (int j = 0; j < 12; j++) {
                 if (balls[i][j].type != 's') {
                     BALL &ball = balls[i][j];
@@ -906,7 +905,7 @@ void ballDraw(BALL ball) {
                 SDL_RenderCopy(renderer, yellowLockedBall, &src, &dest);
 
         } else if (ball.level == 0) {
-            if (!colorsAreTheSame(BLACK, ball.second_color)) {
+            if (colorsAreTheSame(BLACK, ball.second_color)) {
                 if (colorsAreTheSame(color, RED))
                     SDL_RenderCopy(renderer, redNormalBall, &src, &dest);
                 else if (colorsAreTheSame(color, CYAN))
@@ -1729,6 +1728,8 @@ int colorToInt(SDL_Color color) {
 
 
 void checkColorOfShootingBalls(BALL &ball) {
+
+    if (ball.type == 'x') return;
 
     vector<int> available_colors = getAvailableColorsVector();
     if (contains(available_colors, colorToInt(ball.color)) || flag.i <= 10) return;
