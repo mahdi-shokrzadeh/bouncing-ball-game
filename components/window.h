@@ -613,7 +613,10 @@ void leaderTextConfig(int n, SDL_Surface *surface[MAX_ARRAY_SIZE], SDL_Texture *
     SDL_SetRenderDrawColor(renderer, WHITE.r, WHITE.g, WHITE.b, WHITE.a);
 
     for(int i = 0;i < n;i++) {
-        textRender(surface[i], text[i], rectSrc[i],rect[i], pos, 60 + i * 50, 0.5, list[i]);
+        string txt = list[i];
+        while(txt.size() < 7)
+            txt = ' ' + txt;
+        textRender(surface[i], text[i], rectSrc[i],rect[i], pos, 60 + i * 50, 0.5, txt);
         SDL_RenderCopy(renderer, text[i], &rectSrc[i], &rect[i]);
         SDL_RenderDrawLine(renderer, 50, (i+2) * 50, 550, (i+2) * 50);
     }
@@ -1112,7 +1115,7 @@ void leaderboard(bool &MouseClicked, int x_MouseClicked, int y_MouseClicked, int
     SDL_Rect scoresTextRect[n];
 
     leaderTextConfig(n, namesTextSurface, namesText, namesTextRectSrc, namesTextRect, names, 60);
-    leaderTextConfig(n, scoresTextSurface, scoresText, scoresTextRectSrc, scoresTextRect, scores, 480);
+    leaderTextConfig(n, scoresTextSurface, scoresText, scoresTextRectSrc, scoresTextRect, scores, 460);
 
 
     // back button

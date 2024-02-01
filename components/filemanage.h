@@ -65,35 +65,6 @@ string locateFile(string mode, int level) {
     }
 }
 
-void mergeSort(int a[], int low, int high) {
-    if(high-low<1)
-        return;
-    int mid=(high+low)/2;
-    mergeSort(a,low,mid);
-    mergeSort(a,mid+1,high);
-    int *b=new int[high-low+1];
-    int k=0, i=low, j=mid+1;
-    while((i<=mid)&&(j<=high))
-    {
-        if(a[i]<a[j])
-        {
-            b[k++]=a[i++];
-        }
-        else
-        {
-            b[k++]=a[j++];
-        }
-    }
-    while(i<=mid)
-        b[k++]=a[i++];
-    while(j<=high)
-        b[k++]=a[j++];
-    //copy to main array
-    for(k=0;k<high-low+1;k++)
-        a[low+k]=b[k];
-    delete[] b;
-}
-
 void sinaSort(int n, string name[], string score[], string newName, int newScore) {
     int i;
     for(i = 0;i < n;i++) {
@@ -108,15 +79,10 @@ void sinaSort(int n, string name[], string score[], string newName, int newScore
     score[i] = to_string(newScore);
 }
 
-void doTrim(int n, char flag, string source, string list[]) {
-    for(int i = 0;i < n;i++) {
-    }
-}
-
 int scoresReader(GAME_INF game,string name[], string score[]) {
 
     int n = 0;
-    string tempNames = "", tempScores = "";
+    string tempNames, temp;
     string address = locateFile(game.mode, game.level);
 
     ifstream scores;
@@ -127,16 +93,17 @@ int scoresReader(GAME_INF game,string name[], string score[]) {
     }
 
     scores >> n;
-//    getline(scores, tempScores);
-//    getline(scores, tempNames);
-//    doTrim(n, ',', tempScores, score);
-//    doTrim(n, ',', tempNames, name);
-
-    for(int i = 0;i < n;i++) {
+    for(int i = 0;i < n;i++)
         scores >> score[i];
-    }
+
+    getline(scores, temp);
+    getline(scores, tempNames);
+
+    size_t pos = 0;
     for(int i = 0;i < n;i++) {
-        scores >> name[i];
+        pos =tempNames.find('%');
+        name[i] = tempNames.substr(0,pos);
+        tempNames.erase(0, pos+1);
     }
 
 //    while(!scores.eof())
@@ -177,7 +144,7 @@ void scoresWriter(GAME_INF game) {
     }
     scores << endl;
     for (int i = 0; i < n && i < 10; i++) {
-        scores << name[i] << " ";
+        scores << name[i] << "%";
     }
 
     scores.close();
