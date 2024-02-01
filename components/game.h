@@ -301,6 +301,8 @@ void resetVars();
 
 void handlePauseMenu();
 
+vector<ELEMENT> xType(ELEMENT ele, SDL_Color color);
+
 // ---------------------------------------------------
 
 
@@ -338,7 +340,7 @@ void handleGameProcess(GAME_INF game_inf) {
                 if (game_page_state == "game") {
                     switch (event.key.keysym.sym) {
                         case SDLK_SPACE:
-                            swapShootingBalls(shooter_ball , reserved_ball);
+                            swapShootingBalls(shooter_ball, reserved_ball);
                             drawShootingBalls(shooter_ball, reserved_ball);
                             break;
 
@@ -824,11 +826,9 @@ void initializeShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
 
 
 void swapShootingBalls(BALL &shooter_ball, BALL &reserved_ball) {
-
-    swap(shooter_ball, reserved_ball);
-    shooter_ball.center = center_of_reserved_ball;
-    reserved_ball.center = center_of_shooting_ball;
-
+    swap(shooter_ball.type, reserved_ball.type);
+    swap(shooter_ball.color, reserved_ball.color);
+    swap(shooter_ball.ice_effect, reserved_ball.ice_effect);
 }
 
 
@@ -952,7 +952,7 @@ void ballDraw(BALL ball) {
 //        SDL_RenderCopy(renderer, redBlueBall, &src, &dest);
 //
 //    }
-    if(ball.ice_effect) {
+    if (ball.ice_effect) {
         SDL_RenderCopy(renderer, iceBall, &src, &dest);
     }
 
@@ -1001,17 +1001,17 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
 
         ball_is_being_thrown = true;
         thrown_ball = shooting_ball;
-        shooting_ball = reserved_ball;
-        shooting_ball.center = center_of_shooting_ball;
-        reserved_ball.center = center_of_reserved_ball;
-        shooting_ball.type = 'c';
+//        shooting_ball = reserved_ball;
+//        swap(shooting_ball.type , reserved_ball.type);
+//        swap(shooting_ball.color , reserved_ball.color);
+        swapShootingBalls(shooting_ball, reserved_ball);
+//        shooting_ball.type = 'c';
         int m = rand() % 5;
         switch (m) {
             case 0:
                 if (number_of_x_balls > 0) {
                     reserved_ball.type = 'x';
                     number_of_x_balls--;
-                    cout << "X" << endl;
                     break;
                 }
             case -2:
@@ -1028,12 +1028,10 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
 //                reserved_ball.color = thrown_ball.color;
 //                reserved_ball.type = 'c';
 //                setRandomColorForShootingBall(reserved_ball.color);
-                if (number_of_x_balls > 0) {
-                    reserved_ball.type = 'x';
-                    number_of_x_balls--;
-                    cout << "X" << endl;
-                    break;
-                }
+                reserved_ball.type = 'x';
+                number_of_x_balls--;
+                break;
+
         }
 //        setRandomColor(reserved_ball.color);
 //        while (reserved_ball.color.r == shooting_ball.color.r) setRandomColor(reserved_ball.color);
@@ -1348,6 +1346,8 @@ void filterByColor(vector<ELEMENT> &elements, BALL ball) {
             }
         } else if (balls[it->i][it->j].type == 'e') {
             elements.erase(it);
+        } else if (balls[it->i][it->j].type == 'x') {
+            it++;
         }
 
     }
@@ -1361,11 +1361,15 @@ bool vectorContainsElement(const vector<ELEMENT> &elements, const ELEMENT &el) {
     return false;
 }
 
+void addVec(vector<ELEMENT> &vec1, vector<ELEMENT> const &vec2) {
+    for (auto el: vec2) {
+        if (!vectorContainsElement(vec1, el)) vec1.push_back(el);
+    }
+}
 
 void handleGraphCheck(int i, int j, BALL in_ball) {
     vector<ELEMENT> visited;
     vector<ELEMENT> queue;
-
 
     ELEMENT zero;
     zero.i = i;
@@ -1374,86 +1378,14 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
     queue.push_back(zero);
 
     if (in_ball.type == 'x') {
-        while (!queue.empty()) {
-            ELEMENT el = queue[0];
-            vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
-            BALL x_ball;
-            x_ball.color = RED;
-            filterByColor(vec, x_ball);
-            if (!vectorContainsElement(visited, el)) visited.push_back(el);
-            for (ELEMENT el2: vec) {
-                if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
-            }
-            queue.erase(queue.begin());
-        }
-
-        queue.push_back(zero);
-        while (!queue.empty()) {
-            ELEMENT el = queue[0];
-            vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
-            BALL x_ball;
-            x_ball.color = BLUE;
-            filterByColor(vec, x_ball);
-            if (!vectorContainsElement(visited, el)) visited.push_back(el);
-            for (ELEMENT el2: vec) {
-                if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
-            }
-            queue.erase(queue.begin());
-        }
-
-        queue.push_back(zero);
-        while (!queue.empty()) {
-            ELEMENT el = queue[0];
-            vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
-            BALL x_ball;
-            x_ball.color = YELLOW;
-            filterByColor(vec, x_ball);
-            if (!vectorContainsElement(visited, el)) visited.push_back(el);
-            for (ELEMENT el2: vec) {
-                if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
-            }
-            queue.erase(queue.begin());
-        }
-        queue.push_back(zero);
-        while (!queue.empty()) {
-            ELEMENT el = queue[0];
-            vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
-            BALL x_ball;
-            x_ball.color = CYAN;
-            filterByColor(vec, x_ball);
-            if (!vectorContainsElement(visited, el)) visited.push_back(el);
-            for (ELEMENT el2: vec) {
-                if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
-            }
-            queue.erase(queue.begin());
-        }
-        while (!queue.empty()) {
-            ELEMENT el = queue[0];
-            vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
-            BALL x_ball;
-            x_ball.color = PURPLE;
-            filterByColor(vec, x_ball);
-            if (!vectorContainsElement(visited, el)) visited.push_back(el);
-            for (ELEMENT el2: vec) {
-                if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
-            }
-            queue.erase(queue.begin());
-        }
-        while (!queue.empty()) {
-            ELEMENT el = queue[0];
-            vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
-            BALL x_ball;
-            x_ball.color = GREEN;
-            filterByColor(vec, x_ball);
-            if (!vectorContainsElement(visited, el)) visited.push_back(el);
-            for (ELEMENT el2: vec) {
-                if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
-            }
-            queue.erase(queue.begin());
-        }
+        addVec(visited, xType(zero, PURPLE));
+        addVec(visited, xType(zero, BLUE));
+        addVec(visited, xType(zero, RED));
+        addVec(visited, xType(zero, YELLOW));
+        addVec(visited, xType(zero, GREEN));
+        addVec(visited, xType(zero, CYAN));
 
     } else {
-
         // c type
         while (!queue.empty()) {
             ELEMENT el = queue[0];
@@ -1473,7 +1405,7 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
 
 
     if (visited.size() > LEAST_BALLS_NUMBER) {
-
+        cout << "VISITED" << endl;
         // clearing balls
         for (ELEMENT el: visited) {
             // important condition!
@@ -1494,6 +1426,34 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
 
 }
 
+vector<ELEMENT> xType(ELEMENT ele, SDL_Color color) {
+    BALL b;
+    b.type = 'c';
+    b.color = color;
+
+    vector<ELEMENT> queue;
+    vector<ELEMENT> visited;
+    visited.push_back(ele);
+    queue.push_back(ele);
+
+    while (!queue.empty()) {
+        ELEMENT el = queue[0];
+        vector<ELEMENT> vec = findNeighbors(el.i, el.j, "all");
+        filterByColor(vec, b);
+        if (!vectorContainsElement(visited, el)) visited.push_back(el);
+        for (ELEMENT el2: vec) {
+            if (!vectorContainsElement(visited, el2)) queue.push_back(el2);
+        }
+        queue.erase(queue.begin());
+    }
+    if (visited.size() > LEAST_BALLS_NUMBER) {
+
+        return visited;
+    } else {
+        visited.clear();
+        return visited;
+    }
+}
 
 void handleFallingBalls() {
 
@@ -2132,21 +2092,21 @@ void handlePauseMenu() {
     SDL_RenderFillRect(renderer, &settingBox);
 
     // main menu button
-    if(!checkInOut(free_mouse_x, free_mouse_y, mainMenuButtonRect))
+    if (!checkInOut(free_mouse_x, free_mouse_y, mainMenuButtonRect))
         SDL_RenderCopy(renderer, mainMenuButton, &mainMenuButtonRectSrc, &mainMenuButtonRect);
     else
         SDL_RenderCopy(renderer, mainMenuHoverButton, &mainMenuHoverButtonRectSrc, &mainMenuHoverButtonRect);
     SDL_RenderCopy(renderer, mainMenuText, &mainMenuTextRectSrc, &mainMenuTextRect);
 
     // resume button
-    if(!checkInOut(free_mouse_x, free_mouse_y, resumeButtonRect))
+    if (!checkInOut(free_mouse_x, free_mouse_y, resumeButtonRect))
         SDL_RenderCopy(renderer, resumeButton, &resumeButtonRectSrc, &resumeButtonRect);
     else
         SDL_RenderCopy(renderer, resumeHoverButton, &resumeHoverButtonRectSrc, &resumeHoverButtonRect);
     SDL_RenderCopy(renderer, resumeText, &resumeTextRectSrc, &resumeTextRect);
 
     // setting menu button
-    if(!checkInOut(free_mouse_x, free_mouse_y, settingMenuButtonRect))
+    if (!checkInOut(free_mouse_x, free_mouse_y, settingMenuButtonRect))
         SDL_RenderCopy(renderer, settingMenuButton, &settingMenuButtonRectSrc, &settingMenuButtonRect);
     else
         SDL_RenderCopy(renderer, settingMenuHoverButton, &settingMenuHoverButtonRectSrc, &settingMenuHoverButtonRect);
