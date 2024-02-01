@@ -137,13 +137,15 @@ void scoresWriter(GAME_INF game) {
         return;
     }
 
-    scores << n << endl;
+    int num = n<10?n:10;
 
-    for (int i = 0; i < n && i < 10; i++) {
+    scores << num << endl;
+
+    for (int i = 0; i < num; i++) {
         scores << score[i] << " ";
     }
     scores << endl;
-    for (int i = 0; i < n && i < 10; i++) {
+    for (int i = 0; i < num; i++) {
         scores << name[i] << "%";
     }
 
