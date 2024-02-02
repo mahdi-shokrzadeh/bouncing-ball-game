@@ -539,7 +539,9 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         }
 
         // shooter
-        SDL_RenderDrawRect(renderer, &shooter_section);
+//        SDL_RenderDrawRect(renderer, &shooter_section);
+        aalineRGBA(renderer , 10 , 550 , 590 , 550 , RED.r , RED.g , RED.b , 255);
+
         drawShootingBalls(shooter_ball, reserved_ball);
 
 
@@ -725,7 +727,10 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         }
 
         // shooter
-        SDL_RenderDrawRect(renderer, &shooter_section);
+//        SDL_RenderDrawRect(renderer, &shooter_section);
+
+//        SDL_SetRenderDrawColor(renderer,RED.r , RED.g , RED.b , 255);
+        aalineRGBA(renderer , 10 , 550 , 590 , 550 , RED.r , RED.g , RED.b , 255);
         drawShootingBalls(shooter_ball, reserved_ball);
 
 
