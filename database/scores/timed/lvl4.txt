@@ -1,3 +1,3 @@
-8
-1200 1000 720 666 456 330 245 123
-Mohammad%Sina%Jafar%Salam%Arasteh%sina%ShokrZade%Darvish
+3
+330 245 123
+Mohammad%Sina%ShokrZade%
