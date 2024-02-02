@@ -82,7 +82,7 @@ SDL_Event event;
 
 // Initializing balls
 
-BALL balls[100][12] = {0};
+BALL balls[10000][12] = {0};
 
 
 // Page state
@@ -189,8 +189,8 @@ bool win_run = false;
 
 // Time effects
 
-int number_of_x_balls = 3;
-int number_of_ice_balls = 4;
+int number_of_x_balls = 4;
+int number_of_ice_balls = 5;
 bool time_effect_is_active = false;
 int time_counter = TIME_EFFECT_COUNTER;
 
@@ -1027,6 +1027,7 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
                 if (number_of_x_balls > 0) {
                     reserved_ball.type = 'x';
                     number_of_x_balls--;
+                    reserved_ball.ice_effect = false;
                     break;
                 }
             case 1:
@@ -1034,8 +1035,7 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
                     reserved_ball.type = 'c';
                     reserved_ball.ice_effect = true;
                     setRandomColorForShootingBall(reserved_ball.color);
-                    number_of_ice_balls--;
-
+                    number_of_ice_balls-=1;
                     break;
                 }
             default:
@@ -1043,10 +1043,12 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
                 reserved_ball.color = thrown_ball.color;
                 reserved_ball.type = 'c';
                 setRandomColorForShootingBall(reserved_ball.color);
+                reserved_ball.ice_effect = false;
 
                 break;
 
         }
+        cout << number_of_ice_balls << endl;
 //        setRandomColor(reserved_ball.color);
 //        while (reserved_ball.color.r == shooting_ball.color.r) setRandomColor(reserved_ball.color);
 
@@ -1097,7 +1099,6 @@ void checkCollShooterAndBalls() {
 void handleCollShooterAndBalls(BALL &ball, int i, int j) {
 
     if (!ball_is_being_thrown)return;
-    cout << thrown_ball.ice_effect << endl;
     if (thrown_ball.ice_effect) time_effect_is_active = true;
 
     ELEMENT el;
@@ -2173,8 +2174,8 @@ void resetVars() {
 
     game_over_run = false;
     win_run = false;
-    number_of_x_balls = 3;
-    number_of_ice_balls = 4;
+    number_of_x_balls = 4;
+    number_of_ice_balls = 5;
     time_effect_is_active = false;
     time_counter = TIME_EFFECT_COUNTER;
 }
