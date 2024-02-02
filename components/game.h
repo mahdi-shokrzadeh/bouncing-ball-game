@@ -144,6 +144,10 @@ SDL_Rect score_rect;
 int score_x = 390;
 int score_y = 660;
 
+SDL_Surface *level_surface;
+SDL_Texture *level_texture;
+SDL_Rect level_rect_src;
+SDL_Rect level_rect;
 
 // color handling
 vector<int> balls_recent_color = {1};
@@ -285,7 +289,6 @@ void showScore(string type);
 
 void initializeRandomPattern(int (&arr)[20][12]);
 
-void initializeRandomPattern(int (&arr)[20][12]);
 
 bool checkBallCanConnect(ELEMENT el, int arr[20][12]);
 
@@ -396,7 +399,7 @@ void handleGameProcess(GAME_INF game_inf) {
 
             handleSetting();
 
-        }else if (game_page_state == "quit_menu") {
+        } else if (game_page_state == "quit_menu") {
 
 
         } else if (game_page_state == "over") {
@@ -415,7 +418,8 @@ void handleGameProcess(GAME_INF game_inf) {
 
 
         //  Delay and update window
-        if (game_page_state != "win" && game_page_state != "over" && game_page_state != "pause_menu" && game_page_state != "setting_menu") {
+        if (game_page_state != "win" && game_page_state != "over" && game_page_state != "pause_menu" &&
+            game_page_state != "setting_menu") {
             SDL_RenderPresent(renderer);
         }
 
@@ -431,6 +435,7 @@ void handleGameProcess(GAME_INF game_inf) {
             destroyIt(timer_surface, timer_texture);
             destroyIt(play_again_btn_sur, play_again_btn_tex);
             destroyIt(main_menu_btn_sur, main_menu_btn_tex);
+            destroyIt(level_surface, level_texture);
 
         }
 
@@ -629,7 +634,164 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         }
 
     } else if (inf.mode == "infinite") {
+        bool ball_is_falling = false;
+        // Blank out the renderer with all black
+        SDL_SetRenderDrawColor(renderer, BLACK.r, BLACK.g, BLACK.b, 255);
+        SDL_RenderClear(renderer);
 
+        SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
+
+        // targeter
+        drawTargeter();
+
+        // drawing balls
+
+        for (int i = 0; i < FINAL_ROWS; i++) {
+            for (int j = 0; j < 12; j++) {
+                if (balls[i][j].type != 's') {
+                    BALL &ball = balls[i][j];
+                    if (time_effect_is_active) {
+                        time_counter--;
+                        ball.center.y += VERTICAL_TIME_SPEED;
+                    } else {
+                        ball.center.y += vertical_speed;
+                    }
+
+                    if (ball.center.y <= SCREEN_HEIGHT + 30 && ball.center.y >= -40) {
+                        ballDraw(ball);
+                    }
+
+
+                    // updating the flags
+                    if (ball.center.y >= -70 && ball.center.y <= -40 && flag.i != i) {
+                        flag.i = i;
+                        flag.j = j;
+                    }
+
+
+                    // falling balls
+                    if (ball.type == 'f') {
+                        if (ball.dx == 0) {
+                            ball.dx = rand() % 2 == 0 ? (rand() % 10) / 10.0 + 0.5 : -1 * (rand() % 10) / 10.0 - 0.5;
+                        }
+                        ball.center.x += ball.dx;
+
+                        ball.center.y += falling_balls_speed * (1000 + 150 - i) / 1000.0;
+                        falling_balls_speed += falling_ball_acc;
+                        ball_is_falling = true;
+                        if (ball.center.y >= SCREEN_HEIGHT + 20) {
+                            ball.center = {10000, 10000};
+                            ball.type = 's';
+                            temp_fell_balls--;
+                        }
+                    }
+
+                    // checking if game is over or win
+                    // c -> also lock and other types
+                    if (ball.center.y >= 530 && (ball.type == 'c' || ball.type == 'e' || ball.type == 't')) {
+                        game_state = "over";
+                        game_page_state = "over";
+                    }
+
+
+                }
+            }
+        }
+        // updating end_pointer_ball center
+        for (int j = 0; j < 12; j++) {
+            if (balls[FINAL_ROWS][j].type != 's') {
+                BALL &ball = balls[FINAL_ROWS][j];
+                if (time_effect_is_active) {
+                    ball.center.y += VERTICAL_TIME_SPEED;
+
+                } else {
+                    ball.center.y += vertical_speed;
+
+                }
+            }
+        }
+
+        if (time_effect_is_active) {
+            end_pointer_ball.center.y += VERTICAL_TIME_SPEED;
+        } else {
+            end_pointer_ball.center.y += vertical_speed;
+        }
+
+        // time effect
+        if (time_counter <= 0) {
+            time_effect_is_active = false;
+            time_counter = TIME_EFFECT_COUNTER;
+        }
+
+        // shooter
+        SDL_RenderDrawRect(renderer, &shooter_section);
+        drawShootingBalls(shooter_ball, reserved_ball);
+
+
+        // draw the end section
+        if (end_pointer_ball.center.y >= -50) {
+            SDL_Rect r;
+            r.x = 5;
+            r.y = int(end_pointer_ball.center.y - 35);
+            r.w = SCREEN_WIDTH - 10;
+            r.h = 50;
+            SDL_SetRenderDrawColor(renderer, PLUM.r, PLUM.g, PLUM.b, 255);
+            SDL_RenderFillRect(renderer, &r);
+            flag.i = FINAL_ROWS;
+
+            textRender(level_surface, level_texture, level_rect_src, level_rect,
+                       200, int(end_pointer_ball.center.y - 30), 0.7, "Level: " + to_string(p));
+            SDL_RenderCopy(renderer, level_texture, &level_rect_src, &level_rect);
+        }
+
+        // draw pause menu button
+        gameRenderImage(menu_btn_tex, menu_btn_rect);
+
+
+        // score
+
+        textRender(score_surface, score_texture, score_rect_src, score_rect,
+                   score_x, score_y, 0.7, to_string(score));
+        SDL_RenderCopy(renderer, score_texture, &score_rect_src, &score_rect);
+
+
+
+        // handle ball shooting
+        if (ball_is_being_thrown && game_state == "running") {
+            handleBallShooting();
+            checkCollShooterAndBalls();
+        }
+
+        // cehck the shooting ball color
+        if (!throw_is_disabled) {
+            checkColorOfShootingBalls(shooter_ball);
+            checkColorOfShootingBalls(reserved_ball);
+        }
+        // set number of balls
+        number_of_balls = calculateBalls();
+
+
+        if (number_of_balls == 0 && !ball_is_being_thrown) {
+            game_state = "win";
+            throw_is_disabled = true;
+
+        }
+
+        // handle winning state
+        if (!ball_is_falling && number_of_balls == 0 && !ball_is_being_thrown) {
+            time_to_wait--;
+            if (time_to_wait == 0) {
+                initializeBalls();
+                initializeShootingBalls(shooter_ball , reserved_ball);
+                time_to_wait = 9;
+                number_of_ice_balls = 5;
+                throw_is_disabled = false;
+                number_of_x_balls = 5;
+                game_state = "running";
+                p++;
+            }
+        }
 
     }
 
@@ -657,6 +819,10 @@ void initializeBalls() {
                 setPattern(level_5);
         }
     } else if (inf.mode == "random") {
+        int ar[20][12] = {0};
+        initializeRandomPattern(ar);
+        setPattern(ar);
+    } else {
         int ar[20][12] = {0};
         initializeRandomPattern(ar);
         setPattern(ar);
@@ -1035,7 +1201,7 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
                     reserved_ball.type = 'c';
                     reserved_ball.ice_effect = true;
                     setRandomColorForShootingBall(reserved_ball.color);
-                    number_of_ice_balls-=1;
+                    number_of_ice_balls -= 1;
                     break;
                 }
             default:
@@ -1424,7 +1590,7 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
         // clearing balls
         for (ELEMENT el: visited) {
             // important condition!
-            if (balls[el.i][el.j].center.y >= -20) {
+//            if (balls[el.i][el.j].center.y >= -20) {
                 // checking if ball has lock or no
                 if (balls[el.i][el.j].level == 1) {
                     balls[el.i][el.j].level = 0;
@@ -1434,7 +1600,7 @@ void handleGraphCheck(int i, int j, BALL in_ball) {
                     score += 10;
                 }
 
-            }
+//            }
 
         }
     }
@@ -1574,16 +1740,16 @@ void handleCheckBtnsClicks() {
         bool setting_is_clicked = checkInOut(mouse_x, mouse_y, settingMenuButtonRect);
         if (setting_is_clicked) game_page_state = "setting_menu";
 
-    } else if(game_page_state == "setting_menu") {
+    } else if (game_page_state == "setting_menu") {
 
-        if(mouse_click && checkInOut(mouse_x, mouse_y, volumeOnButtonRect)){
-            if(soundVolume) soundVolume = 0;
+        if (mouse_click && checkInOut(mouse_x, mouse_y, volumeOnButtonRect)) {
+            if (soundVolume) soundVolume = 0;
             else soundVolume = soundOutsideRect.w;
             reInitialingSoundMusic();
         }
 
-        if(mouse_click && checkInOut(mouse_x, mouse_y, musicOnButtonRect)){
-            if(musicVolume) musicVolume = 0;
+        if (mouse_click && checkInOut(mouse_x, mouse_y, musicOnButtonRect)) {
+            if (musicVolume) musicVolume = 0;
             else musicVolume = soundOutsideRect.w;
             reInitialingSoundMusic();
         }
@@ -1598,13 +1764,13 @@ void handleCheckBtnsClicks() {
             reInitialingSoundMusic();
         }
 
-        if(mouse_click && checkInOut(mouse_x, mouse_y, jungleThemeButtonRect)) {
+        if (mouse_click && checkInOut(mouse_x, mouse_y, jungleThemeButtonRect)) {
             themeChanger(Jungle);
         }
-        if(mouse_click && checkInOut(mouse_x, mouse_y, oceanThemeButtonRect)) {
+        if (mouse_click && checkInOut(mouse_x, mouse_y, oceanThemeButtonRect)) {
             themeChanger(Ocean);
         }
-        if(mouse_click && checkInOut(mouse_x, mouse_y, spaceThemeButtonRect)) {
+        if (mouse_click && checkInOut(mouse_x, mouse_y, spaceThemeButtonRect)) {
             themeChanger(Space);
         }
 
@@ -1652,20 +1818,20 @@ void handleCheckBtnsClicks() {
 
 void handleGameMouse(BALL &shooter_ball, BALL &reserved_ball) {
 
-    degree = atan( (620.0 - free_mouse_y) / (free_mouse_x - 300.0) ) * (180 / M_PI);
-    if(degree < 180 && degree > 0) degree += 90;
-    else if(degree < 0 && degree > -180) degree += 270;
+    degree = atan((620.0 - free_mouse_y) / (free_mouse_x - 300.0)) * (180 / M_PI);
+    if (degree < 180 && degree > 0) degree += 90;
+    else if (degree < 0 && degree > -180) degree += 270;
 
-    if(degree < 110) degree = 110;
-    if(degree > 250) degree = 250;
+    if (degree < 110) degree = 110;
+    if (degree > 250) degree = 250;
 
-    if(mouse_click) {
+    if (mouse_click) {
 
         //degree = atan( (620.0 - mouse_y) / (mouse_x - 300.0) ) * (180 / M_PI);
         //if(degree < 180 && degree > 0) degree += 90;
         //else if(degree < 0 && degree > -180) degree += 270;
 
-        if(degree > 110 && degree < 250)
+        if (degree > 110 && degree < 250)
             handleShootBall(shooter_ball, reserved_ball);
 
 
@@ -2082,15 +2248,27 @@ void initializeRandomPattern(int (&arr)[20][12]) {
     for (int j = 2; j < 8; j++) {
         arr[19][j] = 1;
     }
-
-    for (int i = 18; i >= 0; i--) {
-        cout << i << endl;
-        int r = (rand() % 4) + 1;
-        while (r > 0) {
-            int m = rand() % 12;
-            if (checkBallCanConnect({i, m}, arr)) {
-                r--;
-                arr[i][m] = randomBallType();
+    if (inf.mode == "infinite") {
+        for (int i = 18; i >= 0; i--) {
+            int r = (rand() % int(4 + p / 2.0)) + 1;
+            r = r % 12;
+            while (r > 0) {
+                int m = rand() % 12;
+                if (checkBallCanConnect({i, m}, arr)) {
+                    r--;
+                    arr[i][m] = randomBallType();
+                }
+            }
+        }
+    } else {
+        for (int i = 18; i >= 0; i--) {
+            int r = (rand() % 4) + 1;
+            while (r > 0) {
+                int m = rand() % 12;
+                if (checkBallCanConnect({i, m}, arr)) {
+                    r--;
+                    arr[i][m] = randomBallType();
+                }
             }
         }
     }
@@ -2217,42 +2395,42 @@ void handleSetting() {
     SDL_RenderFillRect(renderer, &settingBox);
 
     // volume off on button
-    if(soundVolume)
+    if (soundVolume)
         SDL_RenderCopy(renderer, volumeOnButton, &volumeOnButtonRectSrc, &volumeOnButtonRect);
     else
         SDL_RenderCopy(renderer, volumeOffButton, &volumeOffButtonRectSrc, &volumeOffButtonRect);
 
     // music off on button
-    if(musicVolume)
+    if (musicVolume)
         SDL_RenderCopy(renderer, musicOnButton, &musicOnButtonRectSrc, &musicOnButtonRect);
     else
         SDL_RenderCopy(renderer, musicOffButton, &musicOffButtonRectSrc, &musicOffButtonRect);
 
     // bars
     SDL_SetRenderDrawColor(renderer, WHITE.r, WHITE.g, WHITE.b, 255);
-    SDL_RenderFillRect(renderer, &soundOutsideRect) ;
-    SDL_RenderFillRect(renderer, &musicOutsideRect) ;
+    SDL_RenderFillRect(renderer, &soundOutsideRect);
+    SDL_RenderFillRect(renderer, &musicOutsideRect);
 
     SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
-    SDL_RenderFillRect(renderer, &soundInsideRect) ;
-    SDL_RenderFillRect(renderer, &musicInsideRect) ;
+    SDL_RenderFillRect(renderer, &soundInsideRect);
+    SDL_RenderFillRect(renderer, &musicInsideRect);
 
     // jungle theme button
-    if(!checkInOut(free_mouse_x, free_mouse_y, jungleThemeButtonRect))
+    if (!checkInOut(free_mouse_x, free_mouse_y, jungleThemeButtonRect))
         SDL_RenderCopy(renderer, jungleThemeButton, &jungleThemeButtonRectSrc, &jungleThemeButtonRect);
     else
         SDL_RenderCopy(renderer, jungleThemeHoverButton, &jungleThemeHoverButtonRectSrc, &jungleThemeHoverButtonRect);
     SDL_RenderCopy(renderer, jungleThemeText, &jungleThemeTextRectSrc, &jungleThemeTextRect);
 
     // ocean theme button
-    if(!checkInOut(free_mouse_x, free_mouse_y, oceanThemeButtonRect))
+    if (!checkInOut(free_mouse_x, free_mouse_y, oceanThemeButtonRect))
         SDL_RenderCopy(renderer, oceanThemeButton, &oceanThemeButtonRectSrc, &oceanThemeButtonRect);
     else
         SDL_RenderCopy(renderer, oceanThemeHoverButton, &oceanThemeHoverButtonRectSrc, &oceanThemeHoverButtonRect);
     SDL_RenderCopy(renderer, oceanThemeText, &oceanThemeTextRectSrc, &oceanThemeTextRect);
 
     // space theme button
-    if(!checkInOut(free_mouse_x, free_mouse_y, spaceThemeButtonRect))
+    if (!checkInOut(free_mouse_x, free_mouse_y, spaceThemeButtonRect))
         SDL_RenderCopy(renderer, spaceThemeButton, &spaceThemeButtonRectSrc, &spaceThemeButtonRect);
     else
         SDL_RenderCopy(renderer, spaceThemeHoverButton, &spaceThemeHoverButtonRectSrc, &spaceThemeHoverButtonRect);

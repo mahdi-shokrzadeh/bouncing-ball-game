@@ -48,6 +48,8 @@ SDL_Renderer *renderer;
 // main.cpp loop
 SDL_bool main_loop = SDL_TRUE;
 
+int p = 1;
+
 
 // Time effect
 #define TIME_EFFECT_COUNTER 4250
