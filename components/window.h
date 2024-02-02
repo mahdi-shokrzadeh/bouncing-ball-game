@@ -372,13 +372,13 @@ void initializeButtonsAndBG() {
     textRender(level5TextSurface, level5Text, level5TextRectSrc,
                level5TextRect, th.loc[18]+150, th.loc[19]+345, 0.9, "level 5");
 
-    //resume button
-    imageRender(resumeButtonSurface, resumeButton,resumeButtonRectSrc,
-                resumeButtonRect, th.loc[8], th.loc[9]-520, th.sizeMultiplier, th.button);
-    imageRender(resumeHoverButtonSurface, resumeHoverButton,resumeHoverButtonRectSrc,
-                resumeHoverButtonRect, th.loc[8], th.loc[9]-520, th.sizeMultiplier, th.buttonHover);
-    textRender(resumeTextSurface, resumeText, resumeTextRectSrc,
-               resumeTextRect, th.loc[10]-13, th.loc[11]-520+th.loc[24], 0.8, "Resume");
+    //restart button
+    imageRender(restartButtonSurface, restartButton,restartButtonRectSrc,
+                restartButtonRect, th.loc[8], th.loc[9]-520, th.sizeMultiplier, th.button);
+    imageRender(restartHoverButtonSurface, restartHoverButton,restartHoverButtonRectSrc,
+                restartHoverButtonRect, th.loc[8], th.loc[9]-520, th.sizeMultiplier, th.buttonHover);
+    textRender(restartTextSurface, restartText, restartTextRectSrc,
+               restartTextRect, th.loc[10]-13, th.loc[11]-520+th.loc[24], 0.8, "Restart");
 
     //setting button
     imageRender(settingMenuButtonSurface, settingMenuButton,settingMenuButtonRectSrc,
@@ -593,12 +593,12 @@ void destroyButtonsAndBG() {
     SDL_FreeSurface(mainMenuTextSurface);
     SDL_DestroyTexture(mainMenuText);
 
-    SDL_FreeSurface(resumeButtonSurface);
-    SDL_DestroyTexture(resumeButton);
-    SDL_FreeSurface(resumeHoverButtonSurface);
-    SDL_DestroyTexture(resumeHoverButton);
-    SDL_FreeSurface(resumeTextSurface);
-    SDL_DestroyTexture(resumeText);
+    SDL_FreeSurface(restartButtonSurface);
+    SDL_DestroyTexture(restartButton);
+    SDL_FreeSurface(restartHoverButtonSurface);
+    SDL_DestroyTexture(restartHoverButton);
+    SDL_FreeSurface(restartTextSurface);
+    SDL_DestroyTexture(restartText);
 
     SDL_FreeSurface(settingMenuButtonSurface);
     SDL_DestroyTexture(settingMenuButton);

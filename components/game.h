@@ -303,6 +303,8 @@ void handlePauseMenu();
 
 vector<ELEMENT> xType(ELEMENT ele, SDL_Color color);
 
+void handleSetting();
+
 // ---------------------------------------------------
 
 
@@ -373,6 +375,10 @@ void handleGameProcess(GAME_INF game_inf) {
 
         SDL_GetMouseState(&free_mouse_x, &free_mouse_y);
 
+//        SDL_RenderClear(renderer);
+//
+//        SDL_RenderCopy(renderer, bg, NULL, &bgRect);
+
         if (game_page_state == "game") {
 
             Game(shooter_ball, reserved_ball);
@@ -381,7 +387,11 @@ void handleGameProcess(GAME_INF game_inf) {
 
             handlePauseMenu();
 
-        } else if (game_page_state == "quit_menu") {
+        } else if (game_page_state == "setting_menu") {
+
+            handleSetting();
+
+        }else if (game_page_state == "quit_menu") {
 
 
         } else if (game_page_state == "over") {
@@ -400,7 +410,7 @@ void handleGameProcess(GAME_INF game_inf) {
 
 
         //  Delay and update window
-        if (game_page_state != "win" && game_page_state != "over" && game_page_state != "pause_menu") {
+        if (game_page_state != "win" && game_page_state != "over" && game_page_state != "pause_menu" && game_page_state != "setting_menu") {
             SDL_RenderPresent(renderer);
         }
 
@@ -1541,6 +1551,63 @@ void handleCheckBtnsClicks() {
     } else if (game_page_state == "pause_menu") {
         bool menu_is_clicked = checkInOut(mouse_x, mouse_y, menu_btn_rect);
         if (menu_is_clicked) game_page_state = "game";
+        bool restart_is_clicked = checkInOut(mouse_x, mouse_y, restartButtonRect);
+        if (restart_is_clicked) {
+            resetVars();
+            game_page_state = "game";
+            handleGameProcess(inf);
+        }
+        bool main_is_clicked = checkInOut(mouse_x, mouse_y, mainMenuButtonRect);
+        if (main_is_clicked) {
+            Locator["main_menu"] = !Locator["main_menu"];
+            Locator["game"] = !Locator["game"];
+            // Reset vars
+            resetVars();
+            game_loop = false;
+        }
+        bool setting_is_clicked = checkInOut(mouse_x, mouse_y, settingMenuButtonRect);
+        if (setting_is_clicked) game_page_state = "setting_menu";
+
+    } else if(game_page_state == "setting_menu") {
+
+        if(mouse_click && checkInOut(mouse_x, mouse_y, volumeOnButtonRect)){
+            if(soundVolume) soundVolume = 0;
+            else soundVolume = soundOutsideRect.w;
+            reInitialingSoundMusic();
+        }
+
+        if(mouse_click && checkInOut(mouse_x, mouse_y, musicOnButtonRect)){
+            if(musicVolume) musicVolume = 0;
+            else musicVolume = soundOutsideRect.w;
+            reInitialingSoundMusic();
+        }
+
+        if (mouse_click && checkInOut(mouse_x, mouse_y, soundOutsideRect)) {
+            soundVolume = (mouse_x - soundOutsideRect.x);
+            reInitialingSoundMusic();
+        }
+
+        if (mouse_click && checkInOut(mouse_x, mouse_y, musicOutsideRect)) {
+            musicVolume = (mouse_x - musicOutsideRect.x);
+            reInitialingSoundMusic();
+        }
+
+        if(mouse_click && checkInOut(mouse_x, mouse_y, jungleThemeButtonRect)) {
+            themeChanger(Jungle);
+        }
+        if(mouse_click && checkInOut(mouse_x, mouse_y, oceanThemeButtonRect)) {
+            themeChanger(Ocean);
+        }
+        if(mouse_click && checkInOut(mouse_x, mouse_y, spaceThemeButtonRect)) {
+            themeChanger(Space);
+        }
+
+        bool menu_is_clicked = checkInOut(mouse_x, mouse_y, menu_btn_rect);
+        if (menu_is_clicked) {
+            game_page_state = "pause_menu";
+            settingWriter();
+        }
+
 
     } else if (game_page_state == "over") {
         bool main_menu_is_clicked = checkInOut(mouse_x, mouse_y, main_menu_btn_rect);
@@ -2097,12 +2164,12 @@ void handlePauseMenu() {
         SDL_RenderCopy(renderer, mainMenuHoverButton, &mainMenuHoverButtonRectSrc, &mainMenuHoverButtonRect);
     SDL_RenderCopy(renderer, mainMenuText, &mainMenuTextRectSrc, &mainMenuTextRect);
 
-    // resume button
-    if (!checkInOut(free_mouse_x, free_mouse_y, resumeButtonRect))
-        SDL_RenderCopy(renderer, resumeButton, &resumeButtonRectSrc, &resumeButtonRect);
+    // restart button
+    if (!checkInOut(free_mouse_x, free_mouse_y, restartButtonRect))
+        SDL_RenderCopy(renderer, restartButton, &restartButtonRectSrc, &restartButtonRect);
     else
-        SDL_RenderCopy(renderer, resumeHoverButton, &resumeHoverButtonRectSrc, &resumeHoverButtonRect);
-    SDL_RenderCopy(renderer, resumeText, &resumeTextRectSrc, &resumeTextRect);
+        SDL_RenderCopy(renderer, restartHoverButton, &restartHoverButtonRectSrc, &restartHoverButtonRect);
+    SDL_RenderCopy(renderer, restartText, &restartTextRectSrc, &restartTextRect);
 
     // setting menu button
     if (!checkInOut(free_mouse_x, free_mouse_y, settingMenuButtonRect))
@@ -2113,6 +2180,57 @@ void handlePauseMenu() {
 
     SDL_RenderPresent(renderer);
 
+}
+
+void handleSetting() {
+
+    // setting box
+    SDL_SetRenderDrawColor(renderer, th.SecColor.r, th.SecColor.g, th.SecColor.b, 255);
+    SDL_RenderFillRect(renderer, &settingBox);
+
+    // volume off on button
+    if(soundVolume)
+        SDL_RenderCopy(renderer, volumeOnButton, &volumeOnButtonRectSrc, &volumeOnButtonRect);
+    else
+        SDL_RenderCopy(renderer, volumeOffButton, &volumeOffButtonRectSrc, &volumeOffButtonRect);
+
+    // music off on button
+    if(musicVolume)
+        SDL_RenderCopy(renderer, musicOnButton, &musicOnButtonRectSrc, &musicOnButtonRect);
+    else
+        SDL_RenderCopy(renderer, musicOffButton, &musicOffButtonRectSrc, &musicOffButtonRect);
+
+    // bars
+    SDL_SetRenderDrawColor(renderer, WHITE.r, WHITE.g, WHITE.b, 255);
+    SDL_RenderFillRect(renderer, &soundOutsideRect) ;
+    SDL_RenderFillRect(renderer, &musicOutsideRect) ;
+
+    SDL_SetRenderDrawColor(renderer, th.MainColor.r, th.MainColor.g, th.MainColor.b, 255);
+    SDL_RenderFillRect(renderer, &soundInsideRect) ;
+    SDL_RenderFillRect(renderer, &musicInsideRect) ;
+
+    // jungle theme button
+    if(!checkInOut(free_mouse_x, free_mouse_y, jungleThemeButtonRect))
+        SDL_RenderCopy(renderer, jungleThemeButton, &jungleThemeButtonRectSrc, &jungleThemeButtonRect);
+    else
+        SDL_RenderCopy(renderer, jungleThemeHoverButton, &jungleThemeHoverButtonRectSrc, &jungleThemeHoverButtonRect);
+    SDL_RenderCopy(renderer, jungleThemeText, &jungleThemeTextRectSrc, &jungleThemeTextRect);
+
+    // ocean theme button
+    if(!checkInOut(free_mouse_x, free_mouse_y, oceanThemeButtonRect))
+        SDL_RenderCopy(renderer, oceanThemeButton, &oceanThemeButtonRectSrc, &oceanThemeButtonRect);
+    else
+        SDL_RenderCopy(renderer, oceanThemeHoverButton, &oceanThemeHoverButtonRectSrc, &oceanThemeHoverButtonRect);
+    SDL_RenderCopy(renderer, oceanThemeText, &oceanThemeTextRectSrc, &oceanThemeTextRect);
+
+    // space theme button
+    if(!checkInOut(free_mouse_x, free_mouse_y, spaceThemeButtonRect))
+        SDL_RenderCopy(renderer, spaceThemeButton, &spaceThemeButtonRectSrc, &spaceThemeButtonRect);
+    else
+        SDL_RenderCopy(renderer, spaceThemeHoverButton, &spaceThemeHoverButtonRectSrc, &spaceThemeHoverButtonRect);
+    SDL_RenderCopy(renderer, spaceThemeText, &spaceThemeTextRectSrc, &spaceThemeTextRect);
+
+    SDL_RenderPresent(renderer);
 }
 
 #endif //BOUNCING_BALL_GAME_GAME_H

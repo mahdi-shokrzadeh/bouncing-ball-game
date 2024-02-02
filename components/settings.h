@@ -531,18 +531,18 @@ SDL_Rect level5TextRectSrc;
 SDL_Rect level5TextRect;
 
 
-SDL_Surface *resumeButtonSurface = NULL;
-SDL_Texture *resumeButton = NULL;
-SDL_Rect resumeButtonRect;
-SDL_Rect resumeButtonRectSrc;
-SDL_Surface *resumeHoverButtonSurface = NULL;
-SDL_Texture *resumeHoverButton = NULL;
-SDL_Rect resumeHoverButtonRect;
-SDL_Rect resumeHoverButtonRectSrc;
-SDL_Surface *resumeTextSurface;
-SDL_Texture *resumeText;
-SDL_Rect resumeTextRectSrc;
-SDL_Rect resumeTextRect;
+SDL_Surface *restartButtonSurface = NULL;
+SDL_Texture *restartButton = NULL;
+SDL_Rect restartButtonRect;
+SDL_Rect restartButtonRectSrc;
+SDL_Surface *restartHoverButtonSurface = NULL;
+SDL_Texture *restartHoverButton = NULL;
+SDL_Rect restartHoverButtonRect;
+SDL_Rect restartHoverButtonRectSrc;
+SDL_Surface *restartTextSurface;
+SDL_Texture *restartText;
+SDL_Rect restartTextRectSrc;
+SDL_Rect restartTextRect;
 
 SDL_Surface *mainMenuButtonSurface = NULL;
 SDL_Texture *mainMenuButton = NULL;
