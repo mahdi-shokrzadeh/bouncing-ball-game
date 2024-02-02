@@ -50,7 +50,7 @@ SDL_bool main_loop = SDL_TRUE;
 
 
 // Time effect
-#define TIME_EFFECT_COUNTER 4100
+#define TIME_EFFECT_COUNTER 4150
 #define VERTICAL_TIME_SPEED 0.12
 
 // patterns
