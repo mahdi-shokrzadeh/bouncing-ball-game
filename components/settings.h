@@ -52,7 +52,7 @@ int p = 1;
 
 
 // Time effect
-#define TIME_EFFECT_COUNTER 4550
+#define TIME_EFFECT_COUNTER 4950
 #define VERTICAL_TIME_SPEED 0.10
 
 // patterns

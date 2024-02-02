@@ -630,7 +630,7 @@ void Game(BALL &shooter_ball, BALL &reserved_ball) {
         if (!ball_is_falling && number_of_balls == 0 && !ball_is_being_thrown) {
             if (time_to_wait == 0) {
                 game_page_state = "win";
-                cout << "Won!" << endl;
+//                cout << "Won!" << endl;
             }
             time_to_wait--;
         }
@@ -1219,7 +1219,7 @@ void handleShootBall(BALL &shooting_ball, BALL &reserved_ball) {
                 break;
 
         }
-        cout << number_of_ice_balls << endl;
+//        cout << number_of_ice_balls << endl;
 //        setRandomColor(reserved_ball.color);
 //        while (reserved_ball.color.r == shooting_ball.color.r) setRandomColor(reserved_ball.color);
 
@@ -1790,7 +1790,6 @@ void handleCheckBtnsClicks() {
         bool main_menu_is_clicked = checkInOut(mouse_x, mouse_y, main_menu_btn_rect);
         bool play_again_is_clicked = checkInOut(mouse_x, mouse_y, play_again_btn_rect);
         if (main_menu_is_clicked) {
-            cout << "Main is clicked!!" << endl;
             Locator["main_menu"] = !Locator["main_menu"];
             Locator["game"] = !Locator["game"];
             // Reset vars
@@ -1805,7 +1804,7 @@ void handleCheckBtnsClicks() {
         bool main_menu_is_clicked = checkInOut(mouse_x, mouse_y, main_menu_btn_rect);
         bool play_again_is_clicked = checkInOut(mouse_x, mouse_y, play_again_btn_rect);
         if (main_menu_is_clicked) {
-            cout << "Main is clicked!!" << endl;
+//            cout << "Main is clicked!!" << endl;
             Locator["main_menu"] = !Locator["main_menu"];
             Locator["game"] = !Locator["game"];
             // Reset vars
@@ -1854,7 +1853,7 @@ void setRandomColorForShootingBall(SDL_Color &color) {
 
     vector<int> available_colors = getAvailableColorsVector();
     if (available_colors.empty()) {
-        cout << "ZERO!" << endl;
+//        cout << "ZERO!" << endl;
         return;
     }
 
@@ -1975,11 +1974,11 @@ void checkColorOfShootingBalls(BALL &ball) {
     vector<int> available_colors = getAvailableColorsVector();
     if (contains(available_colors, colorToInt(ball.color)) || flag.i <= 10) return;
     if (available_colors.empty()) {
-        cout << "Problem!" << endl;
+//        cout << "Problem!" << endl;
         return;
     }
     setRandomColorForShootingBall(ball.color);
-    cout << "Changed!" << endl;
+//    cout << "Changed!" << endl;
 
 }
 
