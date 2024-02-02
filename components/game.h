@@ -1677,7 +1677,7 @@ void handleFallingBalls() {
     falling_balls_speed = 2.4;
     for (int i = 0; i < element.i; i++) {
         for (int j = 0; j < 12; j++) {
-            if (balls[i][j].type != 's' && balls[i][j].center.y >= -20 && !vectorContainsElement(visited, {i, j})) {
+            if (balls[i][j].type != 's' && !vectorContainsElement(visited, {i, j})) {
                 balls[i][j].type = 'f';
                 fell_balls++;
                 temp_fell_balls++;
