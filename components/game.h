@@ -255,6 +255,8 @@ void gameInitialImage(SDL_Surface *&g_button, SDL_Texture *&g_button_tex, char *
 
 void handleCheckBtnsClicks();
 
+void handleGameMouse(BALL &shooter_ball, BALL &reserved_ball);
+
 void gameRenderImage(SDL_Texture *&g_button_tex, SDL_Rect dstRect);
 
 void destroyIt(SDL_Surface *&g_button, SDL_Texture *&g_button_tex);
@@ -346,17 +348,17 @@ void handleGameProcess(GAME_INF game_inf) {
                             drawShootingBalls(shooter_ball, reserved_ball);
                             break;
 
-                        case SDLK_RIGHT :
-                            handleTargeterEvent(0);
-                            break;
-
-                        case SDLK_s :
-                            handleShootBall(shooter_ball, reserved_ball);
-                            break;
-
-                        case SDLK_LEFT :
-                            handleTargeterEvent(1);
-                            break;
+//                        case SDLK_RIGHT :
+//                            handleTargeterEvent(0);
+//                            break;
+//
+//                        case SDLK_s :
+//                            handleShootBall(shooter_ball, reserved_ball);
+//                            break;
+//
+//                        case SDLK_LEFT :
+//                            handleTargeterEvent(1);
+//                            break;
 
                         default:
                             game_loop = SDL_TRUE;
@@ -375,11 +377,14 @@ void handleGameProcess(GAME_INF game_inf) {
 
         SDL_GetMouseState(&free_mouse_x, &free_mouse_y);
 
+
 //        SDL_RenderClear(renderer);
 //
 //        SDL_RenderCopy(renderer, bg, NULL, &bgRect);
 
         if (game_page_state == "game") {
+
+            handleGameMouse(shooter_ball, reserved_ball);
 
             Game(shooter_ball, reserved_ball);
 
@@ -1644,6 +1649,28 @@ void handleCheckBtnsClicks() {
     mouse_click = false;
 }
 
+void handleGameMouse(BALL &shooter_ball, BALL &reserved_ball) {
+
+    degree = atan( (620.0 - free_mouse_y) / (free_mouse_x - 300.0) ) * (180 / M_PI);
+    if(degree < 180 && degree > 0) degree += 90;
+    else if(degree < 0 && degree > -180) degree += 270;
+
+    if(degree < 110) degree = 110;
+    if(degree > 250) degree = 250;
+
+    if(mouse_click) {
+
+        //degree = atan( (620.0 - mouse_y) / (mouse_x - 300.0) ) * (180 / M_PI);
+        //if(degree < 180 && degree > 0) degree += 90;
+        //else if(degree < 0 && degree > -180) degree += 270;
+
+        if(degree > 110 && degree < 250)
+            handleShootBall(shooter_ball, reserved_ball);
+
+
+        //mouse_click = false;
+    }
+}
 
 bool colorsAreTheSame(SDL_Color c1, SDL_Color c2) {
     return (c1.r == c2.r && c1.g == c2.g && c1.b == c2.b);
